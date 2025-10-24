@@ -23,7 +23,8 @@ preguntas seguridad
 respuestas segurirad (id usuario, id pregunta, respuesta hash)
 */
 
-CREATE DATABASE 
+CREATE DATABASE transportadora;
+
 
 
 
