@@ -1,0 +1,40 @@
+Cliente
+-Unica direccion de residencia
+-Maximo 2 telefonos
+-Siempre tiene mas de 18 años
+-Solo puede solicitar servicios con origen en Colombia
+
+Administrador
+-Unica direccion de residencia
+-Maximo 2 telefonos
+
+Conductor
+-Unica direccion de residencia
+-Maximo 2 telefonos
+-Siempre tiene mas de 18 años
+-Tiene licencia C1 o superior (vehiculo publico)
+-Asignacion de manera diaria un vehiculo diferente (independientemente el tipo)
+-Asignacion de un vechiculo de la misma sucursal
+
+Vehiculo
+-Todos son publicos
+-Todos son color blanco
+-Si transporta pasajeros tiene capacidad de 5 pasajeros
+-Los tipos de servicio son mutuamente excluyentes en una ruta
+-Solo puede estar inactivo por mantenimiento
+-Si el vehiculo esta en manteniento no puede ser asignado
+-Solo vehiculos desde 2010 en adelante
+
+Ruta
+-Kilometros siempre
+-Unicamente sucursales nacionales (desde donde sale el vehiculo)
+-El origen y destino no pueden ser iguales
+-Solo puede existir un pago por servicio.
+-Los servicios Finalizados no pueden modificarse
+-Solo via terrestre
+-Los valores deben estar expresados en pesos colombianos
+
+
+usuario
+-Cada usuario tiene un correo único
+-Cada usuario debe tener al menos una pregunta de seguridad registrada
