@@ -50,8 +50,7 @@ CREATE TABLE codigo_postal (
 	codigo 			  varchar(10) primary key,
 	id_pais           VARCHAR(50) NOT NULL,
 	departamento      VARCHAR(50) NOT NULL,
-	ciudad            VARCHAR(50) NOT NULL,
-	barrio			  VARCHAR(50) NOT NULL
+	ciudad            VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE sucursal (
