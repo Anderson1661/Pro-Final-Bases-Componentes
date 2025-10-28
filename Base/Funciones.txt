@@ -1,0 +1,57 @@
+👨‍💼 ADMINISTRADOR
+Panel principal
+Dashboard con:
+    Total servicios (por tipo, categoría, mes)
+    Ganancias totales / mes / año
+    Conductores activos / clientes registrados
+Gestión completa:
+    CRUD de usuarios (conductores/clientes)
+    CRUD de vehículos
+    CRUD de rutas (plantillas)
+    Asignación de servicios
+Reportes:
+    Reporte mensual/anual (vista vw_service_summary)
+    Reporte por método de pago
+    Ranking de clientes por gasto
+    Conductores con más servicios
+Seguridad:
+    Restablecer contraseñas
+
+
+
+
+
+
+🚗 CONDUCTOR / REPARTIDOR
+Panel principal
+    Ver servicios asignados
+    Ver detalles (ruta, cliente, categoría, valor)
+    Cambiar estado del servicio (EN_CURSO → FINALIZADO)
+    Ver pagos recibidos
+Historial de servicios (propios)
+Editar su perfil, cambiar contraseña, configurar preguntas de seguridad
+
+
+
+
+
+👤 CLIENTE
+Panel principal
+    Solicitar servicio (elige tipo, ruta, categoría)
+    Ver estado del servicio (pendiente/en curso/finalizado)
+    Historial de servicios
+        Métodos de pago y facturas
+Editar perfil / cambiar contraseña
+Recuperar contraseña mediante preguntas de seguridad
+
+
+
+
+
+PANEL LATERAL
+    EDITAR PERFIL
+    ACT CONTRASENA
+    HISTORIAL 
+        ADMIN VE HISTORIAL DEL DIA DE TODOS LOS CONDUCTORES
+        CONDUCTOS VE SU HISTORIAL SOLAMENTE
+        CLIENTE VE SU HISTORIAL SOLAMENTEß
