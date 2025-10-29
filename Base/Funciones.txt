@@ -25,11 +25,11 @@ Seguridad:
 🚗 CONDUCTOR / REPARTIDOR
 Panel principal
     Ver servicios asignados
-    Ver detalles (ruta, cliente, categoría, valor)
-    Cambiar estado del servicio (EN_CURSO → FINALIZADO)
+        Ver detalles (ruta, cliente, categoría, valor)
+        Cambiar estado del servicio (EN_CURSO → FINALIZADO)
     Ver pagos recibidos
-Historial de servicios (propios)
-Editar su perfil, cambiar contraseña, configurar preguntas de seguridad
+    Historial de servicios (propios)
+// Editar su perfil, cambiar contraseña, configurar preguntas de seguridad
 
 
 
