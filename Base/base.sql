@@ -190,6 +190,7 @@ CREATE TABLE ruta (
 	id_codigo_postal_origen varchar (10),
 	id_codigo_postal_destino varchar (10),
 	distancia_km NUMERIC(8, 2),
+	fecha_hora_reserva timestamp,
 	fecha_hora_origen timestamp,
 	fecha_hora_destino timestamp,
 	id_conductor int,
