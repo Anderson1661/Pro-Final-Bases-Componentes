@@ -159,8 +159,7 @@ INSERT INTO metodo_pago (descripcion) VALUES
 ('Efectivo'),
 ('Tarjeta Debito'),
 ('Tarjeta Credito'),
-('Transferencia'),
-('Cuotas');
+('Transferencia');
 
 CREATE TABLE categoria_servicio (
 	id_categoria_servicio serial primary key,
@@ -205,6 +204,11 @@ CREATE TABLE ruta (
 
 alter table ruta add constraint check_distancia check (distancia_km>0);
 
+create table pasajero_ruta(
+	id_ruta int,
+	nombre_pasajero varchar(100),
+	primary key (id_ruta, nombre_pasajero)
+);
 
 CREATE TABLE preguntas_seguridad (
 	id_pregunta serial primary key,
