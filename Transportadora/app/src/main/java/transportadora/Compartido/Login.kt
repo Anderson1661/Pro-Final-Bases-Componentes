@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import transportadora.Cliente.Principal_cliente
 import transportadora.Login.R
+
 
 class Login : AppCompatActivity() {
 
@@ -14,25 +17,29 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // 1️⃣ Volver a la activity anterior
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_login)
         txtVolverLogin.setOnClickListener {
-            // finaliza esta activity y vuelve a la anterior
             finish()
         }
 
-        // 2️⃣ Ingresar: tomar correo y guardar en variable
         val botonIngresar = findViewById<Button>(R.id.boton_ingresar_login)
         val txtCorreo = findViewById<EditText>(R.id.txt_correo_login)
+        val txtContra = findViewById<EditText>(R.id.txt_contra_login)
+
 
         botonIngresar.setOnClickListener {
             val correoIngresado = txtCorreo.text.toString()
-            // Por ahora solo guardamos en variable
-            // Puedes usar Log o Toast para probar
-            println("Correo ingresado: $correoIngresado")
+            val contraIngresada = txtContra.text.toString()
+            // validar corrreo y contra
+            Toast.makeText(
+                this,
+                "Sesion iniciada exitosamente",
+                Toast.LENGTH_LONG
+            ).show()
+            val intent = Intent(this@Login, Principal_cliente::class.java)
+            startActivity(intent)
         }
 
-        // 3️⃣ Ir a la activity Registrar
         val txtRegistrar = findViewById<TextView>(R.id.txt_registrar_login)
         txtRegistrar.setOnClickListener {
             val intent = Intent(this, Registrar1::class.java)
