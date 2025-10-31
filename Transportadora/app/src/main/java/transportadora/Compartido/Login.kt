@@ -1,5 +1,6 @@
 package transportadora.Compartido
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -13,6 +14,7 @@ import transportadora.Login.R
 
 class Login : AppCompatActivity() {
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -20,6 +22,12 @@ class Login : AppCompatActivity() {
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_login)
         txtVolverLogin.setOnClickListener {
             finish()
+        }
+
+        val txtOlvidarcontra = findViewById<TextView>(R.id.txt_olvidar_contra)
+        txtOlvidarcontra.setOnClickListener {
+            val intent = Intent(this, Preg_seguridad::class.java)
+            startActivity(intent)
         }
 
         val botonIngresar = findViewById<Button>(R.id.boton_ingresar_login)
