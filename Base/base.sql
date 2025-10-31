@@ -1,18 +1,10 @@
-
 CREATE DATABASE transportadora;
 
 
 
-CREATE TABLE usuario (
-	id_usuario 			SERIAL primary key,
-	id_tipo_usuario 	int,
-	correo 				varchar(100),
-	contrasenia 		varchar(150)
-);
-
 CREATE TABLE tipo_usuario (
-	id_tipo_usuario 	SERIAL primary key,
-	descripcion 		varchar (30)
+	id_tipo_usuario 	      SERIAL primary key,
+	descripcion 		        varchar (30) not null
 );
 
 insert into tipo_usuario (descripcion) values 
@@ -20,9 +12,39 @@ insert into tipo_usuario (descripcion) values
 ('Conductor'),
 ('Cliente');
 
+CREATE TABLE usuario (
+	id_usuario 			        SERIAL primary key,
+	id_tipo_usuario 	      int not null,
+	correo 				          varchar(100) unique not null,
+	contrasenia 		        varchar(200) not null,
+	foreign key (id_tipo_usuario) references tipo_usuario (id_tipo_usuario)
+);
+
+CREATE TABLE pais (
+  id_pais                 SERIAL PRIMARY KEY,
+  nombre                  VARCHAR(50) NOT NULL unique
+);
+
+CREATE TABLE codigo_postal (
+	id_codigo_postal 		    varchar(10) primary key,
+	id_pais                 INT NOT NULL,
+	departamento            VARCHAR(50) NOT NULL,
+	ciudad                  VARCHAR(50) NOT NULL,
+	foreign key (id_pais) references pais (id_pais)
+);
+
+CREATE TABLE sucursal (
+	id_sucursal             serial primary key,
+	codigo_postal           varchar(10) not null,
+	direccion               varchar(50) not null,
+	telefono                bigint unique not null,
+	nombre                  varchar(100) unique not null,
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal)
+);
+
 CREATE TABLE tipo_identificacion (
-	id_tipo_identificacion SERIAL primary key,
-	descripcion 		varchar(30)
+	id_tipo_identificacion  SERIAL primary key,
+	descripcion 		        varchar(30) unique not null
 );
 
 INSERT INTO tipo_identificacion (descripcion) VALUES 
@@ -32,8 +54,8 @@ INSERT INTO tipo_identificacion (descripcion) VALUES
 ('Pasaporte');
 
 CREATE TABLE genero (
-	id_genero			SERIAL primary key,
-	descripcion			varchar(30)
+	id_genero			          SERIAL primary key,
+	descripcion			        varchar(30) not null unique
 );
 
 insert into genero (descripcion) values
@@ -41,82 +63,75 @@ insert into genero (descripcion) values
 ('Femenino'),
 ('Otro');
 
-CREATE TABLE pais (
-    id_pais SERIAL PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE codigo_postal (
-	codigo 			  varchar(10) primary key,
-	id_pais           VARCHAR(50) NOT NULL,
-	departamento      VARCHAR(50) NOT NULL,
-	ciudad            VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE sucursal (
-	id_sucursal serial primary key,
-	id_codigo_postal varchar(10),
-	direccion varchar(50),
-	telefono bigint,
-	nombre varchar(100)
-);
-
 CREATE TABLE cliente (
-	id_cliente 			int primary key,
-	identificacion 		varchar(20),
-	id_tipo_identificacion int,
-	nombre 				varchar(100),
-	direccion 			varchar(100),
-	correo 				unique varchar(100),
-	id_genero 			int,
-	codigo_postal 		varchar(10)
+	id_cliente 			        serial primary key,
+	identificacion 		      varchar(20) not null unique,
+	id_tipo_identificacion  int not null,
+  nombre 				          varchar(100) not null,
+	direccion 			        varchar(100) not null,
+	correo 				          varchar(100) unique not null,
+	id_genero 			        int not null,
+	codigo_postal 		      varchar(10) not null, 
+	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
+	foreign key (id_genero) references genero (id_genero),
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal)
 );
 
 CREATE TABLE telefono_cliente (
-	id_cliente 			int,
-	telefono 			bigint,
-	primary key (id_cliente, telefono)
+	id_cliente 			        int,
+	telefono 			          bigint,
+	primary key (id_cliente, telefono),
+  foreign key (id_cliente) references cliente (id_cliente)
 );
 
 CREATE TABLE administrador (
-	id_administrador 	int primary key,
-	identificacion 		varchar(20),
-	id_tipo_identificacion int,
-	nombre 				varchar(100),
-	direccion 			varchar(100),
-	correo 				unique varchar(100),
-	id_genero 			int,
-	codigo_postal 		varchar(10)
+	id_administrador 	      int primary key,
+	identificacion 		      varchar(20) not null unique,
+	id_tipo_identificacion  int not null,
+	nombre 				          varchar(100) not null,
+	direccion 			        varchar(100) not null,
+	correo 				          varchar(100) not null unique,
+	id_genero 			        int not null,
+	codigo_postal 		      varchar(10) not null,
+  foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
+	foreign key (id_genero) references genero (id_genero),
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal)
 );
 
 CREATE TABLE telefono_administrador (
-	id_administrador 	int,
-	telefono 			bigint,
-	primary key (id_administrador, telefono)
+	id_administrador 	      int,
+	telefono 			          bigint,
+	primary key (id_administrador, telefono),
+  foreign key (id_administrador) references administrador (id_administrador)
 );
 
 CREATE TABLE conductor (
-	id_conductor		int primary key,
-	identificacion 		varchar(20),
-	id_tipo_identificacion int,
-	nombre 				varchar(100),
-	direccion 			varchar(100),
-	correo 				unique varchar(100),
-	id_genero 			int,
-	codigo_postal 		varchar(10),
-	url_foto			varchar(255),
-	id_sucursal			int
+	id_conductor		        int primary key,
+	identificacion 		      varchar(20) not null unique,
+	id_tipo_identificacion  int not null,
+	nombre 				          varchar(100) not null,
+	direccion 			        varchar(100) not null,
+	correo 				          varchar(100) not null unique,
+	id_genero 			        int not null,
+	codigo_postal 		      varchar(10) not null,
+	url_foto			          varchar(255) not null unique,
+	id_sucursal			        int not null,
+  foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
+	foreign key (id_genero) references genero (id_genero),
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
+  foreign key (id_sucursal) references sucursal (id_sucursal)
 );
 
 CREATE TABLE telefono_conductor (
-	id_conductor 		int,
-	telefono 			bigint,
-	primary key (id_conductor, telefono)
+	id_conductor 		        int,
+	telefono 			          bigint,
+	primary key (id_conductor, telefono),
+  foreign key (id_conductor) references conductor (id_conductor)
 );
 
 CREATE TABLE estado_vehiculo (
-  id_estado				SERIAL PRIMARY KEY,
-  descripcion       	VARCHAR(100) NOT NULL
+  id_estado_vehiculo				        SERIAL PRIMARY KEY,
+  descripcion       	    VARCHAR(100) NOT NULL unique
 );
 
 INSERT INTO estado_vehiculo (descripcion) VALUES 
@@ -125,13 +140,13 @@ INSERT INTO estado_vehiculo (descripcion) VALUES
 ('Asignado');
 
 CREATE TABLE marca_vehiculo (
-  id_marca          	SERIAL PRIMARY KEY,
-  nombre_marca      	VARCHAR(50) NOT NULL
+  id_marca          	    SERIAL PRIMARY KEY,
+  nombre_marca      	    VARCHAR(50) NOT NULL unique
 );
 
 CREATE TABLE tipo_servicio (
-	id_tipo_servicio SERIAL PRIMARY KEY,
-	descripcion VARCHAR(30)
+	id_tipo_servicio        SERIAL PRIMARY KEY,
+	descripcion             VARCHAR(30) not null unique
 );
 
 INSERT INTO tipo_servicio (descripcion) VALUES 
@@ -140,19 +155,23 @@ INSERT INTO tipo_servicio (descripcion) VALUES
 ('Pasajeros y alimentos');
 
 CREATE TABLE vehiculo (
-	placa              VARCHAR(20) PRIMARY KEY,
-	modelo             int,
-	id_marca           INT,
-	id_tipo_servicio   INT,
-	id_estado_vehiculo INT,
-	id_sucursal		   int
+	placa                   VARCHAR(20) PRIMARY KEY,
+	modelo                  int,
+	id_marca                INT,
+	id_tipo_servicio        INT,
+	id_estado_vehiculo      INT,
+	id_sucursal		          int,
+   foreign key (id_marca) references marca_vehiculo (id_marca),
+   foreign key (id_tipo_servicio) references tipo_servicio (id_tipo_servicio),
+   foreign key (id_estado_vehiculo) references estado_vehiculo (id_estado_vehiculo),
+   foreign key (id_sucursal) references sucursal (id_sucursal)
 );
 
 alter table vehiculo add constraint check_modelo check (modelo>=2010);
 
 CREATE TABLE metodo_pago (
-	id_metodo_pago serial primary key,
-	descripcion VARCHAR(30)
+	id_metodo_pago          serial primary key,
+	descripcion             VARCHAR(30) not null unique
 );
 
 INSERT INTO metodo_pago (descripcion) VALUES 
@@ -162,9 +181,9 @@ INSERT INTO metodo_pago (descripcion) VALUES
 ('Transferencia');
 
 CREATE TABLE categoria_servicio (
-	id_categoria_servicio serial primary key,
-	descripcion VARCHAR(30),
-	valor_km NUMERIC(12, 2)
+	id_categoria_servicio   serial primary key,
+	descripcion             VARCHAR(30) not null unique,
+	valor_km                NUMERIC(12, 2) not null
 );
 
 INSERT INTO categoria_servicio (descripcion, valor_km) VALUES 
@@ -173,8 +192,8 @@ INSERT INTO categoria_servicio (descripcion, valor_km) VALUES
 ('Urgente',2000);
 
 CREATE TABLE estado_servicio (
-	id_estado_servicio serial primary key,
-	descripcion VARCHAR(30)
+	id_estado_servicio      serial primary key,
+	descripcion             VARCHAR(30) not null unique
 );
 
 insert into estado_servicio (descripcion) VALUES
@@ -184,36 +203,45 @@ insert into estado_servicio (descripcion) VALUES
 
 
 CREATE TABLE ruta (
-	id_ruta serial primary key,
-	direccion_origen varchar(50),
-	direccion_destino varchar(50),
-	id_codigo_postal_origen varchar (10),
-	id_codigo_postal_destino varchar (10),
-	distancia_km NUMERIC(8, 2),
-	fecha_hora_reserva timestamp,
-	fecha_hora_origen timestamp,
-	fecha_hora_destino timestamp,
-	id_conductor int,
-	id_tipo_servicio int,
-	id_cliente int,
-	id_estado_servicio int,
-	placa_vehiculo varchar(20),
-	id_categoria_servicio int,
-	id_metodo_pago int,
-	total NUMERIC(12, 2)
+	id_ruta                 serial primary key,
+	direccion_origen        varchar(50) not null,
+	direccion_destino       varchar(50) not null,
+	id_codigo_postal_origen  varchar (10) not null,
+	id_codigo_postal_destino varchar (10) not null,
+	distancia_km            NUMERIC(8, 2) not null,
+	fecha_hora_reserva      timestamp not null,
+	fecha_hora_origen       timestamp not null,
+	fecha_hora_destino      timestamp not null,
+	id_conductor            int not null,
+	id_tipo_servicio        int not null,
+	id_cliente              int not null,
+	id_estado_servicio      int not null,
+	placa_vehiculo          varchar(20) not null unique,
+	id_categoria_servicio   int not null,
+	id_metodo_pago          int not null,
+	total                   NUMERIC(12, 2),
+  foreign key (id_codigo_postal_origen) references codigo_postal (id_codigo_postal),
+  foreign key (id_codigo_postal_destino) references codigo_postal (id_codigo_postal),
+  foreign key (id_conductor) references conductor (id_conductor),
+  foreign key (id_tipo_servicio) references tipo_servicio (id_tipo_servicio),
+  foreign key (id_cliente) references cliente (id_cliente),
+  foreign key (id_estado_servicio) references estado_servicio (id_estado_servicio),
+  foreign key (id_categoria_servicio) references categoria_servicio (id_categoria_servicio),
+  foreign key (id_metodo_pago) references metodo_pago (id_metodo_pago)
 );
 
 alter table ruta add constraint check_distancia check (distancia_km>0);
 
 create table pasajero_ruta(
-	id_ruta int,
-	nombre_pasajero varchar(100),
-	primary key (id_ruta, nombre_pasajero)
+	id_ruta                 int,
+	nombre_pasajero         varchar(100),
+	primary key (id_ruta, nombre_pasajero),
+  foreign key (id_ruta) references ruta(id_ruta)
 );
 
 CREATE TABLE preguntas_seguridad (
-	id_pregunta serial primary key,
-	descripcion varchar(100)
+	id_pregunta             serial primary key,
+	descripcion             varchar(100) not null unique
 );
 
 INSERT INTO preguntas_seguridad (descripcion) VALUES
@@ -224,14 +252,13 @@ INSERT INTO preguntas_seguridad (descripcion) VALUES
 ('¿Cuál es el nombre de tu mejor amigo de la infancia?');
 
 CREATE TABLE respuestas_seguridad (
-	id_pregunta int,
-	id_usuario int,
-	respuesta_pregunta varchar(255),
-	primary key(id_pregunta, id_usuario)
+	id_pregunta           int,
+	id_usuario            int,
+	respuesta_pregunta varchar(255) not null,
+	primary key (id_pregunta, id_usuario),
+  foreign key (id_pregunta) references preguntas_seguridad(id_pregunta),
+  foreign key (id_usuario) references usuario (id_usuario)
 );
-
-
-
 
 
 
