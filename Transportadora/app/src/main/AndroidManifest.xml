@@ -11,15 +11,60 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Transportadora">
+
         <activity
-            android:name=".MainActivity"
+            android:name="transportadora.Cliente.Act_preguntas_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Act_perfil_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Perfil_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Historial_serv_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Seguimiento_serv_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Nuevo_serv_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Principal_cliente"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Ayuda"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Cambiar_contra"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Preg_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Registrar2"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Registrar1"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Compartido.Login"
+            android:exported="false" />
+
+        <!-- PANTALLA PRINCIPAL DE LA APP -->
+        <activity
+            android:name="transportadora.Compartido.Main"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
