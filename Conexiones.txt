@@ -1,0 +1,140 @@
+🌐 1️⃣ Qué se busca lograr
+    Queremos que tu app Android:
+        Pueda consultar la base de datos PostgreSQL.
+        Pueda insertar y actualizar datos (por ejemplo, registrar un cliente o crear una ruta).
+        Todo a través de PHP scripts alojados en un servidor (por ejemplo, 000webhost o un VPS), que actúan como intermediarios seguros entre la app y la base de datos.
+
+
+
+
+⚙️ 2️⃣ Arquitectura general
+    [APP ANDROID]  ←→  [API PHP en servidor web]  ←→  [PostgreSQL remoto]
+
+    📱 En Android:
+        Tu app no se conecta directamente al PostgreSQL (no se puede por seguridad y rendimiento).
+        En su lugar, hace peticiones HTTP (POST/GET) a tus scripts PHP, que devuelven respuestas JSON.
+
+    💻 En PHP:
+        Cada script PHP:
+            Se conecta al PostgreSQL (con pg_connect()).
+            Ejecuta una consulta (SELECT, INSERT, etc.).
+            Devuelve un JSON limpio con los datos o un mensaje de éxito/error.
+
+
+
+
+🧩 3️⃣ Ejemplo de conexión: db_config.php
+<?php
+$host = "localhost";
+$port = "5432";
+$dbname = "transportadora";
+$user = "postgres";
+$password = "tu_contraseña";
+$conn = pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password");
+if (!$conn) {
+    die(json_encode(["status" => "error", "message" => "Error de conexión a la base de datos."]));
+}
+?>
+
+
+
+
+🔐 4️⃣ Ejemplo de login: login.php
+<?php
+header("Content-Type: application/json");
+require_once "db_config.php";
+$data = json_decode(file_get_contents("php://input"), true);
+$correo = $data['correo'];
+$contrasenia = $data['contrasenia'];
+$query = "SELECT id_usuario, id_tipo_usuario FROM usuario WHERE correo = $1 AND contrasenia = $2";
+$result = pg_query_params($conn, $query, array($correo, $contrasenia));
+if ($row = pg_fetch_assoc($result)) {
+    echo json_encode([
+        "status" => "ok",
+        "id_usuario" => $row['id_usuario'],
+        "id_tipo_usuario" => $row['id_tipo_usuario']
+    ]);
+} else {
+    echo json_encode(["status" => "error", "message" => "Credenciales incorrectas"]);
+}
+pg_close($conn);
+?>
+
+
+
+
+
+👤 5️⃣ Ejemplo de inserción: insert_cliente.php
+<?php
+header("Content-Type: application/json");
+require_once "db_config.php";
+$data = json_decode(file_get_contents("php://input"), true);
+$query = "INSERT INTO cliente 
+(identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal) 
+VALUES ($1, $2, $3, $4, $5, $6, $7)";
+$result = pg_query_params($conn, $query, array(
+    $data['identificacion'],
+    $data['id_tipo_identificacion'],
+    $data['nombre'],
+    $data['direccion'],
+    $data['correo'],
+    $data['id_genero'],
+    $data['codigo_postal']
+));
+if ($result) {
+    echo json_encode(["status" => "ok", "message" => "Cliente insertado correctamente"]);
+} else {
+    echo json_encode(["status" => "error", "message" => pg_last_error($conn)]);
+}
+pg_close($conn);
+?>
+
+
+
+
+📲 6️⃣ Cómo consume Android los datos
+Usando Volley o Retrofit desde Kotlin:
+    Ejemplo rápido con Volley
+        val url = "https://tuservidor.com/api_transportadora/login.php"
+
+        val json = JSONObject()
+        json.put("correo", "ejemplo@correo.com")
+        json.put("contrasenia", "temporal123")
+
+        val request = JsonObjectRequest(Request.Method.POST, url, json,
+            { response ->
+                if (response.getString("status") == "ok") {
+                    // Login exitoso
+                } else {
+                    // Mostrar error
+                }
+            },
+            { error ->
+                Log.e("API", "Error: ${error.message}")
+            }
+        )
+        Volley.newRequestQueue(this).add(request)
+
+
+
+
+☁️ 7️⃣ Subir la API al hosting
+    Una vez probado en local:
+        Crea una cuenta en 000webhost.com
+        o InfinityFree.net
+        .
+        En el panel, crea una base de datos PostgreSQL (si no soporta PostgreSQL, usa otro hosting gratuito como render.com
+        o neon.tech
+        ).
+        Sube la carpeta api_transportadora al directorio /public_html/.
+        Ajusta el db_config.php con los datos del hosting (host, usuario, contraseña, etc.).
+
+
+
+
+
+🌎 8️⃣ Para hacerla pública y que funcione en todos los móviles
+    Solo asegúrate de que:
+        Tu servidor web (PHP) esté en internet (ej. https://tuservidor.com/api_transportadora/...).
+        Tu base de datos PostgreSQL sea accesible desde el servidor PHP (no desde Android directamente).
+    Así, cualquier instalación de tu app podrá compartir y usar los mismos datos.
