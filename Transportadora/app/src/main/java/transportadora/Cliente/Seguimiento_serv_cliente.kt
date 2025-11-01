@@ -3,6 +3,9 @@ package transportadora.Cliente
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -58,6 +61,20 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
             val intent = Intent(this, Historial_serv_cliente::class.java)
             startActivity(intent)
         }
+
+        val btnBuscar = findViewById<Button>(R.id.btn_buscar)
+        val layoutDatos = findViewById<LinearLayout>(R.id.layout_datos_envio)
+
+        btnBuscar.setOnClickListener {
+            layoutDatos.visibility = View.VISIBLE
+
+            // (opcional) hacer scroll automático para ver los resultados
+            val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
+            scrollView.post {
+                scrollView.smoothScrollTo(0, layoutDatos.top)
+            }
+        }
+
 
     }
 }

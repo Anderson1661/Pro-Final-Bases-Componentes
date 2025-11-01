@@ -147,346 +147,354 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="15dp" />
 
-                    <!-- Campos calculados -->
-                    <TextView
+                    <!-- 🔽 Contenedor de los datos ocultos -->
+                    <LinearLayout
+                        android:id="@+id/layout_datos_envio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Fecha programada para el envio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="20dp" />
-                    <TextView
-                        android:id="@+id/txt_fecha_envio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="12/12/2024"
-                        android:textColor="@color/grisoscuro" />
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Estado del envio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_estado_envio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pendiente"
-                        android:textColor="@color/grisoscuro" />
+                        <!-- Campos calculados -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha programada para el envio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="20dp" />
+                        <TextView
+                            android:id="@+id/txt_fecha_envio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="12/12/2024"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Fecha de reserva del envio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_fecha_reserva"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="12/12/2024"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Estado del envio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_estado_envio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pendiente"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Direccion de origen"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_dir_origen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="calle 45 #27-34"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha de reserva del envio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_fecha_reserva"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="12/12/2024"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pais de origen"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_pais_origen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Colombia"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Direccion de origen"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_dir_origen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="calle 45 #27-34"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Departamento de origen"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_dep_origen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cundinamarca"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pais de origen"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_pais_origen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Colombia"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ciudad de origen"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_ciu_origen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bogota"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Departamento de origen"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_dep_origen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cundinamarca"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Fecha de inicio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_fehca_inicio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="12/12/2024"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ciudad de origen"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_ciu_origen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Bogota"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tipo de servicio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_tipo_serv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pasajeros"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha de inicio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_fehca_inicio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="12/12/2024"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cantidad de pasajeros"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_cantidad_pasajeros"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="2"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tipo de servicio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_tipo_serv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pasajeros"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nombre pasajero 1"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_nombre_pas1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Maria"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Cantidad de pasajeros"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_cantidad_pasajeros"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="2"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nombre pasajero 2"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_nombre_pas2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Juan"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre pasajero 1"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_nombre_pas1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Maria"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nombre pasajero 3"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_nom_pas3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre pasajero 2"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_nombre_pas2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Juan"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nombre pasajero 4"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_nombre_pas4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre pasajero 3"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_nom_pas3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Categoria del servicio"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_categoria"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Normal"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre pasajero 4"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_nombre_pas4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Direccion de destino"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_dir_destino"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="carrera 25 #52-83"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Categoria del servicio"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_categoria"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Normal"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pais de destino"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_pais_destino"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Colombia"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Direccion de destino"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_dir_destino"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="carrera 25 #52-83"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Departamento de destino"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_dep_destino"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Meta"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Pais de destino"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_pais_destino"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Colombia"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ciudad de destino"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_ciu_destino"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Vilavicencio"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Departamento de destino"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_dep_destino"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Meta"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Precio por km"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_precio_km"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="$1500"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ciudad de destino"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_ciu_destino"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Vilavicencio"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Kilometros del recorrido"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_kilometros"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="150"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Precio por km"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_precio_km"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="$1500"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Total pagado"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_total_pagado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="$150.000"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Kilometros del recorrido"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_kilometros"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="150"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Metodo de pago"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_metodo_pago"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tarjeta Debito"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total pagado"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_total_pagado"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="$150.000"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Fecha de entrega"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_fecha_entrega"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="12/12/2024"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Metodo de pago"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_metodo_pago"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tarjeta Debito"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Nombre del conductor"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_conductor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Carlos"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha de entrega"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_fecha_entrega"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="12/12/2024"
+                            android:textColor="@color/grisoscuro" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Placas del vehiculo"
-                        android:textColor="@color/negro"
-                        android:layout_marginTop="10dp" />
-                    <TextView
-                        android:id="@+id/txt_placa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="ZLF64F"
-                        android:layout_marginBottom="80dp"
-                        android:textColor="@color/grisoscuro" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre del conductor"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_conductor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Carlos"
+                            android:textColor="@color/grisoscuro" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Placas del vehiculo"
+                            android:textColor="@color/negro"
+                            android:layout_marginTop="10dp" />
+                        <TextView
+                            android:id="@+id/txt_placa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ZLF64F"
+                            android:layout_marginBottom="80dp"
+                            android:textColor="@color/grisoscuro" />
+                    </LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
