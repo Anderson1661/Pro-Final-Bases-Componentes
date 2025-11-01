@@ -11,7 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Transportadora">
-
+        <activity
+            android:name="transportadora.Cliente.Transferencia"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Cliente.Act_serv"
+            android:exported="false" />
         <activity
             android:name="transportadora.Cliente.Act_preguntas_cliente"
             android:exported="false" />
@@ -26,9 +31,6 @@
             android:exported="false" />
         <activity
             android:name="transportadora.Cliente.Seguimiento_serv_cliente"
-            android:exported="false" />
-        <activity
-            android:name="transportadora.Cliente.Nuevo_serv_cliente"
             android:exported="false" />
         <activity
             android:name="transportadora.Cliente.Principal_cliente"
@@ -50,18 +52,16 @@
             android:exported="false" />
         <activity
             android:name="transportadora.Compartido.Login"
-            android:exported="false" />
-
-        <!-- PANTALLA PRINCIPAL DE LA APP -->
+            android:exported="false" /> <!-- PANTALLA PRINCIPAL DE LA APP -->
         <activity
             android:name="transportadora.Compartido.Main"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />

@@ -11,15 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import transportadora.Compartido.Cambiar_contra
 import transportadora.Login.R
 
-class Principal_cliente : AppCompatActivity() {
+class Act_serv : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_principal_cliente)
+        setContentView(R.layout.activity_act_serv)
 
 
         val spinner_direcciones = findViewById<Spinner>(R.id.spinner_origen_tipo)
@@ -82,17 +81,17 @@ class Principal_cliente : AppCompatActivity() {
         }
         val txtcambiarcontra = findViewById<TextView>(R.id.cambiocontra)
         txtcambiarcontra.setOnClickListener {
-            val intent = Intent(this@Principal_cliente, transportadora.Compartido.Preg_seguridad::class.java)
+            val intent = Intent(this@Act_serv, transportadora.Compartido.Preg_seguridad::class.java)
             startActivity(intent)
         }
         val txtcerrarsesion = findViewById<TextView>(R.id.cerrarsesion)
         txtcerrarsesion.setOnClickListener {
-            val intent = Intent(this@Principal_cliente, transportadora.Compartido.Main::class.java)
+            val intent = Intent(this@Act_serv, transportadora.Compartido.Main::class.java)
             startActivity(intent)
         }
         val txtayuda = findViewById<TextView>(R.id.ayuda)
         txtayuda.setOnClickListener {
-            val intent = Intent(this@Principal_cliente, transportadora.Compartido.Ayuda::class.java)
+            val intent = Intent(this@Act_serv, transportadora.Compartido.Ayuda::class.java)
             startActivity(intent)
         }
 
@@ -114,12 +113,5 @@ class Principal_cliente : AppCompatActivity() {
             val intent = Intent(this, Historial_serv_cliente::class.java)
             startActivity(intent)
         }
-
-        val btncontinuarpago = findViewById<TextView>(R.id.btn_continuar)
-        btncontinuarpago.setOnClickListener {
-            val intent = Intent(this, Transferencia::class.java)
-            startActivity(intent)
-        }
-
     }
 }

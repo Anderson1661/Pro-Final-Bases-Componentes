@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="transportadora.Cliente.Principal_cliente">
+    tools:context="transportadora.Cliente.Act_serv">
 
     <ImageView
         android:id="@+id/imageViewFondo"
@@ -377,14 +377,23 @@
 
                     <!-- Botones -->
                     <Button
-                        android:id="@+id/btn_continuar"
+                        android:id="@+id/btn_descartar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Continuar"
+                        android:text="Descartar cambios"
+                        android:textColor="@color/blanco"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:layout_marginTop="40dp" />
+
+                    <Button
+                        android:id="@+id/btn_actualizar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Actualizar datos"
                         android:textColor="@color/blanco"
                         android:backgroundTint="@color/naranja"
-                        android:layout_marginTop="40dp"
-                        android:layout_marginBottom="40dp"/>
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="80dp" />
 
                 </LinearLayout>
             </ScrollView>
@@ -406,7 +415,7 @@
                     android:layout_marginEnd="20dp"
                     android:text="Nuevo\nServicio"
                     android:textAlignment="center"
-                    android:textColor="@color/naranja"
+                    android:textColor="@color/amarillo"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 

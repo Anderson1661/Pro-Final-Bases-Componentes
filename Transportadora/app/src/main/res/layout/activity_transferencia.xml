@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F6F7FB"
+    tools:context="transportadora.Cliente.Transferencia">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="@color/naranja"
+        android:title="Verificación de transferencia"
+        android:titleTextColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Título / Monto -->
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Transferencia pendiente"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#263238"/>
+
+                <TextView
+                    android:id="@+id/tvAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="$ 45.000"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/naranja"/>
+
+                <!-- Cuenta aleatoria a mostrar -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Enviar a:"
+                    android:textColor="#37474F"
+                    android:layout_marginTop="16dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#FFFFFF"
+                    android:padding="12dp"
+                    android:layout_marginTop="8dp"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:id="@+id/tvBank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Banco: -"
+                        android:textStyle="bold"
+                        android:textColor="#263238"/>
+
+                    <TextView
+                        android:id="@+id/tvAccount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cuenta: -"
+                        android:layout_marginTop="6dp"
+                        android:textColor="#424242"/>
+
+                    <TextView
+                        android:id="@+id/tvHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Titular: -"
+                        android:layout_marginTop="4dp"
+                        android:textColor="#424242"/>
+                </LinearLayout>
+
+                <!-- Barra de progreso -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Progreso de verificación"
+                    android:layout_marginTop="18dp"
+                    android:textColor="#37474F"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0"/>
+
+                <!-- Puntos etapa (solo visual) -->
+                <LinearLayout
+                    android:id="@+id/llDots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/dot1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="●"
+                        android:textSize="20sp"
+                        android:padding="8dp"
+                        android:textColor="#90A4AE"
+                        android:clickable="false"/>
+
+                    <TextView
+                        android:id="@+id/dot2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="●"
+                        android:textSize="20sp"
+                        android:padding="8dp"
+                        android:textColor="#90A4AE"
+                        android:clickable="false"/>
+
+                    <TextView
+                        android:id="@+id/dot3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="●"
+                        android:textSize="20sp"
+                        android:padding="8dp"
+                        android:textColor="#90A4AE"
+                        android:clickable="false"/>
+
+                    <TextView
+                        android:id="@+id/dot4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="●"
+                        android:textSize="20sp"
+                        android:padding="8dp"
+                        android:textColor="#90A4AE"
+                        android:clickable="false"/>
+
+                    <TextView
+                        android:id="@+id/dot5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="●"
+                        android:textSize="20sp"
+                        android:padding="8dp"
+                        android:textColor="#90A4AE"
+                        android:clickable="false"/>
+                </LinearLayout>
+
+                <!-- Estado -->
+                <TextView
+                    android:id="@+id/tvState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estado: Esperando confirmación"
+                    android:layout_marginTop="12dp"
+                    android:textStyle="bold"
+                    android:textColor="#263238"/>
+
+                <!-- Resultado -->
+                <LinearLayout
+                    android:id="@+id/layoutResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:id="@+id/tvCheck"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:text="✓"
+                        android:textSize="44sp"
+                        android:gravity="center"
+                        android:textColor="#43A047"/>
+
+                    <TextView
+                        android:id="@+id/tvResultText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pago recibido"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textColor="#263238"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="12dp"/>
+            </LinearLayout>
+
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
