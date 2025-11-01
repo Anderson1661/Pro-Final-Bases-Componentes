@@ -1,10 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="40dp"
     tools:context="transportadora.Compartido.Ayuda">
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/fondo_boton_volver" />
+
+    <TextView
+        android:id="@+id/txt_volver_reg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="75dp"
+        android:text="Volver"
+        android:textStyle="bold"
+        android:textColor="@color/negro"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_volver_reg2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:paddingBottom="40dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:gravity="center"
+                android:text="Ayuda, datos básicos de la app"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Sobre la aplicación"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Esta aplicación te permite gestionar tus envíos de forma rápida y sencilla. Podrás crear nuevos servicios de transporte, realizar un seguimiento en tiempo real del estado de tus envíos y consultar tu historial de servicios completados. La plataforma está diseñada para facilitar la conexión entre clientes que necesitan realizar un envío y conductores disponibles para realizar el servicio."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Cómo usar la aplicación"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="1. Regístrate o inicia sesión: Para comenzar, crea una cuenta de cliente o inicia sesión si ya tienes una.
+2. Crea un nuevo envío: En la pantalla principal, pulsa el botón para crear un nuevo servicio. Deberás especificar la dirección de origen y destino, así como otros detalles relevantes.
+3. Seguimiento del envío: Una vez creado el servicio, podrás ver su estado actual en la sección de seguimiento. El estado se actualizará a medida que el conductor avance en la ruta.
+4. Historial de servicios: En el menú inferior, encontrarás la sección “Historial”, donde podrás consultar todos los servicios que has completado."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Cuenta y perfil"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Puedes actualizar tu información personal en cualquier momento desde la sección “Perfil”. Aquí podrás modificar tu nombre, correo electrónico, dirección y otros datos de contacto. No olvides pulsar el botón “Guardar cambios” para que la información se actualice correctamente."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Preguntas frecuentes"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="¿Puedo modificar un envío en curso?"
+                android:textStyle="bold"
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Solo puedes modificar un envío si el conductor aún no lo ha recogido. Una vez en tránsito, no se pueden realizar cambios."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="¿Cómo puedo ver mi historial de servicios?"
+                android:textStyle="bold"
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Puedes acceder a tu historial de servicios desde la sección “Historial” en el menú inferior de la pantalla principal."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="¿Qué hago si el estado del envío no cambia?"
+                android:textStyle="bold"
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Si el estado de tu envío no se actualiza, primero verifica tu conexión a internet. Si el problema persiste, te recomendamos comunicarte directamente con el operador responsable del envío para obtener más información."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Navegación dentro de la app"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="La aplicación cuenta con un menú inferior que te permite acceder rápidamente a las secciones principales:\n\n• Nuevo: Crea un nuevo envío desde cero.\n• Seguimiento: Consulta el estado actual de tus servicios activos.\n• Historial: Revisa los envíos completados anteriormente.\n• Perfil: Gestiona tu información personal y preferencias."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Consejos de uso"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="• Asegúrate de revisar que las direcciones sean correctas antes de confirmar un servicio.\n• Mantén actualizada tu información de contacto en el perfil.\n• Puedes consultar el historial para verificar detalles de servicios anteriores.\n• Si un envío tarda más de lo esperado, revisa el estado en la pestaña Seguimiento antes de contactar soporte."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Privacidad y seguridad"
+                android:textColor="@color/naranja"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Tu información personal y los datos de tus envíos se manejan de manera confidencial. La app utiliza conexión segura para proteger tus datos y solo los usuarios autorizados pueden acceder a la información relacionada con los servicios. No compartas tu cuenta ni tus credenciales con otras personas."
+                android:textColor="@color/grisoscuro"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
