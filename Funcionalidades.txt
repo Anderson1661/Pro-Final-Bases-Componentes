@@ -37,12 +37,15 @@ Panel principal
 
 👤 CLIENTE
 Panel principal
-    Solicitar servicio (elige tipo, ruta, categoría)
-    Ver estado del servicio (pendiente/en curso/finalizado)
+    Solicitar servicio
+    Ver estado y demas datos de un servicio 
     Historial de servicios
-        Métodos de pago y facturas
-Editar perfil / cambiar contraseña
+Editar perfil 
+Cambiar contraseña
+Cerrar sesion
+Ayuda
 Recuperar contraseña mediante preguntas de seguridad
+
 
 
 

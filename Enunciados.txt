@@ -1,0 +1,66 @@
+Bases de Datos avanzadas: (Punto 1,2 y 3 10 de noviembre)
+    ENUNCIADO
+        La compañía transportadora AVENTUREROS S.A. está dedicada al transporte de pasajeros y de alimentos.  
+        Esta compañía desea contar con una aplicación de software que le permita llevar el control de los datos más importantes de su operación.  
+        Es necesario registrar los datos de los clientes, contando con su identificación, nombre, dirección, teléfonos, género y nacionalidad.  
+        Los conductores inscriben su vehículo y la empresa requiere saber datos importantes como la identificación, nombre, dirección, teléfonos, género, nacionalidad y fotografía de los conductores; 
+        en cuanto a los vehículos se requiere la placa, el modelo, la marca y el tipo de servicio que prestará (pasajeros, alimentos o ambos). 
+        La compañía requiere que sea registrado cada servicio identificando el conductor; la ruta, que debe involucrar dirección de origen y dirección de destino; el cliente; el tipo de servicio y el valor del servicio.  
+        Cada servicio tiene una categoría que puede ser normal, especial o urgente y en cada caso la tarifa adicional puede variar, 
+        siendo la tarifa adicional más costosa la que corresponde a los servicios urgentes.  
+        Se debe proporcionar al usuario varias formas de pago del servicio.
+        
+        Aventureros S.A. requiere realizar reportes mensuales y anuales de su operación, por lo tanto, 
+        la aplicación debe permitir obtener los siguientes datos:
+            Valores totales de los servicios realizados, diferenciando si corresponden a transporte de pasajeros o alimentos y la categoría a la que corresponde.
+            Cantidad de servicios de pasajeros y de alimentos por mes.
+            Datos de los clientes que han solicitado servicios durante un período de tiempo, organizados de mayor a menor.
+            Valores totales de los servicios de acuerdo con su medio de pago.
+            Entre otras…..
+
+
+    ELEMENTOS A EVALUAR EN LA ENTREGA DEL PROYECTO
+    Documento:
+        1. Definición del problema
+            Descripción de funcionalidades (aplicación)
+            Descripción del entorno de ejecución (S.O., Motor de BD…..)
+            Definición de las reglas de negocio (delimitar problema)
+
+        2. Diagrama del modelo Entidad Relación
+
+        3. Diagrama del modelo relacional
+
+        4. Diccionario de datos
+            Descripción de tablas y columnas
+            Descripción de procedimientos y triggers
+            Descripción de vistas
+
+        5. Código fuente
+            Estructura de la base de datos
+            Inserción de datos
+            Conexión de la aplicación a la BD
+
+        6. Descripción de la aplicación (Manual de usuario)
+
+    Software:
+        Bases de datos implementada en MySQL, PostgreSQL o SQL Server
+        Aplicación funcional con conexión a base de datos
+
+
+
+
+***************************************************************************
+
+
+Programacion por componentes:
+    PRIMERA ENTREGA PROYECTO FINAL COMPONENTES (16 de noviembre)
+
+    Modelo Relacional en Tercera Forma Normal
+    Entrega preliminar del diseño de la Aplicación usando Mockups.
+    Modelo Físico de la BD
+    Realizar un login de usuarios con diferentes perfiles, para cada perfil debe existir una interfaz gráfica predeterminada, si el usuario no esta registrado deberá poder realizar el registro en la Aplicación.
+    Realizar el proceso de recordatorio de contraseña de un usuario, use el método que desee.
+    Realizar un CRUD completo para la tabla Usuarios.
+    Entregar un CRUD Funcional para mínimo 2 tablas utilizadas en la base de datos sin contar con la que realizaron en el punto anterior, presentando la interfaz gráfica en una sola Activity con iconos o botones los cuales al darles click, direccionen a la Activity correspondiente.
+    Los diferentes mensajes de validación serán presentados por medio de notificaciones (toast), se deben validar los campos de los formularios realizados, por ejemplo, solo se aceptan caracteres, números, campos de email, campos de fecha.
+
