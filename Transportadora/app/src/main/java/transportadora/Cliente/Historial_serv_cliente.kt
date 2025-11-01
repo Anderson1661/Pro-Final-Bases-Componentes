@@ -1,6 +1,9 @@
 package transportadora.Cliente
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ScrollView
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,10 +15,59 @@ class Historial_serv_cliente : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_historial_serv_cliente)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+
+        //Menu lateral
+        val txteditarperfil = findViewById<TextView>(R.id.editarperfil)
+        txteditarperfil.setOnClickListener {
+            val intent = Intent(this, Perfil_cliente::class.java)
+            startActivity(intent)
+        }
+        val txtcambiarcontra = findViewById<TextView>(R.id.cambiocontra)
+        txtcambiarcontra.setOnClickListener {
+            val intent = Intent(this@Historial_serv_cliente, transportadora.Compartido.Preg_seguridad::class.java)
+            startActivity(intent)
+        }
+        val txtcerrarsesion = findViewById<TextView>(R.id.cerrarsesion)
+        txtcerrarsesion.setOnClickListener {
+            val intent = Intent(this@Historial_serv_cliente, transportadora.Compartido.Main::class.java)
+            startActivity(intent)
+        }
+        val txtayuda = findViewById<TextView>(R.id.ayuda)
+        txtayuda.setOnClickListener {
+            val intent = Intent(this@Historial_serv_cliente, transportadora.Compartido.Ayuda::class.java)
+            startActivity(intent)
+        }
+
+        //menu inferior
+        val txtmenu1 = findViewById<TextView>(R.id.menu1)
+        val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
+        txtmenu1.setOnClickListener {
+            val intent = Intent(this, Principal_cliente::class.java)
+            startActivity(intent)
+        }
+        val txtmenu2 = findViewById<TextView>(R.id.menu2)
+        txtmenu2.setOnClickListener {
+            val intent = Intent(this, Seguimiento_serv_cliente::class.java)
+            startActivity(intent)
+        }
+        val txtmenu3 = findViewById<TextView>(R.id.menu3)
+        txtmenu3.setOnClickListener {
+            scrollView.post {
+                scrollView.smoothScrollTo(0, 0)
+            }
+        }
+
+        // botones de cada servicio
+        val btndetalles = findViewById<TextView>(R.id.btnDetalle)
+        btndetalles.setOnClickListener {
+            val intent = Intent(this, Seguimiento_serv_cliente::class.java)
+            startActivity(intent)
+        }
+        val btneditar = findViewById<TextView>(R.id.btnEditar)
+        btneditar.setOnClickListener {
+            val intent = Intent(this, Act_serv::class.java)
+            startActivity(intent)
         }
     }
 }

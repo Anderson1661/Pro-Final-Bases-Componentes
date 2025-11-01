@@ -1,31 +1,28 @@
 package transportadora.Cliente
 
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.animation.addListener
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import transportadora.Login.R
-
+import kotlin.math.round
 
 class Transferencia : AppCompatActivity() {
-
-    private var animator: ValueAnimator? = null
-    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transferencia)
 
-        // Obtén las vistas con findViewById (ejemplo claro y sin lateinit)
+        // Referencias UI
         val tvBank: TextView = findViewById(R.id.tvBank)
         val tvAccount: TextView = findViewById(R.id.tvAccount)
         val tvHolder: TextView = findViewById(R.id.tvHolder)
@@ -41,10 +38,10 @@ class Transferencia : AppCompatActivity() {
             findViewById<TextView>(R.id.dot5)
         )
 
-        // generar cuenta inicial (meramente visual)
+        // Cuenta simulada
         fun generateRandomAccount() {
-            val bancos = listOf("Banco Ejemplo", "Banco Uno", "Banco Móvil", "Banco Nacional", "Banco Global")
-            val titulares = listOf("Transportadora S.A.", "Transportes y Cía")
+            val bancos = listOf("Banco Bancolombia", "Banco Davivienda", "Banco Caja Social")
+            val titulares = listOf("Transportadora PEPFOOD S.A.")
             val bank = bancos.random()
             val holder = titulares.random()
             val length = (10..14).random()
@@ -54,11 +51,11 @@ class Transferencia : AppCompatActivity() {
             tvHolder.text = "Titular: $holder"
         }
 
-        // update dots helper
+        // Actualiza los puntos
         fun updateDots(progress: Int) {
             val total = dots.size
             val exact = progress / 100.0 * (total - 1)
-            val activeIndex = kotlin.math.round(exact).toInt().coerceIn(0, total - 1)
+            val activeIndex = round(exact).toInt().coerceIn(0, total - 1)
             val activeColor = ContextCompat.getColor(this, R.color.naranja)
             val inactiveColor = ContextCompat.getColor(this, android.R.color.darker_gray)
 
@@ -75,6 +72,7 @@ class Transferencia : AppCompatActivity() {
             }
         }
 
+        // Texto de estado
         fun updateStateText(progress: Int) {
             val state = when {
                 progress < 33 -> "Estado: Esperando confirmación"
@@ -85,12 +83,14 @@ class Transferencia : AppCompatActivity() {
             tvState.text = state
         }
 
+        // Aplicar progreso a todo
         fun setProgress(value: Int) {
             progressBar.progress = value
             updateDots(value)
             updateStateText(value)
         }
 
+        // Mostrar éxito y cambiar de pantalla
         fun showSuccessAndFinish() {
             layoutResult.alpha = 0f
             layoutResult.visibility = View.VISIBLE
@@ -98,43 +98,37 @@ class Transferencia : AppCompatActivity() {
                 .alpha(1f)
                 .setDuration(300)
                 .withEndAction {
-                    // pequeña pausa visual y luego lanzar Historial
                     Handler(Looper.getMainLooper()).postDelayed({
                         try {
-                            // Ajusta el nombre de la Activity de Historial si es distinto
                             val intent = Intent(this@Transferencia, Historial_serv_cliente::class.java)
                             startActivity(intent)
                         } catch (e: Exception) {
-                            // si la activity no existe por el nombre, ignora o loggea
+                            // si no existe la Activity, ignorar
                         }
                         finish()
-                    }, 700)
+                    }, 300) // pequeña pausa final
                 }
                 .start()
         }
 
-        // iniciar proceso automáticamente (pequeña espera para que UI se estabilice)
+        // ---- Inicio del proceso ----
         generateRandomAccount()
-        progressBar.post {
-            progressBar.progress = 0
-            updateDots(0)
-            tvState.text = "Estado: Esperando confirmación"
+        progressBar.progress = 0
+        updateDots(0)
+        tvState.text = "Estado: Esperando confirmación"
 
-            animator = ValueAnimator.ofInt(0, 100).apply {
-                duration = 5000L
-                interpolator = LinearInterpolator()
-                addUpdateListener { anim ->
-                    val value = anim.animatedValue as Int
-                    setProgress(value)
-                }
-                addListener(onEnd = {showSuccessAndFinish()})
-                start()
+        // ANIMACIÓN 4 SEGUNDOS REALES
+        lifecycleScope.launch {
+            val totalDuration = 6000L
+            val steps = 100
+            val interval = totalDuration / steps
+
+            for (i in 0..steps) {
+                setProgress(i)
+                delay(interval)
             }
-        }
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        animator?.cancel()
+            showSuccessAndFinish()
+        }
     }
 }

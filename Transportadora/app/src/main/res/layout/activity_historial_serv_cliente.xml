@@ -1,10 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="transportadora.Cliente.Historial_serv_cliente">
+    tools:context="transportadora.Cliente.Act_serv">
+
+    <ImageView
+        android:id="@+id/imageViewFondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/fondo_cliente"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/menuLateral"
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="50dp"
+            android:paddingStart="1dp"
+            android:paddingEnd="3dp">
+
+            <TextView
+                android:id="@+id/editarperfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar\nPerfil"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="50dp"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="50dp" />
+
+            <TextView
+                android:id="@+id/cambiocontra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cambiar\nContraseña"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="55dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/cerrarsesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cerrar\nSesión"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:gravity="top|center_horizontal"
+                android:layout_marginTop="95dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/ayuda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ayuda"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="440dp" />
+        </LinearLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Contenido scrollable -->
+                <ScrollView
+                    android:id="@+id/scrollContenido"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:fillViewport="true"
+                    android:background="@color/blanco"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/menuInferior"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingBottom="32dp">
+
+                        <!-- Título -->
+                        <TextView
+                            android:id="@+id/textViewTitulo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Historial de Servicios"
+                            android:textAlignment="center"
+                            android:textColor="@color/negro"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:layout_marginTop="40dp"
+                            android:layout_marginBottom="24dp" />
+
+                        <!-- Lista contenedora -->
+                        <LinearLayout
+                            android:id="@+id/layoutHistorialServicios"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:divider="@drawable/divider_line"
+                            android:showDividers="middle" />
+
+                        <!-- Ejemplo de un servicio -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_servicio_card"
+                            android:padding="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:elevation="3dp">
+
+                            <!-- Columna izquierda (datos del servicio) -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvServicio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Servicio: Envío Paquete #A1423"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/negro"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tvFecha"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fecha: 12/09/2025"
+                                    android:textColor="#616161"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvOrigen"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Origen: Calle 45 #12-30, Bogotá"
+                                    android:textColor="#616161"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvDestino"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Destino: Carrera 10 #20-15, Medellín"
+                                    android:textColor="#616161"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTipoServicio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Tipo: Pasajeros"
+                                    android:textColor="#616161"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp" />
+
+                                <TextView
+                                    android:id="@+id/tvEstado"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Estado: Finalizado"
+                                    android:textColor="#616161"
+                                    android:textSize="14sp"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <!-- Columna derecha (botones) -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center">
+
+                                <Button
+                                    android:id="@+id/btnDetalle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Detalles"
+                                    android:textSize="12sp"
+                                    android:backgroundTint="@color/naranja"
+                                    android:textColor="#FFFFFF"
+                                    android:layout_marginBottom="4dp" />
+
+                                <Button
+                                    android:id="@+id/btnEditar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Editar"
+                                    android:textSize="12sp"
+                                    android:backgroundTint="@color/grisoscuro"
+                                    android:textColor="#FFFFFF"
+                                    android:layout_marginBottom="4dp" />
+
+                                <Button
+                                    android:id="@+id/btnCancelar"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cancelar"
+                                    android:textSize="12sp"
+                                    android:backgroundTint="@color/amarillo"
+                                    android:textColor="#FFFFFF" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+
+
+
+                <!-- Menú inferior fijo -->
+                <LinearLayout
+                    android:id="@+id/menuInferior"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/menu1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="Nuevo\nServicio"
+                        android:textAlignment="center"
+                        android:textColor="@color/amarillo"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/menu2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Seguimiento\nde Servicio"
+                        android:textColor="@color/amarillo"
+                        android:textAlignment="center"
+                        android:layout_marginEnd="20dp"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/menu3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Historial de\nServicios"
+                        android:textAlignment="center"
+                        android:textColor="@color/naranja"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
