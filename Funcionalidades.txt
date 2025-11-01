@@ -1,60 +1,92 @@
-👨‍💼 ADMINISTRADOR
-Panel principal
-Dashboard con:
-    Total servicios (por tipo, categoría, mes)
-    Ganancias totales / mes / año
-    Conductores activos / clientes registrados
-Gestión completa:
-    CRUD de usuarios (conductores/clientes)
-    CRUD de vehículos
-    CRUD de rutas (plantillas)
-    Asignación de servicios
-Reportes:
-    Reporte mensual/anual (vista vw_service_summary)
-    Reporte por método de pago
-    Ranking de clientes por gasto
-    Conductores con más servicios
-Seguridad:
-    Restablecer contraseñas
+# Funcionalidades de la Aplicación "Aventureros S.A."
 
+A continuación se detallan las funcionalidades de la aplicación, desglosadas por perfiles de usuario y características generales.
 
+---
 
+### 1. Funcionalidades Generales (Comunes a todos los perfiles)
 
+- **Autenticación de Usuarios:**
+  - **Login:** Inicio de sesión con correo y contraseña. El sistema identifica el tipo de usuario (Administrador, Conductor, Cliente) y redirige a la interfaz correspondiente.
+  - **Registro:** Creación de nuevas cuentas de usuario (inicialmente para Clientes). El registro de Conductores y Administradores se gestiona desde el panel de Administración.
+  - **Cierre de Sesión:** Salir de la sesión activa.
 
+- **Recuperación de Cuenta:**
+  - **Mecanismo por Preguntas de Seguridad:** Los usuarios pueden restablecer su contraseña respondiendo a preguntas de seguridad previamente configuradas.
 
-🚗 CONDUCTOR / REPARTIDOR
-Panel principal
-    Ver servicios asignados
-        Ver detalles (ruta, cliente, categoría, valor)
-        Cambiar estado del servicio (EN_CURSO → FINALIZADO)
-    Ver pagos recibidos
-    Historial de servicios (propios)
-// Editar su perfil, cambiar contraseña, configurar preguntas de seguridad
+- **Gestión de Perfil Propio:**
+  - **Actualización de Datos Personales:** Cada usuario puede modificar su propia información (dirección, teléfono, etc.).
+  - **Cambio de Contraseña:** Funcionalidad para cambiar la contraseña actual por una nueva.
+  - **Gestión de Preguntas de Seguridad:** Actualizar las preguntas y respuestas de seguridad.
 
+---
 
+### 2. Perfil: 👤 Cliente
 
+- **Panel Principal:**
+  - Vista principal con acceso rápido a las funciones más importantes.
 
+- **Gestión de Servicios:**
+  - **Solicitar un Servicio:**
+    - Ingresar dirección de origen y destino.
+    - Seleccionar tipo de servicio (Pasajeros, Alimentos, Ambos).
+    - Seleccionar categoría del servicio (Normal, Especial, Urgente).
+    - Ver estimación del costo (calculado automáticamente por la BD).
+    - Seleccionar método de pago.
+  - **Seguimiento de Servicio:**
+    - Ver el estado actual de un servicio solicitado ("Pendiente", "En proceso", "Finalizado").
+    - (Futuro) Ver la ubicación del conductor en tiempo real.
+  - **Historial de Servicios:**
+    - Consultar una lista de todos los servicios que ha solicitado en el pasado.
+    - Ver detalles de cada servicio histórico (ruta, costo, conductor, etc.).
 
-👤 CLIENTE
-Panel principal
-    Solicitar servicio
-    Ver estado y demas datos de un servicio 
-    Historial de servicios
-Editar perfil 
-Cambiar contraseña
-Cerrar sesion
-Ayuda
-Recuperar contraseña mediante preguntas de seguridad
+- **Ayuda y Soporte:**
+  - Sección con información de contacto o preguntas frecuentes.
 
+---
 
+### 3. Perfil: 🚗 Conductor
 
+- **Panel Principal:**
+  - Dashboard con un resumen de los servicios asignados para el día.
 
+- **Gestión de Servicios Asignados:**
+  - **Visualización de Servicios:** Ver la lista de servicios pendientes o en curso.
+  - **Detalles del Servicio:** Acceder a toda la información de un servicio: ruta completa, datos del cliente, tipo y categoría del servicio, y valor a cobrar.
+  - **Actualización de Estado:** Marcar un servicio como "En proceso" al iniciarlo y "Finalizado" al completarlo.
 
+- **Historial y Pagos:**
+  - **Historial Propio:** Consultar el historial de todos los servicios que ha realizado.
+  - **Resumen de Ganancias:** Ver los pagos recibidos o pendientes por los servicios completados.
 
-PANEL LATERAL
-    EDITAR PERFIL
-    ACT CONTRASENA
-    HISTORIAL 
-        ADMIN VE HISTORIAL DEL DIA DE TODOS LOS CONDUCTORES
-        CONDUCTOS VE SU HISTORIAL SOLAMENTE
-        CLIENTE VE SU HISTORIAL SOLAMENTEß
+---
+
+### 4. Perfil: 👨‍💼 Administrador
+
+- **Dashboard Principal:**
+  - Panel de control con estadísticas y métricas clave de la operación.
+  - Visualización de datos generados por las vistas de la BD:
+    - Valores totales por tipo y categoría de servicio.
+    - Cantidad de servicios por mes.
+    - Total de ingresos por método de pago.
+
+- **Gestión Total (CRUD Completo):**
+  - **Gestión de Usuarios:**
+    - Crear, leer, actualizar y eliminar perfiles de Clientes, Conductores y otros Administradores.
+    - Restablecer contraseñas de cualquier usuario.
+  - **Gestión de Vehículos:**
+    - Registrar nuevos vehículos en el sistema.
+    - Actualizar la información de los vehículos (estado, sucursal, etc.).
+    - Eliminar vehículos.
+  - **Gestión de Sucursales y Códigos Postales:**
+    - Administrar las sucursales de la empresa y las zonas geográficas.
+
+- **Asignación y Monitoreo:**
+  - **Asignación de Servicios:** Asignar manualmente un conductor y vehículo a un servicio solicitado por un cliente.
+  - **Monitor de Servicios:** Ver el estado de todos los servicios en tiempo real.
+
+- **Generación de Reportes:**
+  - **Reportes Detallados:**
+    - Generar reportes mensuales y anuales de la operación.
+    - Filtrar clientes por período de tiempo y ordenarlos por cantidad de servicios o gasto total.
+    - Analizar los métodos de pago más utilizados.

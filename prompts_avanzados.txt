@@ -1,0 +1,82 @@
+# Prompts Avanzados para Gemini CLI - Proyecto "Aventureros S.A."
+
+Este archivo contiene prompts detallados para tareas de mantenimiento, despliegue y seguridad, preparando el proyecto para un entorno de producción o pruebas avanzadas.
+
+---
+
+### 1. Prompt para Fortalecer la Seguridad de la API (Hashing de Contraseñas)
+
+**Objetivo:** Dejar de guardar contraseñas en texto plano y usar hashing seguro, una práctica de seguridad indispensable.
+
+**Prompt:**
+"Hola Gemini, necesito fortalecer la seguridad de las contraseñas en la API. Realiza las siguientes tareas:
+1.  Modifica `conexiones_bd/usuario/create.php` para que la contraseña recibida sea hasheada con `password_hash()` antes de guardarla en la base de datos.
+2.  Modifica `conexiones_bd/usuario/update.php` para que, si se recibe una nueva contraseña, también la hashee con `password_hash()`.
+3.  Crea un nuevo endpoint principal `conexiones_bd/login.php`. Este script debe recibir `correo` y `contrasenia` vía POST, buscar al usuario por su correo, y verificar la contraseña usando `password_verify()`. Si es correcta, debe devolver un JSON con `id_usuario` y `id_tipo_usuario`. Si no, un error de credenciales.
+4.  Finalmente, elimina el campo `contrasenia` de las consultas SELECT en `conexiones_bd/usuario/read.php` para nunca exponer el hash."
+
+---
+
+### 2. Prompt para Generar una Guía de Despliegue a Producción
+
+**Objetivo:** Obtener un manual detallado para publicar el backend y la base de datos en servicios en la nube gratuitos, permitiendo que la app sea usada desde cualquier lugar.
+
+**Prompt:**
+"Hola Gemini, necesito una guía de despliegue completa para llevar este proyecto a un entorno de producción. Genera un archivo `GUIA_DESPLIEGUE.md` que explique paso a paso cómo:
+1.  Configurar una base de datos PostgreSQL gratuita en `Neon.tech`, obtener su URL de conexión y ejecutar el script `Base/base.sql` para crear las tablas.
+2.  Subir el código del backend (la carpeta `conexiones_bd`) a un repositorio de GitHub.
+3.  Desplegar el backend en `Render.com` como un "Web Service", conectándolo al repositorio de GitHub para despliegue continuo.
+4.  Configurar las "Environment Variables" en Render para almacenar de forma segura los datos de conexión a la base de datos de Neon (host, usuario, contraseña, etc.) y modificar `conexion.php` para que lea estas variables de entorno en lugar de tenerlas escritas en el código.
+5.  Encontrar la URL pública del backend en Render (ej: `https://aventureros-api.onrender.com`) y explicar dónde se debería actualizar esta URL en el código fuente de la aplicación Android para que consuma la API en la nube."
+
+---
+
+### 3. Prompt para Crear un Script de Seeding para la Base de Datos
+
+**Objetivo:** Facilitar la inicialización de una base de datos nueva con datos de prueba esenciales.
+
+**Prompt:**
+"Hola Gemini, crea un nuevo script PHP llamado `conexiones_bd/seed_db.php`. Este script, al ser ejecutado, debe poblar la base de datos con datos iniciales. Debe ser idempotente (verificar si los datos ya existen antes de insertarlos). Incluye inserciones para:
+1.  Los 3 `tipo_usuario` (Administrador, Conductor, Cliente).
+2.  Los 4 `tipo_identificacion`.
+3.  Los 3 `genero`.
+4.  Los 3 `estado_vehiculo`.
+5.  Los 3 `tipo_servicio`.
+6.  Los 4 `metodo_pago`.
+7.  Las 3 `categoria_servicio`.
+8.  Los 3 `estado_servicio`.
+9.  Las 5 `preguntas_seguridad`.
+10. Un usuario Administrador de ejemplo en las tablas `usuario` y `administrador`."
+
+---
+
+### 4. Prompt para Implementar Versionado en la API
+
+**Objetivo:** Preparar la API para futuros cambios sin romper la compatibilidad con versiones antiguas de la app.
+
+**Prompt:**
+"Hola Gemini, vamos a implementar versionado en la API. Realiza los siguientes cambios estructurales:
+1.  Crea una nueva carpeta `conexiones_bd/v1/`.
+2.  Mueve todas las carpetas de endpoints existentes (`cliente`, `conductor`, `ruta`, `vw_total_por_metodo_pago`, etc.) dentro de `conexiones_bd/v1/`.
+3.  Adapta las rutas de inclusión en todos los archivos movidos para que el `require_once` apunte correctamente al archivo `conexion.php` (que ahora estará dos niveles más arriba, ej: `require_once '../../conexion.php'`).
+4.  Actualiza el archivo `README.md` para reflejar que todos los endpoints de la API ahora tienen el prefijo `/v1/`, por ejemplo: `/v1/cliente/read.php`."
+
+---
+
+### 5. Prompt para Comandos de Backup y Restauración de la Base de Datos
+
+**Objetivo:** Tener a mano los comandos para realizar copias de seguridad y restaurar la base de datos, una tarea crítica de mantenimiento.
+
+**Prompt:**
+"Hola Gemini, necesito los comandos de consola para administrar la base de datos PostgreSQL. Proporcióname lo siguiente:
+1.  El comando `pg_dump` exacto para crear un backup completo de la base de datos `transportadora` en un archivo llamado `transportadora_backup.sql`. Explica qué hace cada parámetro del comando.
+2.  El comando `psql` exacto para restaurar la base de datos desde el archivo `transportadora_backup.sql` en una máquina nueva donde la base de datos `transportadora` ya ha sido creada pero está vacía."
+
+---
+
+### 6. Prompt para Actualizar Documentación (README y Funcionalidades)
+
+**Objetivo:** Unificar y mantener al día la documentación del proyecto después de realizar cambios.
+
+**Prompt:**
+"Hola Gemini. Necesito que actualices la documentación del proyecto. Por favor, analiza toda la estructura de directorios, el archivo `Base/base.sql`, y todos los archivos de la API en `conexiones_bd/`. Luego, actualiza el archivo `Funcionalidades.txt` con cualquier nueva funcionalidad o cambio que detectes y, finalmente, regenera el `README.md` para que refleje el estado actual y completo del proyecto, incluyendo la estructura de directorios, la guía de la API y las funcionalidades."
