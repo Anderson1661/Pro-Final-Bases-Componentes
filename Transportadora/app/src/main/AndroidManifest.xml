@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Transportadora">
         <activity
+            android:name="transportadora.Administrador.Principal_administrador"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Conductor.Principal_conductor"
+            android:exported="false" />
+        <activity
             android:name="transportadora.Cliente.Transferencia"
             android:exported="false" />
         <activity
