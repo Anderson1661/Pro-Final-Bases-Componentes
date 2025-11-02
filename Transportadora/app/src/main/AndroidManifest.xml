@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Transportadora">
         <activity
+            android:name="transportadora.Conductor.Registrar_conductor"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Conductor.Historial_serv_conductor"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Conductor.Act_perfil_conductor"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Conductor.Act_preguntas_conductor"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Conductor.Perfil_conductor"
+            android:exported="false" />
+        <activity
             android:name="transportadora.Administrador.Principal_administrador"
             android:exported="false" />
         <activity

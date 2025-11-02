@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="75dp"
         android:text="Volver"
         android:textStyle="bold"
         android:textColor="@color/negro"
