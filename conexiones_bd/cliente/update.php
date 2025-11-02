@@ -19,6 +19,7 @@ if (isset($data['nombre'])) { $updates[] = "nombre = $" . $param_count++; $param
 if (isset($data['direccion'])) { $updates[] = "direccion = $" . $param_count++; $params[] = $data['direccion']; }
 if (isset($data['correo'])) { $updates[] = "correo = $" . $param_count++; $params[] = $data['correo']; }
 if (isset($data['id_genero'])) { $updates[] = "id_genero = $" . $param_count++; $params[] = (int)$data['id_genero']; }
+if (isset($data['id_pais_nacionalidad'])) { $updates[] = "id_pais_nacionalidad = $" . $param_count++; $params[] = (int)$data['id_pais_nacionalidad']; }
 if (isset($data['codigo_postal'])) { $updates[] = "codigo_postal = $" . $param_count++; $params[] = $data['codigo_postal']; }
 
 if (empty($updates)) {

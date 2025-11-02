@@ -67,14 +67,16 @@ CREATE TABLE cliente (
 	id_cliente 			        serial primary key,
 	identificacion 		      varchar(20) not null unique,
 	id_tipo_identificacion  int not null,
-  nombre 				          varchar(100) not null,
+  	nombre 				          varchar(100) not null,
 	direccion 			        varchar(100) not null,
 	correo 				          varchar(100) unique not null,
 	id_genero 			        int not null,
-	codigo_postal 		      varchar(10) not null, 
+	id_pais_nacionalidad		int not null, 
+	codigo_postal 		      varchar(10) not null,
 	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
 	foreign key (id_genero) references genero (id_genero),
-	foreign key (codigo_postal) references codigo_postal (id_codigo_postal)
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
+	foreign key (id_pais_nacionalidad) references pais (id_pais)
 );
 
 CREATE TABLE telefono_cliente (
@@ -114,12 +116,14 @@ CREATE TABLE conductor (
 	correo 				          varchar(100) not null unique,
 	id_genero 			        int not null,
 	codigo_postal 		      varchar(10) not null,
+	id_pais_nacionalidad		int not null, 
 	url_foto			          varchar(255) not null unique,
 	id_sucursal			        int not null,
-  foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
+  	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
 	foreign key (id_genero) references genero (id_genero),
 	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
-  foreign key (id_sucursal) references sucursal (id_sucursal)
+	foreign key (id_pais_nacionalidad) references pais (id_pais),
+  	foreign key (id_sucursal) references sucursal (id_sucursal)
 );
 
 CREATE TABLE telefono_conductor (

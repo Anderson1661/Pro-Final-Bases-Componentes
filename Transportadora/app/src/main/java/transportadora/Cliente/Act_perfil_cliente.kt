@@ -28,6 +28,7 @@ class Act_perfil_cliente : AppCompatActivity() {
         val spinner_paises = findViewById<Spinner>(R.id.txt_pais)
         val spinner_departamentos = findViewById<Spinner>(R.id.txt_departamento)
         val spinner_ciudades = findViewById<Spinner>(R.id.txt_ciudad)
+        val spinner_nacionalidad = findViewById<Spinner>(R.id.txt_nacionalidad)
 
         // Lista de opciones (puede venir de un recurso o del código)
         val tipos_identificacion = listOf("Cedula", "Extranjeria")
@@ -39,6 +40,9 @@ class Act_perfil_cliente : AppCompatActivity() {
         val adapter_paises = ArrayAdapter(this, android.R.layout.simple_spinner_item, paises)
         adapter_paises.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner_paises.adapter = adapter_paises
+        val adapter_nacionalidad = ArrayAdapter(this, android.R.layout.simple_spinner_item, paises)
+        adapter_nacionalidad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner_nacionalidad.adapter = adapter_nacionalidad
 
         val departamentos = listOf("Cundinamarca", "Meta")
         val adapter_departamentos = ArrayAdapter(this, android.R.layout.simple_spinner_item, departamentos)
