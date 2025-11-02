@@ -13,6 +13,7 @@ $updates = [];
 $params = [];
 $param_count = 1;
 
+if (isset($data['placa_vehiculo'])) { $updates[] = "placa_vehiculo = $" . $param_count++; $params[] = $data['placa_vehiculo']; }
 if (isset($data['identificacion'])) { $updates[] = "identificacion = $" . $param_count++; $params[] = $data['identificacion']; }
 if (isset($data['id_tipo_identificacion'])) { $updates[] = "id_tipo_identificacion = $" . $param_count++; $params[] = (int)$data['id_tipo_identificacion']; }
 if (isset($data['nombre'])) { $updates[] = "nombre = $" . $param_count++; $params[] = $data['nombre']; }

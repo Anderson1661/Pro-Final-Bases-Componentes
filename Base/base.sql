@@ -107,32 +107,6 @@ CREATE TABLE telefono_administrador (
   foreign key (id_administrador) references administrador (id_administrador)
 );
 
-CREATE TABLE conductor (
-	id_conductor		        int primary key,
-	identificacion 		      varchar(20) not null unique,
-	id_tipo_identificacion  int not null,
-	nombre 				          varchar(100) not null,
-	direccion 			        varchar(100) not null,
-	correo 				          varchar(100) not null unique,
-	id_genero 			        int not null,
-	codigo_postal 		      varchar(10) not null,
-	id_pais_nacionalidad		int not null, 
-	url_foto			          varchar(255) not null unique,
-	id_sucursal			        int not null,
-  	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
-	foreign key (id_genero) references genero (id_genero),
-	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
-	foreign key (id_pais_nacionalidad) references pais (id_pais),
-  	foreign key (id_sucursal) references sucursal (id_sucursal)
-);
-
-CREATE TABLE telefono_conductor (
-	id_conductor 		        int,
-	telefono 			          bigint,
-	primary key (id_conductor, telefono),
-  foreign key (id_conductor) references conductor (id_conductor)
-);
-
 CREATE TABLE estado_vehiculo (
   id_estado_vehiculo				        SERIAL PRIMARY KEY,
   descripcion       	    VARCHAR(100) NOT NULL unique
@@ -172,6 +146,34 @@ CREATE TABLE vehiculo (
 );
 
 alter table vehiculo add constraint check_modelo check (modelo>=2010);
+
+CREATE TABLE conductor (
+	id_conductor		        int primary key,
+	placa_vehiculo                   VARCHAR(20) not null unique,
+	identificacion 		      varchar(20) not null unique,
+	id_tipo_identificacion  int not null,
+	nombre 				          varchar(100) not null,
+	direccion 			        varchar(100) not null,
+	correo 				          varchar(100) not null unique,
+	id_genero 			        int not null,
+	codigo_postal 		      varchar(10) not null,
+	id_pais_nacionalidad		int not null, 
+	url_foto			          varchar(255) not null unique,
+	id_sucursal			        int not null,
+	foreign key (placa_vehiculo) references vehiculo (placa),
+  	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
+	foreign key (id_genero) references genero (id_genero),
+	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
+	foreign key (id_pais_nacionalidad) references pais (id_pais),
+  	foreign key (id_sucursal) references sucursal (id_sucursal)
+);
+
+CREATE TABLE telefono_conductor (
+	id_conductor 		        int,
+	telefono 			          bigint,
+	primary key (id_conductor, telefono),
+  foreign key (id_conductor) references conductor (id_conductor)
+);
 
 CREATE TABLE metodo_pago (
 	id_metodo_pago          serial primary key,
@@ -220,7 +222,6 @@ CREATE TABLE ruta (
 	id_tipo_servicio        int not null,
 	id_cliente              int not null,
 	id_estado_servicio      int not null,
-	placa_vehiculo          varchar(20) not null unique,
 	id_categoria_servicio   int not null,
 	id_metodo_pago          int not null,
 	total                   NUMERIC(12, 2),
