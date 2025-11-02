@@ -23,7 +23,6 @@ if (isset($data['id_genero'])) { $updates[] = "id_genero = $" . $param_count++; 
 if (isset($data['codigo_postal'])) { $updates[] = "codigo_postal = $" . $param_count++; $params[] = $data['codigo_postal']; }
 if (isset($data['id_pais_nacionalidad'])) { $updates[] = "id_pais_nacionalidad = $" . $param_count++; $params[] = (int)$data['id_pais_nacionalidad']; }
 if (isset($data['url_foto'])) { $updates[] = "url_foto = $" . $param_count++; $params[] = $data['url_foto']; }
-if (isset($data['id_sucursal'])) { $updates[] = "id_sucursal = $" . $param_count++; $params[] = (int)$data['id_sucursal']; }
 
 if (empty($updates)) {
     send_response(400, ['error' => 'No hay campos para actualizar.']);
