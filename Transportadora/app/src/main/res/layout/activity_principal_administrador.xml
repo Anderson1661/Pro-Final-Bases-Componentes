@@ -1,10 +1,450 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="transportadora.Administrador.Principal_administrador">
+
+    <ImageView
+        android:id="@+id/imageViewFondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/fondo_menu_lateral"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/menuLateral"
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="50dp"
+            android:paddingStart="1dp"
+            android:paddingEnd="3dp">
+
+            <TextView
+                android:id="@+id/editarperfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar\nPerfil"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="50dp"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="50dp" />
+
+            <TextView
+                android:id="@+id/cambiocontra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cambiar\nContraseña"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="55dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/cerrarsesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cerrar\nSesión"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:gravity="top|center_horizontal"
+                android:layout_marginTop="95dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/ayuda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ayuda"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="440dp" />
+        </LinearLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <ScrollView
+                android:id="@+id/scrollContenido"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:paddingBottom="10dp"> <!-- espacio para que el contenido no quede debajo del menú inferior -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Contenido principal -->
+                    <TextView
+                        android:id="@+id/textViewTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="30dp"
+                        android:fontFamily="@font/gorditas_bold"
+                        android:text="Bienvenido, administrador"
+                        android:textAlignment="center"
+                        android:textColor="@color/amarillo"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Botones reportes-->
+                    <Button
+                        android:id="@+id/btn_reporte1"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/naranja"
+                        android:text="Reporte Totales por Tipo y Categoria"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_reporte2"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/naranja"
+                        android:text="Reporte Servicios por Mes"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_reporte3"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/naranja"
+                        android:text="Reporte Clientes en Periodo"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_reporte4"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/naranja"
+                        android:text="Reporte Totales por Metodo de Pago"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <!-- Botones crud de tablas-->
+                    <Button
+                        android:id="@+id/btn_administradores"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar administradores"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_cat_servicio"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Categorias de servicios"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_clientes"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar clientes"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_cod_postal"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Codigos Postales"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_colores"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Colores de vehiculos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_conductores"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Conductores"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_est_servicio"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Estados de Servicios"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_est_vehiculo"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Estados de Vehiculos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_generos"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Generos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_lineas"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Lineas de Vehiculos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_marcas"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Marcas de vehiculos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_metodos"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Metodos de Pago"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_paises"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Paises"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_pasajeros"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Pasajeros de Servicios"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_preguntas"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Preguntas de Seguridad"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_respuestas"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Respuestas de Seguridad"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_servicios"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Servicios"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tel_admin"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Telefonos de Administradores"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tel_cliente"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Telefonos de Clientes"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tel_condu"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Telefonos de Conductores"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tipos_id"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Tipos de Identificacion"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tipos_servicio"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Tipos de servicio"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_tipos_usuario"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Tipos de Usuario"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_usuarios"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="administrar Usuarios"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_vehiculos"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Administrar Vehiculos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                </LinearLayout>
+            </ScrollView>
+        </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

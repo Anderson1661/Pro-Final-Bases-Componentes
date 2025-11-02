@@ -8,7 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import transportadora.Administrador.Principal_administrador
 import transportadora.Cliente.Principal_cliente
+import transportadora.Conductor.Principal_conductor
 import transportadora.Conductor.Registrar_conductor
 import transportadora.Login.R
 
@@ -45,8 +47,11 @@ class Login : AppCompatActivity() {
                 "Sesion iniciada exitosamente",
                 Toast.LENGTH_LONG
             ).show()
-            val intent = Intent(this@Login, Principal_cliente::class.java)
-            startActivity(intent)
+            val intentcliente = Intent(this@Login, Principal_cliente::class.java)
+            val intentconductor = Intent(this@Login, Principal_conductor::class.java)
+            val intentadministrador = Intent(this@Login, Principal_administrador::class.java)
+            startActivity(intentcliente)
+            //cambiar el intent para interfaz diferente
         }
 
         val txtRegistrar = findViewById<TextView>(R.id.txt_registrar_login)

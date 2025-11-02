@@ -12,6 +12,252 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Transportadora">
         <activity
+            android:name="transportadora.Administrador.Vehiculos.Editar_vehiculos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Vehiculos.Crear_vehiculos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Vehiculos.Administrar_vehiculos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Usuarios.Editar_usuarios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Usuarios.Crear_usuarios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Usuarios.Administrar_usuarios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_usuario.Editar_tipos_usuario"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_usuario.Crear_tipos_usuario"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_usuario.Administrar_tipos_usuario"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_servicio.Editar_tipos_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_servicio.Crear_tipos_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_servicio.Administrar_tipos_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_identificacion.Editar_tipos_identificacion"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_identificacion.Crear_tipos_identificacion"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tipos_identificacion.Administrar_tipos_identificacion"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_conductores.Editar_tel_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_conductores.Crear_tel_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_conductores.Administrar_tel_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_clientes.Editar_tel_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_clientes.Crear_tel_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_clientes.Administrar_tel_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_administradores.Editar_tel_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_administradores.Crear_tel_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Tel_administradores.Administrar_tel_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Servicios.Editar_servicios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Servicios.Crear_servicios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Servicios.Administrar_servicios"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Respuestas_seguridad.Editar_respuestas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Respuestas_seguridad.Crear_respuestas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Respuestas_seguridad.Administrar_respuestas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Preguntas_seguridad.Editar_preguntas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Preguntas_seguridad.Crear_preguntas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Preguntas_seguridad.Administrar_preguntas_seguridad"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Pasajeros_servicio.Editar_pasajeros_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Pasajeros_servicio.Crear_pasajeros_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Pasajeros_servicio.Administrar_pasajeros_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Paises.Editar_paises"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Paises.Crear_paises"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Paises.Administrar_paises"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Metodos_pago.Editar_metodos_pago"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Metodos_pago.Crear_metodos_pago"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Metodos_pago.Administrar_metodos_pago"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Marcas_vehiculo.Editar_marcas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Marcas_vehiculo.Crear_marcas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Marcas_vehiculo.Administrar_marcas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Lineas_vehiculo.Editar_lineas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Lineas_vehiculo.Crear_lineas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Lineas_vehiculo.Administrar_lineas_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Generos.Editar_generos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Generos.Crear_generos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Generos.Administrar_generos"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_vehiculo.Editar_estados_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_vehiculo.Crear_estados_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_vehiculo.Administrar_estados_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_servicio.Editar_estados_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_servicio.Crear_estados_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Estados_servicio.Administrar_estados_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Conductores.Editar_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Conductores.Crear_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Conductores.Administrar_conductores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Colores_vehiculo.Editar_colores_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Colores_vehiculo.Crear_colores_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Colores_vehiculo.Administrar_colores_vehiculo"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Codigos_postales.Editar_codigos_postales"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Codigos_postales.Crear_codigos_postales"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Codigos_postales.Administrar_codigos_postales"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Clientes.Editar_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Clientes.Crear_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Clientes.Administrar_clientes"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Categorias_servicio.Editar_categoria_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Categorias_servicio.Crear_categoria_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Categorias_servicio.Administrar_categoria_servicio"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Administradores.Editar_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Administradores.Crear_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Administradores.Administrar_administradores"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Act_preguntas_administrador"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Act_perfil_administrador"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Perfil_administrador"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Reporte4_admin"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Reporte3_admin"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Reporte2_admin"
+            android:exported="false" />
+        <activity
+            android:name="transportadora.Administrador.Reporte1_admin"
+            android:exported="false" />
+        <activity
             android:name="transportadora.Conductor.Registrar_conductor"
             android:exported="false" />
         <activity
