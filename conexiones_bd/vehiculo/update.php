@@ -1,43 +1,21 @@
 <?php
-require_once '../conexion.php';
+include '../conexion.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
+$placa = $_POST['placa'];
+$id_linea = $_POST['id_linea'];
+$id_marca = $_POST['id_marca'];
+$modelo = $_POST['modelo'];
+$id_color = $_POST['id_color'];
+$id_tipo_servicio = $_POST['id_tipo_servicio'];
+$id_estado_vehiculo = $_POST['id_estado_vehiculo'];
 
-if (!isset($data['placa'])) {
-    send_response(400, ['error' => 'La placa del vehículo es requerida.']);
-    exit;
-}
+$sql = "UPDATE vehiculo SET id_linea = '$id_linea', id_marca = '$id_marca', modelo = '$modelo', id_color = '$id_color', id_tipo_servicio = '$id_tipo_servicio', id_estado_vehiculo = '$id_estado_vehiculo' WHERE placa = '$placa'";
 
-$placa = $data['placa'];
-$updates = [];
-$params = [];
-$param_count = 1;
-
-if (isset($data['modelo'])) { $updates[] = "modelo = $" . $param_count++; $params[] = (int)$data['modelo']; }
-if (isset($data['id_marca'])) { $updates[] = "id_marca = $" . $param_count++; $params[] = (int)$data['id_marca']; }
-if (isset($data['id_tipo_servicio'])) { $updates[] = "id_tipo_servicio = $" . $param_count++; $params[] = (int)$data['id_tipo_servicio']; }
-if (isset($data['id_estado_vehiculo'])) { $updates[] = "id_estado_vehiculo = $" . $param_count++; $params[] = (int)$data['id_estado_vehiculo']; }
-if (isset($data['id_sucursal'])) { $updates[] = "id_sucursal = $" . $param_count++; $params[] = (int)$data['id_sucursal']; }
-
-if (empty($updates)) {
-    send_response(400, ['error' => 'No hay campos para actualizar.']);
-    exit;
-}
-
-$params[] = $placa;
-$query = "UPDATE vehiculo SET " . implode(', ', $updates) . " WHERE placa = $" . $param_count;
-
-$result = pg_query_params($conn, $query, $params);
-
-if ($result) {
-    if (pg_affected_rows($result) > 0) {
-        send_response(200, ['success' => 'Vehículo actualizado.']);
-    } else {
-        send_response(404, ['message' => 'No se encontró el vehículo o no se realizaron cambios.']);
-    }
+if ($conexion->query($sql) === TRUE) {
+    echo "Vehículo actualizado exitosamente";
 } else {
-    send_response(500, ['error' => 'Error al actualizar: ' . pg_last_error($conn)]);
+    echo "Error: " . $sql . "<br>" . $conexion->error;
 }
 
-pg_close($conn);
+$conexion->close();
 ?>

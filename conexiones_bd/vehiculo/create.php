@@ -1,30 +1,21 @@
 <?php
-require_once '../conexion.php';
+include '../conexion.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
+$placa = $_POST['placa'];
+$id_linea = $_POST['id_linea'];
+$id_marca = $_POST['id_marca'];
+$modelo = $_POST['modelo'];
+$id_color = $_POST['id_color'];
+$id_tipo_servicio = $_POST['id_tipo_servicio'];
+$id_estado_vehiculo = $_POST['id_estado_vehiculo'];
 
-if (!isset($data['placa']) || !isset($data['modelo']) || !isset($data['id_marca']) || !isset($data['id_tipo_servicio']) || !isset($data['id_estado_vehiculo']) || !isset($data['id_sucursal'])) {
-    send_response(400, ['error' => 'Todos los campos son requeridos.']);
-    exit;
-}
+$sql = "INSERT INTO vehiculo (placa, id_linea, id_marca, modelo, id_color, id_tipo_servicio, id_estado_vehiculo) VALUES ('$placa', '$id_linea', '$id_marca', '$modelo', '$id_color', '$id_tipo_servicio', '$id_estado_vehiculo')";
 
-$placa = $data['placa'];
-$modelo = (int)$data['modelo'];
-$id_marca = (int)$data['id_marca'];
-$id_tipo_servicio = (int)$data['id_tipo_servicio'];
-$id_estado_vehiculo = (int)$data['id_estado_vehiculo'];
-$id_sucursal = (int)$data['id_sucursal'];
-
-$query = "INSERT INTO vehiculo (placa, modelo, id_marca, id_tipo_servicio, id_estado_vehiculo, id_sucursal) VALUES ($1, $2, $3, $4, $5, $6)";
-$params = [$placa, $modelo, $id_marca, $id_tipo_servicio, $id_estado_vehiculo, $id_sucursal];
-
-$result = pg_query_params($conn, $query, $params);
-
-if ($result) {
-    send_response(201, ['success' => 'Vehículo creado exitosamente.']);
+if ($conexion->query($sql) === TRUE) {
+    echo "Nuevo vehículo creado exitosamente";
 } else {
-    send_response(500, ['error' => 'Error al crear el vehículo: ' . pg_last_error($conn)]);
+    echo "Error: " . $sql . "<br>" . $conexion->error;
 }
 
-pg_close($conn);
+$conexion->close();
 ?>

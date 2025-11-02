@@ -132,17 +132,34 @@ INSERT INTO tipo_servicio (descripcion) VALUES
 ('Alimentos'),
 ('Pasajeros y alimentos');
 
+CREATE TABLE color_vehiculo (
+	id_color        SERIAL PRIMARY KEY,
+	descripcion      VARCHAR(30) not null unique
+);
+
+INSERT INTO color_vehiculo (descripcion) VALUES 
+('Negro'),
+('Blanco'),
+('Gris');
+
+CREATE TABLE linea_vehiculo (
+	id_linea        varchar(50),
+	id_marca		int,
+	primary key (id_linea, id_marca),
+	foreign key (id_marca) references marca_vehiculo (id_marca)
+);
+
 CREATE TABLE vehiculo (
 	placa                   VARCHAR(20) PRIMARY KEY,
-	modelo                  int,
-	id_marca                INT,
-	id_tipo_servicio        INT,
-	id_estado_vehiculo      INT,
-	id_sucursal		          int,
-   foreign key (id_marca) references marca_vehiculo (id_marca),
+	linea_vehiculo			varchar(50) not null,
+	modelo                  int not null,
+	id_color				int not null
+	id_tipo_servicio        INT not null,
+	id_estado_vehiculo      INT not null,
+	foreign key (id_color) references color_vehiculo (id_color),
+	foreign key (linea_vehiculo) references linea_vehiculo (id_linea, id_marca),
    foreign key (id_tipo_servicio) references tipo_servicio (id_tipo_servicio),
-   foreign key (id_estado_vehiculo) references estado_vehiculo (id_estado_vehiculo),
-   foreign key (id_sucursal) references sucursal (id_sucursal)
+   foreign key (id_estado_vehiculo) references estado_vehiculo (id_estado_vehiculo)
 );
 
 alter table vehiculo add constraint check_modelo check (modelo>=2010);

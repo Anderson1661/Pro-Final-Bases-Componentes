@@ -22,7 +22,7 @@ $url_foto = $data['url_foto'];
 $id_sucursal = (int)$data['id_sucursal'];
 
 $query = "INSERT INTO conductor (id_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto, id_sucursal) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)";
-$params = [$id_conductor, $identificacion, $id_tipo_identificacion, $nombre, $direccion, $correo, $id_genero, $codigo_postal, $url_foto, $id_sucursal];
+$params = [$id_conductor, $placa_vehiculo, $identificacion, $id_tipo_identificacion, $nombre, $direccion, $correo, $id_genero, $codigo_postal, $url_foto, $id_sucursal];
 
 $result = pg_query_params($conn, $query, $params);
 
