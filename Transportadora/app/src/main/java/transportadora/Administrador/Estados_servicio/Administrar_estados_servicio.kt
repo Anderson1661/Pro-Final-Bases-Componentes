@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import transportadora.Administrador.Principal_administrador
 import transportadora.Login.R
 
 
@@ -24,7 +25,8 @@ class Administrar_estados_servicio : AppCompatActivity() {
 
         val btnVolver = findViewById<TextView>(R.id.txt_volver_login)
         btnVolver.setOnClickListener {
-            finish()
+            val intent = Intent(this, Principal_administrador::class.java)
+            startActivity(intent)
         }
 
         val btnCrear = findViewById<Button>(R.id.btnCrear)

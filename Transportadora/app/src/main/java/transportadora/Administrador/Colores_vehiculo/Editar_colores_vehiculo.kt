@@ -1,6 +1,8 @@
 package transportadora.Administrador.Colores_vehiculo
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,11 @@ class Editar_colores_vehiculo : AppCompatActivity() {
         val btnVolver = findViewById<TextView>(R.id.txt_volver_login)
         btnVolver.setOnClickListener {
             finish()
+        }
+        val botonguardar = findViewById<Button>(R.id.buttonGuardar)
+        botonguardar.setOnClickListener {
+            val intent = Intent(this, Administrar_colores_vehiculo::class.java)
+            startActivity(intent)
         }
     }
 }
