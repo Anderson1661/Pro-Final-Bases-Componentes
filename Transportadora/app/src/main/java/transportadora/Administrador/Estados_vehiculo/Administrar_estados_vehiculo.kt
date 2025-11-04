@@ -8,8 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import transportadora.Administrador.Estados_servicio.Crear_estados_servicio
-import transportadora.Administrador.Estados_servicio.Editar_estados_servicio
+
 import transportadora.Administrador.Principal_administrador
 import transportadora.Login.R
 

@@ -23,7 +23,8 @@ class Crear_estados_vehiculo : AppCompatActivity() {
         btnVolver.setOnClickListener {
             finish()
         }
-        val botonguardar = findViewById<Button>(R.id.buttonGuardar)
+
+        val botonguardar = findViewById<Button>(R.id.buttonCrear)
         botonguardar.setOnClickListener {
             val intent = Intent(this, Administrar_estados_vehiculo::class.java)
             startActivity(intent)
