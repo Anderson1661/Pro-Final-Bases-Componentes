@@ -174,7 +174,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
                         android:backgroundTint="@color/grisoscuro"
-                        android:text="Administrar administradores"
+                        android:text="Administrar Administradores"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
 

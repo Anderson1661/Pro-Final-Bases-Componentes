@@ -50,7 +50,7 @@ class Login : AppCompatActivity() {
             val intentcliente = Intent(this@Login, Principal_cliente::class.java)
             val intentconductor = Intent(this@Login, Principal_conductor::class.java)
             val intentadministrador = Intent(this@Login, Principal_administrador::class.java)
-            startActivity(intentcliente)
+            startActivity(intentadministrador)
             //cambiar el intent para interfaz diferente
         }
 
