@@ -1,5 +1,6 @@
 package transportadora.Compartido
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
@@ -17,6 +18,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import transportadora.Login.R
+import android.widget.Toast
+
 
 class Main : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,4 +76,10 @@ class Main : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    @SuppressLint("MissingSuperCall", "GestureBackNavigation")
+    override fun onBackPressed() {
+        Toast.makeText(this, "No puedes volver atrás desde esta pantalla", Toast.LENGTH_SHORT).show()
+    }
+
 }
