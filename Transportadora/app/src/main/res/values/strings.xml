@@ -4,5 +4,83 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string-array name="tipos_id">
+        <item>"Cedula de ciudadania"</item>
+        <item>"Cedula de extranjeria"</item>
+        <item>"Pasaporte"</item>
+        <item>"Nit"</item>
+    </string-array>
+    <string-array name="tipos_servicio">
+        <item>"Pasajeros"</item>
+        <item>"Alimentos"</item>
+        <item>"Pasajeros y alimentos"</item>
+    </string-array>
+    <string-array name="cat_servicio">
+        <item>"Normal"</item>
+        <item>"Especial"</item>
+        <item>"Urgente"</item>
+    </string-array>
+    <string-array name="paises">
+        <item>"Colombia"</item>
+        <item>"Peru"</item>
+        <item>"Ecuador"</item>
+    </string-array>
+    <string-array name="departamentos">
+        <item>"Cundinamarca"</item>
+        <item>"Meta"</item>
+        <item>"Amazonas"</item>
+    </string-array>
+    <string-array name="ciudades">
+        <item>"Bogota"</item>
+        <item>"Villavicencio"</item>
+        <item>"Leticia"</item>
+    </string-array>
+    <string-array name="genero">
+        <item>"Masculino"</item>
+        <item>"Femenino"</item>
+    </string-array>
+    <string-array name="rutas">
+        <item>"Ruta 1"</item>
+        <item>"Ruta 2"</item>
+    </string-array>
+    <string-array name="preguntas_seguridad">
+        <item>"Pregunta 1"</item>
+        <item>"Pregunta 2"</item>
+    </string-array>
+    <string-array name="usuarios">
+        <item>"Usuario 1"</item>
+        <item>"Usuario 2"</item>
+    </string-array>
+    <string-array name="tipos_origen">
+        <item>"Mi direccion de residencia"</item>
+        <item>"Otra"</item>
+    </string-array>
+    <string-array name="cantidad_pasajeros">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+    </string-array>
+    <string-array name="metodos_pago">
+        <item>"Efectivo"</item>
+        <item>"Tarjeta"</item>
+    </string-array>
+    <string-array name="tipos_usuario">
+        <item>"Administrador"</item>
+        <item>"Cliente"</item>
+        <item>"Conductor"</item>
+    </string-array>
+    <string-array name="marcas_vehiculo">
+        <item>"Marca 1"</item>
+        <item>"Marca 2"</item>
+    </string-array>
+    <string-array name="lineas_vehiculo">
+        <item>"Linea 1"</item>
+        <item>"Linea 2"</item>
+    </string-array>
+    <string-array name="colores_vehiculo">
+        <item>"Color 1"</item>
+        <item>"Color 2"</item>
+    </string-array>
 
 </resources>

@@ -366,6 +366,29 @@ FOR EACH ROW
 EXECUTE FUNCTION calcular_total_ruta();
 
 
+-- ---------- TRIGGER: calcular pago del conductor (30% del total) ----------
+CREATE OR REPLACE FUNCTION calcular_pago_conductor()
+RETURNS TRIGGER AS $$
+BEGIN
+	-- Si no hay total calculado, no hacemos nada (debe calcularse antes)
+	IF NEW.total IS NULL THEN
+		RETURN NEW;
+	END IF;
+
+	-- Calcular el pago del conductor como el 30% del total
+	NEW.pago_conductor := ROUND(NEW.total * 0.30::numeric, 2);
+
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_calcular_pago_conductor ON ruta;
+CREATE TRIGGER trg_calcular_pago_conductor
+BEFORE INSERT OR UPDATE ON ruta
+FOR EACH ROW
+EXECUTE FUNCTION calcular_pago_conductor();
+
+
 -- ---------- VISTAS PARA REPORTES ----------
 
 -- 1) Precio total y cantidad agrupados por tipo de servicio

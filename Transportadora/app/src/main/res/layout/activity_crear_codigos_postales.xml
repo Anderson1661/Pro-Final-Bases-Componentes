@@ -94,13 +94,14 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Spinner
-        android:id="@+id/txt_marca"
+        android:id="@+id/spinner_pais"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="146dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="206dp"
         android:textColor="@color/grisoscuro"
+        android:entries="@array/paises"
         app:layout_constraintTop_toBottomOf="@+id/textView10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

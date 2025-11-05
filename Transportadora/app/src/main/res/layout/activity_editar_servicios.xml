@@ -88,6 +88,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_cliente"
+                android:entries="@array/usuarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -100,6 +101,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_condcutor"
+                android:entries="@array/usuarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -130,6 +132,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_origen_tipo"
+                android:entries="@array/tipos_origen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -160,6 +163,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_depto_origen"
+                android:entries="@array/departamentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -173,6 +177,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_ciudad_origen"
+                android:entries="@array/ciudades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -186,6 +191,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_tipo_servicio"
+                android:entries="@array/tipos_servicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -199,6 +205,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_cantidad_pasajeros"
+                android:entries="@array/cantidad_pasajeros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -277,6 +284,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_categoria_servicio"
+                android:entries="@array/cat_servicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -307,6 +315,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_pais_destino"
+                android:entries="@array/paises"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -320,6 +329,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_depto_destino"
+                android:entries="@array/departamentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -333,6 +343,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_ciudad_destino"
+                android:entries="@array/ciudades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -375,6 +386,7 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_metodo_pago"
+                android:entries="@array/metodos_pago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

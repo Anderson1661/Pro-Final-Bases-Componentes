@@ -81,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/tipos_id"
                 app:layout_constraintTop_toBottomOf="@+id/textView10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -224,6 +225,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/paises"
                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -246,6 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/genero"
                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -359,11 +362,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_contra2_reg1" />
 
             <Spinner
-                android:id="@+id/txt_pregunta1"
+                android:id="@+id/spinner_pais"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/paises"
                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -381,11 +385,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_pregunta1" />
 
             <Spinner
-                android:id="@+id/txt_pregunta2"
+                android:id="@+id/spinner_departamento"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/departamentos"
                 app:layout_constraintTop_toBottomOf="@+id/textView18"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -403,11 +408,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_pregunta2" />
 
             <Spinner
-                android:id="@+id/txt_pregunta3"
+                android:id="@+id/spinner_ciudad"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/ciudades"
                 app:layout_constraintTop_toBottomOf="@+id/textView19"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

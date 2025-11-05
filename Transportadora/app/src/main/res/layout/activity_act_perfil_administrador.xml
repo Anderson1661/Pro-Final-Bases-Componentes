@@ -68,6 +68,7 @@
                 android:layout_marginTop="60dp"
                 android:text="Tipo de identificación"
                 android:textStyle="bold"
+                android:entries="@array/tipos_id"
                 android:textColor="@color/negro"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/tipos_id"
                 app:layout_constraintTop_toBottomOf="@+id/textView10"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -270,6 +272,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/paises"
                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -292,6 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/departamentos"
                 app:layout_constraintTop_toBottomOf="@+id/textView18"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -314,6 +318,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
+                android:entries="@array/ciudades"
                 app:layout_constraintTop_toBottomOf="@+id/textView19"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
