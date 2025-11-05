@@ -215,22 +215,23 @@ insert into estado_servicio (descripcion) VALUES
 
 
 CREATE TABLE ruta (
-	-id_ruta                 serial primary key,
-	-direccion_origen        varchar(50) not null,
-	-direccion_destino       varchar(50) not null,
-	-id_codigo_postal_origen  varchar (10) not null,
-	-id_codigo_postal_destino varchar (10) not null,
-	-distancia_km            NUMERIC(8, 2) not null,
-	-fecha_hora_reserva      timestamp not null,
-	-fecha_hora_origen       timestamp not null,
-	-fecha_hora_destino      timestamp not null,
+	id_ruta                 serial primary key,
+	direccion_origen        varchar(50) not null,
+	direccion_destino       varchar(50) not null,
+	id_codigo_postal_origen  varchar (10) not null,
+	id_codigo_postal_destino varchar (10) not null,
+	distancia_km            NUMERIC(8, 2) not null,
+	fecha_hora_reserva      timestamp not null,
+	fecha_hora_origen       timestamp not null,
+	fecha_hora_destino      timestamp not null,
 	id_conductor            int not null,
-	-id_tipo_servicio        int not null,
+	id_tipo_servicio        int not null,
 	id_cliente              int not null,
 	id_estado_servicio      int not null,
-	-id_categoria_servicio   int not null,
-	-id_metodo_pago          int not null,
-	-total                   NUMERIC(12, 2),
+	id_categoria_servicio   int not null,
+	id_metodo_pago          int not null,
+	total                   NUMERIC(12, 2),
+	pago_conductor			NUMERIC(12, 2),
   foreign key (id_codigo_postal_origen) references codigo_postal (id_codigo_postal),
   foreign key (id_codigo_postal_destino) references codigo_postal (id_codigo_postal),
   foreign key (id_conductor) references conductor (id_conductor),
@@ -303,7 +304,7 @@ BEGIN
     -- Insertar solo si no existe usuario con ese correo
     IF NOT EXISTS (SELECT 1 FROM usuario u WHERE u.correo = NEW.correo) THEN
         INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-        VALUES (tipo, NEW.correo, 'temporal123');
+        VALUES (tipo, NEW.correo, NEW.correo);
     END IF;
 
     RETURN NEW;

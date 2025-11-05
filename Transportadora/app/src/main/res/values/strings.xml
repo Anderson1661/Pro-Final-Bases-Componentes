@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Transportadora</string>
+    <string-array name="cantidad_telefonos">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

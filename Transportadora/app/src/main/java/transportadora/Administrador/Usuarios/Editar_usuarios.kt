@@ -24,7 +24,7 @@ class Editar_usuarios : AppCompatActivity() {
 
         val botoncrear = findViewById<Button>(R.id.buttonGuardar)
         botoncrear.setOnClickListener {
-            val intent = Intent(this, Administrar_tel_administradores::class.java)
+            val intent = Intent(this, Administrar_usuarios::class.java)
             startActivity(intent)
         }
 

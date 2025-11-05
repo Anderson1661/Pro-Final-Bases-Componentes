@@ -26,7 +26,7 @@ class Editar_servicios : AppCompatActivity() {
 
         val buttonCrear = findViewById<Button>(R.id.buttonGuardar)
         buttonCrear.setOnClickListener {
-            val intent = Intent(this, Administrar_respuestas_seguridad::class.java)
+            val intent = Intent(this, Administrar_servicios::class.java)
             startActivity(intent)
         }
 

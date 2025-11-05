@@ -24,7 +24,7 @@ class Crear_usuarios : AppCompatActivity() {
 
         val buttonCrear = findViewById<Button>(R.id.buttonCrear)
         buttonCrear.setOnClickListener {
-            val intent = Intent(this, Administrar_tel_administradores::class.java)
+            val intent = Intent(this, Administrar_usuarios::class.java)
             startActivity(intent)
         }
 

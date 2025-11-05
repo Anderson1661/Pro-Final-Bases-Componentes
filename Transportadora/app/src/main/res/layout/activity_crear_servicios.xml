@@ -68,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cliente del Servicio"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_cliente"
@@ -79,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:text="Conductor del Servicio"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_condcutor"
@@ -90,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:text="Fecha de Reserva del Servicio"
                 android:layout_marginTop="30dp"
+                android:textStyle="bold"
                 android:textColorHint="@color/grisclaro"
                 android:textColor="@color/negro" />
             <EditText
@@ -106,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="Dirección de origen"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_origen_tipo"
@@ -118,6 +122,7 @@
                 android:layout_height="wrap_content"
                 android:text="Dirección de origen"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:textColorHint="@color/grisclaro"
                 android:layout_marginTop="20dp" />
             <EditText
@@ -134,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:text="Departamento de origen"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_depto_origen"
@@ -146,6 +152,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ciudad de origen"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_ciudad_origen"
@@ -158,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tipo de servicio"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_tipo_servicio"
@@ -170,6 +178,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cantidad de pasajeros"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_cantidad_pasajeros"
@@ -182,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nombre completo pasajero 1"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <EditText
                 android:id="@+id/txt_pasajero1"
@@ -197,6 +207,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nombre completo pasajero 2"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp" />
             <EditText
                 android:id="@+id/txt_pasajero2"
@@ -212,6 +223,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nombre completo pasajero 3"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp" />
             <EditText
                 android:id="@+id/txt_pasajero3"
@@ -227,6 +239,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nombre completo pasajero 4"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp" />
             <EditText
                 android:id="@+id/txt_pasajero4"
@@ -243,6 +256,7 @@
                 android:layout_height="wrap_content"
                 android:text="Categoría de servicio"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_categoria_servicio"
@@ -254,6 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dirección de destino"
+                android:textStyle="bold"
                 android:textColor="@color/negro"
                 android:layout_marginTop="20dp" />
             <EditText
@@ -270,6 +285,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="País de destino"
+                android:textStyle="bold"
                 android:textColor="@color/negro"
                 android:layout_marginTop="20dp" />
             <Spinner
@@ -283,6 +299,7 @@
                 android:layout_height="wrap_content"
                 android:text="Departamento de destino"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_depto_destino"
@@ -294,6 +311,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ciudad de destino"
+                android:textStyle="bold"
                 android:textColor="@color/negro"
                 android:layout_marginTop="20dp" />
             <Spinner
@@ -307,6 +325,7 @@
                 android:layout_height="wrap_content"
                 android:text="Kilómetros del recorrido"
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:layout_marginTop="30dp" />
             <TextView
                 android:id="@+id/txt_km_recorrido"
@@ -319,6 +338,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Total a pagar"
+                android:textStyle="bold"
                 android:textColor="@color/negro"
                 android:layout_marginTop="10dp" />
             <TextView

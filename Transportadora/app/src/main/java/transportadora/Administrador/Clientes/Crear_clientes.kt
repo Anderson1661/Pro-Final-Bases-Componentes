@@ -18,19 +18,14 @@ class Crear_clientes : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_crear_clientes)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         val btnVolver = findViewById<TextView>(R.id.txt_volver_reg2)
         btnVolver.setOnClickListener {
             finish()
         }
 
-        val botonguardar = findViewById<Button>(R.id.buttonCrear)
-        botonguardar.setOnClickListener {
+        val buttonCrear = findViewById<Button>(R.id.buttonCrear)
+        buttonCrear.setOnClickListener {
             val intent = Intent(this, Administrar_clientes::class.java)
             startActivity(intent)
         }
