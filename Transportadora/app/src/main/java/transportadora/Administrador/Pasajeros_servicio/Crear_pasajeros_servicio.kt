@@ -26,7 +26,7 @@ class Crear_pasajeros_servicio : AppCompatActivity() {
 
         val botonguardar = findViewById<Button>(R.id.buttonGuardar)
         botonguardar.setOnClickListener {
-            val intent = Intent(this, Administrar_lineas_vehiculo::class.java)
+            val intent = Intent(this, Administrar_pasajeros_servicio::class.java)
             startActivity(intent)
         }
 

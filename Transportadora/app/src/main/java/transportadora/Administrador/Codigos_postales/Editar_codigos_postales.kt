@@ -26,7 +26,7 @@ class Editar_codigos_postales : AppCompatActivity() {
 
         val botoncrear = findViewById<Button>(R.id.buttonGuardar)
         botoncrear.setOnClickListener {
-            val intent = Intent(this, Administrar_lineas_vehiculo::class.java)
+            val intent = Intent(this, Administrar_codigos_postales::class.java)
             startActivity(intent)
         }
 
