@@ -1,8 +1,7 @@
+DROP DATABASE IF EXISTS transportadora;
 CREATE DATABASE transportadora;
 
-
-
-CREATE TABLE tipo_usuario (
+CREATE TABLE IF NOT EXISTS tipo_usuario (
 	id_tipo_usuario 	      SERIAL primary key,
 	descripcion 		        varchar (30) not null
 );
@@ -12,7 +11,7 @@ insert into tipo_usuario (descripcion) values
 ('Conductor'),
 ('Cliente');
 
-CREATE TABLE usuario (
+CREATE TABLE IF NOT EXISTS usuario (
 	id_usuario 			        SERIAL primary key,
 	id_tipo_usuario 	      int not null,
 	correo 				          varchar(100) unique not null,
@@ -20,12 +19,12 @@ CREATE TABLE usuario (
 	foreign key (id_tipo_usuario) references tipo_usuario (id_tipo_usuario)
 );
 
-CREATE TABLE pais (
+CREATE TABLE IF NOT EXISTS pais (
   id_pais                 SERIAL PRIMARY KEY,
   nombre                  VARCHAR(50) NOT NULL unique
 );
 
-CREATE TABLE codigo_postal (
+CREATE TABLE IF NOT EXISTS codigo_postal (
 	id_codigo_postal 		    varchar(10) primary key,
 	id_pais                 INT NOT NULL,
 	departamento            VARCHAR(50) NOT NULL,
@@ -33,7 +32,7 @@ CREATE TABLE codigo_postal (
 	foreign key (id_pais) references pais (id_pais)
 );
 
-CREATE TABLE tipo_identificacion (
+CREATE TABLE IF NOT EXISTS tipo_identificacion (
 	id_tipo_identificacion  SERIAL primary key,
 	descripcion 		        varchar(30) unique not null
 );
@@ -44,7 +43,7 @@ INSERT INTO tipo_identificacion (descripcion) VALUES
 ('NIT'),
 ('Pasaporte');
 
-CREATE TABLE genero (
+CREATE TABLE IF NOT EXISTS genero (
 	id_genero			          SERIAL primary key,
 	descripcion			        varchar(30) not null unique
 );
@@ -54,15 +53,15 @@ insert into genero (descripcion) values
 ('Femenino'),
 ('Otro');
 
-CREATE TABLE cliente (
+CREATE TABLE IF NOT EXISTS cliente (
 	id_cliente 			        serial primary key,
 	identificacion 		      varchar(20) not null unique,
 	id_tipo_identificacion  int not null,
   	nombre 				          varchar(100) not null,
 	direccion 			        varchar(100) not null,
-	correo 				          varchar(100) unique not null,
+	correo 				          varchar(100) not null unique,
 	id_genero 			        int not null,
-	id_pais_nacionalidad		int not null, 
+	id_pais_nacionalidad 	int not null, 
 	codigo_postal 		      varchar(10) not null,
 	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
 	foreign key (id_genero) references genero (id_genero),
@@ -70,17 +69,17 @@ CREATE TABLE cliente (
 	foreign key (id_pais_nacionalidad) references pais (id_pais)
 );
 
-CREATE TABLE telefono_cliente (
+CREATE TABLE IF NOT EXISTS telefono_cliente (
 	id_cliente 			        int,
 	telefono 			          bigint,
 	primary key (id_cliente, telefono),
   foreign key (id_cliente) references cliente (id_cliente)
 );
 
-CREATE TABLE administrador (
+CREATE TABLE IF NOT EXISTS administrador (
 	id_administrador 	      int primary key,
 	identificacion 		      varchar(20) not null unique,
-	id_tipo_identificacion  int not null,
+	id_tipo_identificacion 	int not null,
 	nombre 				          varchar(100) not null,
 	direccion 			        varchar(100) not null,
 	correo 				          varchar(100) not null unique,
@@ -91,14 +90,14 @@ CREATE TABLE administrador (
 	foreign key (codigo_postal) references codigo_postal (id_codigo_postal)
 );
 
-CREATE TABLE telefono_administrador (
+CREATE TABLE IF NOT EXISTS telefono_administrador (
 	id_administrador 	      int,
 	telefono 			          bigint,
 	primary key (id_administrador, telefono),
   foreign key (id_administrador) references administrador (id_administrador)
 );
 
-CREATE TABLE estado_vehiculo (
+CREATE TABLE IF NOT EXISTS estado_vehiculo (
   id_estado_vehiculo				        SERIAL PRIMARY KEY,
   descripcion       	    VARCHAR(100) NOT NULL unique
 );
@@ -108,12 +107,12 @@ INSERT INTO estado_vehiculo (descripcion) VALUES
 ('Mantenimiento'),
 ('Asignado');
 
-CREATE TABLE marca_vehiculo (
+CREATE TABLE IF NOT EXISTS marca_vehiculo (
   id_marca          	    SERIAL PRIMARY KEY,
   nombre_marca      	    VARCHAR(50) NOT NULL unique
 );
 
-CREATE TABLE tipo_servicio (
+CREATE TABLE IF NOT EXISTS tipo_servicio (
 	id_tipo_servicio        SERIAL PRIMARY KEY,
 	descripcion             VARCHAR(30) not null unique
 );
@@ -123,7 +122,7 @@ INSERT INTO tipo_servicio (descripcion) VALUES
 ('Alimentos'),
 ('Pasajeros y alimentos');
 
-CREATE TABLE color_vehiculo (
+CREATE TABLE IF NOT EXISTS color_vehiculo (
 	id_color        SERIAL PRIMARY KEY,
 	descripcion      VARCHAR(30) not null unique
 );
@@ -133,55 +132,56 @@ INSERT INTO color_vehiculo (descripcion) VALUES
 ('Blanco'),
 ('Gris');
 
-CREATE TABLE linea_vehiculo (
+CREATE TABLE IF NOT EXISTS linea_vehiculo (
 	id_linea        varchar(50),
-	id_marca		int,
+	id_marca 		int,
 	primary key (id_linea, id_marca),
 	foreign key (id_marca) references marca_vehiculo (id_marca)
 );
 
-CREATE TABLE vehiculo (
+CREATE TABLE IF NOT EXISTS vehiculo (
 	placa                   VARCHAR(20) PRIMARY KEY,
-	linea_vehiculo			varchar(50) not null,
+	linea_vehiculo 			varchar(50) not null,
 	modelo                  int not null,
-	id_color				int not null
+	id_color 				int not null,
+	id_marca                int not null,
 	id_tipo_servicio        INT not null,
 	id_estado_vehiculo      INT not null,
 	foreign key (id_color) references color_vehiculo (id_color),
-	foreign key (linea_vehiculo) references linea_vehiculo (id_linea, id_marca),
+	foreign key (linea_vehiculo, id_marca) references linea_vehiculo (id_linea, id_marca),
    foreign key (id_tipo_servicio) references tipo_servicio (id_tipo_servicio),
    foreign key (id_estado_vehiculo) references estado_vehiculo (id_estado_vehiculo)
 );
 
 alter table vehiculo add constraint check_modelo check (modelo>=2010);
 
-CREATE TABLE conductor (
+CREATE TABLE IF NOT EXISTS conductor (
 	id_conductor		        int primary key,
 	placa_vehiculo                   VARCHAR(20) not null unique,
 	identificacion 		      varchar(20) not null unique,
-	id_tipo_identificacion  int not null,
+	id_tipo_identificacion    int not null,
 	nombre 				          varchar(100) not null,
 	direccion 			        varchar(100) not null,
 	correo 				          varchar(100) not null unique,
 	id_genero 			        int not null,
 	codigo_postal 		      varchar(10) not null,
-	id_pais_nacionalidad		int not null, 
+	id_pais_nacionalidad 		int not null, 
 	url_foto			          varchar(255) not null unique,
 	foreign key (placa_vehiculo) references vehiculo (placa),
   	foreign key (id_tipo_identificacion) references tipo_identificacion (id_tipo_identificacion),
 	foreign key (id_genero) references genero (id_genero),
 	foreign key (codigo_postal) references codigo_postal (id_codigo_postal),
-	foreign key (id_pais_nacionalidad) references pais (id_pais),
+	foreign key (id_pais_nacionalidad) references pais (id_pais)
 );
 
-CREATE TABLE telefono_conductor (
+CREATE TABLE IF NOT EXISTS telefono_conductor (
 	id_conductor 		        int,
 	telefono 			          bigint,
 	primary key (id_conductor, telefono),
   foreign key (id_conductor) references conductor (id_conductor)
 );
 
-CREATE TABLE metodo_pago (
+CREATE TABLE IF NOT EXISTS metodo_pago (
 	id_metodo_pago          serial primary key,
 	descripcion             VARCHAR(30) not null unique
 );
@@ -192,7 +192,7 @@ INSERT INTO metodo_pago (descripcion) VALUES
 ('Tarjeta Credito'),
 ('Transferencia');
 
-CREATE TABLE categoria_servicio (
+CREATE TABLE IF NOT EXISTS categoria_servicio (
 	id_categoria_servicio   serial primary key,
 	descripcion             VARCHAR(30) not null unique,
 	valor_km                NUMERIC(12, 2) not null
@@ -203,7 +203,7 @@ INSERT INTO categoria_servicio (descripcion, valor_km) VALUES
 ('Especial',1500),
 ('Urgente',2000);
 
-CREATE TABLE estado_servicio (
+CREATE TABLE IF NOT EXISTS estado_servicio (
 	id_estado_servicio      serial primary key,
 	descripcion             VARCHAR(30) not null unique
 );
@@ -214,7 +214,7 @@ insert into estado_servicio (descripcion) VALUES
 ('Finalizado');
 
 
-CREATE TABLE ruta (
+CREATE TABLE IF NOT EXISTS ruta (
 	id_ruta                 serial primary key,
 	direccion_origen        varchar(50) not null,
 	direccion_destino       varchar(50) not null,
@@ -231,7 +231,7 @@ CREATE TABLE ruta (
 	id_categoria_servicio   int not null,
 	id_metodo_pago          int not null,
 	total                   NUMERIC(12, 2),
-	pago_conductor			NUMERIC(12, 2),
+	pago_conductor  		NUMERIC(12, 2),
   foreign key (id_codigo_postal_origen) references codigo_postal (id_codigo_postal),
   foreign key (id_codigo_postal_destino) references codigo_postal (id_codigo_postal),
   foreign key (id_conductor) references conductor (id_conductor),
@@ -244,14 +244,14 @@ CREATE TABLE ruta (
 
 alter table ruta add constraint check_distancia check (distancia_km>0);
 
-create table pasajero_ruta(
+CREATE TABLE IF NOT EXISTS pasajero_ruta(
 	id_ruta                 int,
 	nombre_pasajero         varchar(100),
 	primary key (id_ruta, nombre_pasajero),
   foreign key (id_ruta) references ruta(id_ruta)
 );
 
-CREATE TABLE preguntas_seguridad (
+CREATE TABLE IF NOT EXISTS preguntas_seguridad (
 	id_pregunta             serial primary key,
 	descripcion             varchar(100) not null unique
 );
@@ -263,7 +263,7 @@ INSERT INTO preguntas_seguridad (descripcion) VALUES
 ('¿Cuál fue el nombre de tu primer colegio?'),
 ('¿Cuál es el nombre de tu mejor amigo de la infancia?');
 
-CREATE TABLE respuestas_seguridad (
+CREATE TABLE IF NOT EXISTS respuestas_seguridad (
 	id_pregunta           int,
 	id_usuario            int,
 	respuesta_pregunta varchar(255) not null,
@@ -312,23 +312,36 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers asociados
-DROP TRIGGER IF EXISTS trg_insert_usuario_cliente ON cliente;
-CREATE TRIGGER trg_insert_usuario_cliente
-AFTER INSERT ON cliente
-FOR EACH ROW
-EXECUTE FUNCTION insertar_usuario();
+DO $do$
+BEGIN
+	-- crear triggers para cliente si la tabla existe
+	IF EXISTS (
+		SELECT 1 FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+		WHERE c.relname = 'cliente' AND n.nspname = current_schema()
+	) THEN
+		EXECUTE 'DROP TRIGGER IF EXISTS trg_insert_usuario_cliente ON cliente';
+		EXECUTE 'CREATE TRIGGER trg_insert_usuario_cliente AFTER INSERT ON cliente FOR EACH ROW EXECUTE FUNCTION insertar_usuario()';
+	END IF;
 
-DROP TRIGGER IF EXISTS trg_insert_usuario_conductor ON conductor;
-CREATE TRIGGER trg_insert_usuario_conductor
-AFTER INSERT ON conductor
-FOR EACH ROW
-EXECUTE FUNCTION insertar_usuario();
+	-- crear triggers para conductor si la tabla existe
+	IF EXISTS (
+		SELECT 1 FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+		WHERE c.relname = 'conductor' AND n.nspname = current_schema()
+	) THEN
+		EXECUTE 'DROP TRIGGER IF EXISTS trg_insert_usuario_conductor ON conductor';
+		EXECUTE 'CREATE TRIGGER trg_insert_usuario_conductor AFTER INSERT ON conductor FOR EACH ROW EXECUTE FUNCTION insertar_usuario()';
+	END IF;
 
-DROP TRIGGER IF EXISTS trg_insert_usuario_admin ON administrador;
-CREATE TRIGGER trg_insert_usuario_admin
-AFTER INSERT ON administrador
-FOR EACH ROW
-EXECUTE FUNCTION insertar_usuario();
+	-- crear trigger para administrador si la tabla existe
+	IF EXISTS (
+		SELECT 1 FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+		WHERE c.relname = 'administrador' AND n.nspname = current_schema()
+	) THEN
+		EXECUTE 'DROP TRIGGER IF EXISTS trg_insert_usuario_admin ON administrador';
+		EXECUTE 'CREATE TRIGGER trg_insert_usuario_admin AFTER INSERT ON administrador FOR EACH ROW EXECUTE FUNCTION insertar_usuario()';
+	END IF;
+END
+$do$;
 
 
 -- ---------- TRIGGER: calcular total de ruta ----------
@@ -360,10 +373,17 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trg_calcular_total_ruta ON ruta;
-CREATE TRIGGER trg_calcular_total_ruta
-BEFORE INSERT OR UPDATE ON ruta
-FOR EACH ROW
-EXECUTE FUNCTION calcular_total_ruta();
+DO $do$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+		WHERE c.relname = 'ruta' AND n.nspname = current_schema()
+	) THEN
+		EXECUTE 'DROP TRIGGER IF EXISTS trg_calcular_total_ruta ON ruta';
+		EXECUTE 'CREATE TRIGGER trg_calcular_total_ruta BEFORE INSERT OR UPDATE ON ruta FOR EACH ROW EXECUTE FUNCTION calcular_total_ruta()';
+	END IF;
+END
+$do$;
 
 
 -- ---------- TRIGGER: calcular pago del conductor (30% del total) ----------
@@ -383,35 +403,46 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trg_calcular_pago_conductor ON ruta;
-CREATE TRIGGER trg_calcular_pago_conductor
-BEFORE INSERT OR UPDATE ON ruta
-FOR EACH ROW
-EXECUTE FUNCTION calcular_pago_conductor();
+DO $do$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM pg_class c JOIN pg_namespace n ON c.relnamespace = n.oid
+		WHERE c.relname = 'ruta' AND n.nspname = current_schema()
+	) THEN
+		EXECUTE 'DROP TRIGGER IF EXISTS trg_calcular_pago_conductor ON ruta';
+		EXECUTE 'CREATE TRIGGER trg_calcular_pago_conductor BEFORE INSERT OR UPDATE ON ruta FOR EACH ROW EXECUTE FUNCTION calcular_pago_conductor()';
+	END IF;
+END
+$do$;
 
 
 -- ---------- VISTAS PARA REPORTES ----------
 
 -- 1) Precio total y cantidad agrupados por tipo de servicio
-CREATE OR REPLACE VIEW vw_total_cantidad_por_tipo_servicio AS
+CREATE OR REPLACE VIEW vw_total_por_tipo_y_categoria AS
 SELECT 
     ts.descripcion AS tipo_servicio,
+    cs.descripcion AS categoria_servicio,
     COUNT(r.id_ruta) AS cantidad_servicios,
     COALESCE(SUM(r.total), 0) AS valor_total
 FROM ruta r
 JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio
-GROUP BY ts.descripcion
-ORDER BY ts.descripcion;
+JOIN categoria_servicio cs ON r.id_categoria_servicio = cs.id_categoria_servicio
+GROUP BY ts.descripcion, cs.descripcion
+ORDER BY ts.descripcion, cs.descripcion;
+
 
 
 -- 2) Cantidad de servicios y personas por mes (usa fecha_hora_origen)
-CREATE OR REPLACE VIEW vw_cantidad_servicios_por_mes AS
+CREATE OR REPLACE VIEW vw_cantidad_servicios_por_mes_y_tipo AS
 SELECT 
     TO_CHAR(r.fecha_hora_origen, 'YYYY-MM') AS periodo,
-    COUNT(r.id_ruta) AS cantidad_servicios,
-    COUNT(DISTINCT r.id_cliente) AS cantidad_clientes
+    ts.descripcion AS tipo_servicio,
+    COUNT(r.id_ruta) AS cantidad_servicios
 FROM ruta r
-GROUP BY TO_CHAR(r.fecha_hora_origen, 'YYYY-MM')
-ORDER BY periodo;
+JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio
+GROUP BY TO_CHAR(r.fecha_hora_origen, 'YYYY-MM'), ts.descripcion
+ORDER BY periodo, tipo_servicio;
 
 
 -- 3) Clientes con servicios en un período (ordenados por cantidad)

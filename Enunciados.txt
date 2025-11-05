@@ -12,10 +12,10 @@ Bases de Datos avanzadas: (Punto 1,2 y 3 10 de noviembre)
         
         Aventureros S.A. requiere realizar reportes mensuales y anuales de su operación, por lo tanto, 
         la aplicación debe permitir obtener los siguientes datos:
-            Valores totales de los servicios realizados, diferenciando si corresponden a transporte de pasajeros o alimentos y la categoría a la que corresponde.
-            Cantidad de servicios de pasajeros y de alimentos por mes.
-            Datos de los clientes que han solicitado servicios durante un período de tiempo, organizados de mayor a menor.
-            Valores totales de los servicios de acuerdo con su medio de pago.
+            -Valores totales de los servicios realizados, diferenciando si corresponden a transporte de pasajeros o alimentos y la categoría a la que corresponde.
+            -Cantidad de servicios de pasajeros y de alimentos por mes.
+            -Datos de los clientes que han solicitado servicios durante un período de tiempo, organizados de mayor a menor.
+            -Valores totales de los servicios de acuerdo con su medio de pago.
             Entre otras…..
 
 

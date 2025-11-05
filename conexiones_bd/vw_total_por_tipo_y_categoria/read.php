@@ -1,7 +1,7 @@
 <?php
 require_once '../conexion.php';
 
-$query = "SELECT * FROM vw_total_cantidad_por_tipo_servicio";
+$query = "SELECT * FROM vw_total_por_tipo_y_categoria";
 $result = pg_query($conn, $query);
 
 if ($result) {
