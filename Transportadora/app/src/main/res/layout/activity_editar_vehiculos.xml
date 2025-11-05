@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="40dp"
-    tools:context="transportadora.Administrador.Conductores.Editar_conductores">
+    tools:context="transportadora.Administrador.Vehiculos.Editar_vehiculos">
 
     <ImageView
         android:id="@+id/imageView4"
