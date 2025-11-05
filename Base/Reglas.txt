@@ -13,13 +13,11 @@ Conductor
 -Maximo 2 telefonos
 -Siempre tiene mas de 18 años
 -Tiene licencia C1 o superior (vehiculo publico)
--Asignacion de manera diaria un vehiculo diferente (independientemente el tipo)
--Asignacion de un vechiculo de la misma sucursal
+-
 
 Vehiculo
 -Todos son publicos
--Todos son color blanco
--Si transporta pasajeros tiene capacidad de 5 pasajeros
+-Si transporta pasajeros tiene capacidad de 5 pasajeros (contando al conductor)
 -Los tipos de servicio son mutuamente excluyentes en una ruta
 -Solo puede estar inactivo por mantenimiento
 -Si el vehiculo esta en manteniento no puede ser asignado
@@ -34,7 +32,12 @@ Ruta
 -Solo via terrestre
 -Los valores deben estar expresados en pesos colombianos
 
+Servicio
+-Si es de alimentos maximo transporta hasat 100kg el vehiculo
+-Se asume que el paquete de alimentos no supera la capacidad de tamaño del vehiculo
+
 
 usuario
 -Cada usuario tiene un correo único
 -Cada usuario debe tener al menos una pregunta de seguridad registrada
+-Cuando un usuario se registra siempre su clave sera su mismo correo hasat que este la cambie
