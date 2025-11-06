@@ -3,17 +3,20 @@ package transportadora.Compartido
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 import transportadora.Administrador.Principal_administrador
 import transportadora.Cliente.Principal_cliente
 import transportadora.Conductor.Principal_conductor
 import transportadora.Conductor.Registrar_conductor
 import transportadora.Login.R
-
 
 class Login : AppCompatActivity() {
 
@@ -23,47 +26,78 @@ class Login : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_login)
-        txtVolverLogin.setOnClickListener {
-            finish()
-        }
+        txtVolverLogin.setOnClickListener { finish() }
 
         val txtOlvidarcontra = findViewById<TextView>(R.id.txt_olvidar_contra)
         txtOlvidarcontra.setOnClickListener {
-            val intent = Intent(this, Preg_seguridad::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Preg_seguridad::class.java))
         }
 
         val botonIngresar = findViewById<Button>(R.id.boton_ingresar_login)
         val txtCorreo = findViewById<EditText>(R.id.txt_correo_login)
         val txtContra = findViewById<EditText>(R.id.txt_contra_login)
 
-
         botonIngresar.setOnClickListener {
-            val correoIngresado = txtCorreo.text.toString()
-            val contraIngresada = txtContra.text.toString()
-            // validar corrreo y contra
-            Toast.makeText(
-                this,
-                "Sesion iniciada exitosamente",
-                Toast.LENGTH_LONG
-            ).show()
-            val intentcliente = Intent(this@Login, Principal_cliente::class.java)
-            val intentconductor = Intent(this@Login, Principal_conductor::class.java)
-            val intentadministrador = Intent(this@Login, Principal_administrador::class.java)
-            startActivity(intentcliente)
-            //cambiar el intent para interfaz diferente
+            val correoIngresado = txtCorreo.text.toString().trim()
+            val contraIngresada = txtContra.text.toString().trim()
+
+            if (correoIngresado.isEmpty() || contraIngresada.isEmpty()) {
+                Toast.makeText(this, "Debe ingresar correo y contraseña", Toast.LENGTH_SHORT).show()
+            } else {
+                autenticarUsuario(correoIngresado, contraIngresada)
+            }
         }
 
         val txtRegistrar = findViewById<TextView>(R.id.txt_registrar_login)
         txtRegistrar.setOnClickListener {
-            val intent = Intent(this, Registrar1::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Registrar1::class.java))
         }
 
-        val txt_registrar_conductor = findViewById<TextView>(R.id.txt_registrar_conductor)
-        txt_registrar_conductor.setOnClickListener {
-            val intent = Intent(this@Login, Registrar_conductor::class.java)
-            startActivity(intent)
+        val txtRegistrarConductor = findViewById<TextView>(R.id.txt_registrar_conductor)
+        txtRegistrarConductor.setOnClickListener {
+            startActivity(Intent(this, Registrar_conductor::class.java))
+        }
+    }
+
+    private fun autenticarUsuario(correo: String, contrasenia: String) {
+        val url = "http://10.185.141.37/conexiones/consultas/login.php" // cambia por tu ruta real
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val parametros = "correo=$correo&contrasenia=$contrasenia"
+                val connection = URL(url).openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.doOutput = true
+                connection.outputStream.write(parametros.toByteArray(Charsets.UTF_8))
+
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+
+                withContext(Dispatchers.Main) {
+                    val json = JSONObject(response)
+
+                    if (json.getBoolean("success")) {
+                        val tipoUsuario = json.getInt("id_tipo_usuario")
+
+                        when (tipoUsuario) {
+                            1 -> startActivity(Intent(this@Login, Principal_administrador::class.java))
+                            2 -> startActivity(Intent(this@Login, Principal_conductor::class.java))
+                            3 -> startActivity(Intent(this@Login, Principal_cliente::class.java))
+                            else -> Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
+                        }
+
+                        Toast.makeText(this@Login, "Sesión iniciada", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@Login, json.getString("message"), Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                connection.disconnect()
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@Login, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }
