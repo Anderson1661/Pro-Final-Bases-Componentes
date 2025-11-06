@@ -219,6 +219,11 @@ CREATE TABLE IF NOT EXISTS respuestas_seguridad (
 
 -- Tablas maestras básicas
 INSERT INTO tipo_usuario (descripcion) VALUES ('Administrador'), ('Conductor'), ('Cliente');
+insert into usuario (id_tipo_usuario, correo, contrasenia) values 
+(1, "admin@empresa.com", "admin@empresa.com"),
+(2, "conductor@empresa.com", "conductor@empresa.com"),
+(3, "cliente@empresa.com", "cliente@empresa.com");
+
 INSERT INTO tipo_identificacion (descripcion) VALUES ('Cédula de Ciudadanía'), ('Cédula de Extranjería'), ('Pasaporte');
 INSERT INTO genero (descripcion) VALUES ('Masculino'), ('Femenino'), ('Otro');
 INSERT INTO pais (nombre) VALUES ('Colombia'), ('Venezuela'), ('Ecuador');

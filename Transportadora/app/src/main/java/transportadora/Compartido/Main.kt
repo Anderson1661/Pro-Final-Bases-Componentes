@@ -19,6 +19,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import transportadora.Login.R
 import android.widget.Toast
+import transportadora.Compartido.Registrar1
+
 
 
 class Main : AppCompatActivity() {
@@ -26,13 +28,6 @@ class Main : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main2)
-
-        // Ajuste de márgenes del sistema
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         // Texto clicable + color personalizado
         val textView = findViewById<TextView>(R.id.textView5)

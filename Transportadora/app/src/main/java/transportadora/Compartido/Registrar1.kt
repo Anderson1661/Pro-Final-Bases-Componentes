@@ -18,9 +18,9 @@ class Registrar1 : AppCompatActivity() {
 
         // Asignar valores al spinner de tipos id
         val spinner_tipos_id = findViewById<Spinner>(R.id.txt_tipo_id_reg1)
-        val spinner_paises = findViewById<Spinner>(R.id.txt_pregunta1)
-        val spinner_departamentos = findViewById<Spinner>(R.id.txt_pregunta2)
-        val spinner_ciudades = findViewById<Spinner>(R.id.txt_pregunta3)
+        val spinner_paises = findViewById<Spinner>(R.id.spinner_pais)
+        val spinner_departamentos = findViewById<Spinner>(R.id.spinner_departamento)
+        val spinner_ciudades = findViewById<Spinner>(R.id.spinner_ciudad)
         val spinner_nacionalidad = findViewById<Spinner>(R.id.txt_nacionalidad)
 
         // Lista de opciones (puede venir de un recurso o del código)
