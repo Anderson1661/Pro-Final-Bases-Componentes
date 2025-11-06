@@ -90,7 +90,7 @@ La aplicación Android **NO se conecta directamente** a la base de datos. En su 
 ### Estructura de Carpetas Recomendada (Organizada)
 
 ```
-proyecto_backend/
+conexiones/
 ├── config/
 │   └── conexion.php          # ⭐ UN SOLO archivo de conexión compartido
 │
@@ -134,7 +134,7 @@ proyecto_backend/
 
 **Crear las carpetas:**
 ```bash
-proyecto_backend/
+conexiones/
 ├── config/          (crear esta carpeta)
 ├── alumnos/         (crear esta carpeta)
 ├── usuarios/        (crear esta carpeta)
@@ -144,15 +144,15 @@ proyecto_backend/
 **Verificación 1.1:** 
 - [ ] Abre tu explorador de archivos
 - [ ] Navega a la carpeta `htdocs` (o `www/html`)
-- [ ] Crea la carpeta `proyecto_backend`
-- [ ] Dentro de `proyecto_backend`, crea la carpeta `config`
+- [ ] Crea la carpeta `conexiones`
+- [ ] Dentro de `conexiones`, crea la carpeta `config`
 - [ ] Crea las carpetas para cada tabla que tengas en tu BD
 
 ---
 
 ### Paso 2: Crear el Archivo de Conexión (UNO SOLO para todo el proyecto)
 
-**📁 Ubicación:** `proyecto_backend/config/conexion.php`
+**📁 Ubicación:** `conexiones/config/conexion.php`
 
 **⭐ IMPORTANTE:** Este archivo se crea UNA VEZ y se usa en todos los demás archivos PHP.
 
@@ -216,7 +216,7 @@ mysqli_close($link);
 ?>
 ```
 
-- [ ] Abrir en navegador: `http://localhost/proyecto_backend/test_conexion.php`
+- [ ] Abrir en navegador: `http://localhost/conexiones/test_conexion.php`
 - [ ] Debe mostrar "✅ Conexión exitosa"
 - [ ] Si hay error, verificar credenciales en `conexion.php`
 - [ ] **Eliminar `test_conexion.php` después de verificar**
@@ -234,7 +234,7 @@ Por ejemplo, si tienes 3 tablas (`alumnos`, `usuarios`, `productos`), necesitar�
 
 #### Ejemplo: Tabla "alumnos"
 
-**📁 Ubicación:** `proyecto_backend/alumnos/`
+**📁 Ubicación:** `conexiones/alumnos/`
 
 **Tabla de ejemplo:**
 ```sql
@@ -252,7 +252,7 @@ CREATE TABLE alumnos (
 
 #### 3.1. Crear Endpoint para Consultar Datos (SELECT)
 
-**📁 Archivo:** `proyecto_backend/alumnos/mostrar.php`
+**📁 Archivo:** `conexiones/alumnos/mostrar.php`
 
 ```php
 <?php
@@ -321,13 +321,13 @@ mysqli_close($link);
 - `JSON_UNESCAPED_UNICODE`: Evita problemas con caracteres especiales
 
 **Verificación 3.1.1:**
-- [ ] Crear carpeta `alumnos/` dentro de `proyecto_backend/`
+- [ ] Crear carpeta `alumnos/` dentro de `conexiones/`
 - [ ] Crear archivo `alumnos/mostrar.php` con el código anterior
 - [ ] **Ajustar los nombres de columnas** según tu tabla real
 - [ ] Guardar el archivo
 
 **Verificación 3.1.2 - Probar en navegador:**
-- [ ] Abrir: `http://localhost/proyecto_backend/alumnos/mostrar.php`
+- [ ] Abrir: `http://localhost/conexiones/alumnos/mostrar.php`
 - [ ] Debe mostrar JSON con estructura:
 ```json
 {
@@ -368,7 +368,7 @@ mysqli_close($link);
 
 #### 3.2. Crear Endpoint para Insertar Datos (INSERT)
 
-**📁 Archivo:** `proyecto_backend/alumnos/registrar.php`
+**📁 Archivo:** `conexiones/alumnos/registrar.php`
 
 ```php
 <?php
@@ -428,14 +428,14 @@ mysqli_close($link);
 - [ ] Guardar el archivo
 
 **Verificación 3.2.2 - Probar con navegador (simular petición Android):**
-- [ ] Abrir: `http://localhost/proyecto_backend/alumnos/registrar.php?cod=123&nom=Juan&ape=Perez&em=test@test.com&tel=123456&fen=2024-01-01`
+- [ ] Abrir: `http://localhost/conexiones/alumnos/registrar.php?cod=123&nom=Juan&ape=Perez&em=test@test.com&tel=123456&fen=2024-01-01`
 - [ ] Debe mostrar: "Alumno Registrado"
 - [ ] Verificar en phpMyAdmin que el registro se insertó
 - [ ] Si hay error, revisar nombres de columnas y estructura de tabla
 
 #### 3.3. Crear Endpoint para Actualizar Datos (UPDATE)
 
-**📁 Archivo:** `proyecto_backend/alumnos/editar.php`
+**📁 Archivo:** `conexiones/alumnos/editar.php`
 
 ```php
 <?php
@@ -511,7 +511,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 #### 3.4. Crear Endpoint para Eliminar Datos (DELETE)
 
-**📁 Archivo:** `proyecto_backend/alumnos/eliminar.php`
+**📁 Archivo:** `conexiones/alumnos/eliminar.php`
 
 ```php
 <?php
@@ -575,7 +575,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 **📋 Checklist para cada tabla nueva:**
 
 1. **Crear carpeta:**
-   - [ ] Crear carpeta `nombre_tabla/` dentro de `proyecto_backend/`
+   - [ ] Crear carpeta `nombre_tabla/` dentro de `conexiones/`
 
 2. **Crear archivos PHP:**
    - [ ] `nombre_tabla/mostrar.php` (SELECT)
@@ -609,7 +609,7 @@ CREATE TABLE usuarios (
 );
 ```
 
-**📁 Archivo:** `proyecto_backend/usuarios/mostrar.php`
+**📁 Archivo:** `conexiones/usuarios/mostrar.php`
 ```php
 <?php
 include('../config/conexion.php');
@@ -638,7 +638,7 @@ mysqli_close($link);
 ?>
 ```
 
-**📁 Archivo:** `proyecto_backend/usuarios/login.php` (Ejemplo especial)
+**📁 Archivo:** `conexiones/usuarios/login.php` (Ejemplo especial)
 ```php
 <?php
 include('../config/conexion.php');
@@ -681,18 +681,18 @@ mysqli_close($link);
 **5.1. Colocar archivos PHP en el servidor:**
 
 **Ubicaciones según el servidor:**
-- **XAMPP (Windows):** `C:\xampp\htdocs\proyecto_backend\`
-- **XAMPP (Mac):** `/Applications/XAMPP/htdocs/proyecto_backend/`
-- **XAMPP (Linux):** `/opt/lampp/htdocs/proyecto_backend/`
-- **WAMP (Windows):** `C:\wamp64\www\proyecto_backend\`
-- **MAMP (Mac):** `/Applications/MAMP/htdocs/proyecto_backend/`
-- **Linux Apache:** `/var/www/html/proyecto_backend/`
+- **XAMPP (Windows):** `C:\xampp\htdocs\conexiones\`
+- **XAMPP (Mac):** `/Applications/XAMPP/htdocs/conexiones/`
+- **XAMPP (Linux):** `/opt/lampp/htdocs/conexiones/`
+- **WAMP (Windows):** `C:\wamp64\www\conexiones\`
+- **MAMP (Mac):** `/Applications/MAMP/htdocs/conexiones/`
+- **Linux Apache:** `/var/www/html/conexiones/`
 
 **Verificación 5.1:**
-- [ ] Copiar toda la carpeta `proyecto_backend` con su estructura completa
+- [ ] Copiar toda la carpeta `conexiones` con su estructura completa
 - [ ] Verificar que la estructura de carpetas se mantenga:
   ```
-  proyecto_backend/
+  conexiones/
   ├── config/
   │   └── conexion.php
   ├── alumnos/
@@ -739,8 +739,8 @@ Buscar la dirección IP en la interfaz de red activa
 **5.4. Probar endpoints localmente:**
 
 **Verificación 5.4.1 - Probar desde navegador:**
-- [ ] Abrir: `http://localhost/proyecto_backend/config/conexion.php` (debe mostrar error o estar vacío, es normal)
-- [ ] Abrir: `http://localhost/proyecto_backend/alumnos/mostrar.php`
+- [ ] Abrir: `http://localhost/conexiones/config/conexion.php` (debe mostrar error o estar vacío, es normal)
+- [ ] Abrir: `http://localhost/conexiones/alumnos/mostrar.php`
 - [ ] Debe mostrar JSON con datos (o array vacío si no hay datos)
 - [ ] Si hay error, revisar:
   - [ ] Apache está corriendo
@@ -751,8 +751,8 @@ Buscar la dirección IP en la interfaz de red activa
 **Verificación 5.4.2 - Probar desde dispositivo Android:**
 - [ ] Conectar dispositivo Android a la misma red WiFi que el servidor
 - [ ] Abrir navegador en el dispositivo
-- [ ] Ir a: `http://TU_IP/proyecto_backend/alumnos/mostrar.php`
-  - Ejemplo: `http://192.168.0.101/proyecto_backend/alumnos/mostrar.php`
+- [ ] Ir a: `http://TU_IP/conexiones/alumnos/mostrar.php`
+  - Ejemplo: `http://192.168.0.101/conexiones/alumnos/mostrar.php`
 - [ ] Debe mostrar el mismo JSON que en localhost
 - [ ] Si no funciona, verificar:
   - [ ] Firewall de Windows/Linux puede estar bloqueando
@@ -900,7 +900,7 @@ package com.tu_paquete;
 public class Config {
     // ⚠️ CAMBIAR: IP de tu servidor
     private static final String SERVER_IP = "192.168.0.101";
-    private static final String BASE_URL = "http://" + SERVER_IP + "/proyecto_backend/";
+    private static final String BASE_URL = "http://" + SERVER_IP + "/conexiones/";
     
     // URLs para tabla "alumnos"
     public static final String URL_ALUMNOS_MOSTRAR = BASE_URL + "alumnos/mostrar.php";
@@ -1658,12 +1658,12 @@ Log.d("URL", "Conectando a: " + url);
 - [ ] Anotar nombres de tablas y columnas
 
 **1.2. Estructura de Carpetas Backend:**
-- [ ] Crear carpeta `proyecto_backend/`
-- [ ] Crear carpeta `proyecto_backend/config/`
-- [ ] Crear carpeta por cada tabla: `proyecto_backend/nombre_tabla/`
-  - Ejemplo: `proyecto_backend/alumnos/`
-  - Ejemplo: `proyecto_backend/usuarios/`
-  - Ejemplo: `proyecto_backend/productos/`
+- [ ] Crear carpeta `conexiones/`
+- [ ] Crear carpeta `conexiones/config/`
+- [ ] Crear carpeta por cada tabla: `conexiones/nombre_tabla/`
+  - Ejemplo: `conexiones/alumnos/`
+  - Ejemplo: `conexiones/usuarios/`
+  - Ejemplo: `conexiones/productos/`
 
 **1.3. Archivo de Conexión:**
 - [ ] Crear `config/conexion.php`
@@ -1684,7 +1684,7 @@ Log.d("URL", "Conectando a: " + url);
 - [ ] Incluir `../config/conexion.php`
 - [ ] Ajustar nombres de columnas en SQL
 - [ ] Ajustar nombres de campos en respuesta JSON
-- [ ] Probar en navegador: `http://localhost/proyecto_backend/nombre_tabla/mostrar.php`
+- [ ] Probar en navegador: `http://localhost/conexiones/nombre_tabla/mostrar.php`
 - [ ] Verificar que el JSON se muestre correctamente
 
 **2.2. Endpoint INSERT (registrar.php):**
@@ -1719,7 +1719,7 @@ Log.d("URL", "Conectando a: " + url);
 #### FASE 3: Configuración del Servidor
 
 **3.1. Ubicación de Archivos:**
-- [ ] Copiar `proyecto_backend/` a `htdocs/` o `www/`
+- [ ] Copiar `conexiones/` a `htdocs/` o `www/`
 - [ ] Verificar que la estructura de carpetas se mantenga
 
 **3.2. Obtener IP:**
@@ -1727,7 +1727,7 @@ Log.d("URL", "Conectando a: " + url);
 - [ ] Anotar la dirección IP (ejemplo: `192.168.0.101`)
 
 **3.3. Pruebas desde Navegador:**
-- [ ] Probar `http://localhost/proyecto_backend/nombre_tabla/mostrar.php`
+- [ ] Probar `http://localhost/conexiones/nombre_tabla/mostrar.php`
 - [ ] Verificar que muestre JSON correcto
 - [ ] Probar desde dispositivo Android en la misma red
 

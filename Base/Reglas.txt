@@ -41,3 +41,9 @@ usuario
 -Cada usuario tiene un correo único
 -Cada usuario debe tener al menos una pregunta de seguridad registrada
 -Cuando un usuario se registra siempre su clave sera su mismo correo hasat que este la cambie
+
+
+
+ifconfig | grep "inet "
+    inet 127.0.0.1 netmask 0xff000000
+    inet 192.168.40.8 netmask 0xffffff00 broadcast 192.168.40.255
