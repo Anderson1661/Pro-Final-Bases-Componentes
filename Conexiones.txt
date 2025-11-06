@@ -23,7 +23,7 @@
 
 
 
-🧩 3️⃣ Ejemplo de conexión: db_config.php
+🧩 3️⃣ Ejemplo de conexión: conexion.php
 <?php
 $host = "localhost";
 $port = "5432";
