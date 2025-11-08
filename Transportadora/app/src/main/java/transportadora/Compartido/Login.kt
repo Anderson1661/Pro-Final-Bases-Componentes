@@ -16,6 +16,7 @@ import transportadora.Administrador.Principal_administrador
 import transportadora.Cliente.Principal_cliente
 import transportadora.Conductor.Principal_conductor
 import transportadora.Conductor.Registrar_conductor
+import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 
 class Login : AppCompatActivity() {
@@ -60,7 +61,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun autenticarUsuario(correo: String, contrasenia: String) {
-        val url = "http://10.185.141.37/conexiones/consultas/login.php" // cambia por tu ruta real
+        val url = ApiConfig.BASE_URL + "consultas/login.php" // cambia por tu ruta
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
