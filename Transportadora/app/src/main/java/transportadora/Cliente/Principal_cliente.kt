@@ -19,9 +19,13 @@ class Principal_cliente : AppCompatActivity() {
     private var perfilCliente: PerfilCliente? = null
     private var departamentosOrigen: List<String> = emptyList()
     private var listaCategoriasCompleta: List<Categoria_servicio> = emptyList()
+    private var totalPagar: Double = 0.0
 
     private lateinit var txtKmRecorrido: TextView
     private lateinit var txtTotalPagar: TextView
+    private lateinit var spinner_ciudades1: Spinner
+    private lateinit var spinner_ciudades2: Spinner
+    private lateinit var spinner_categoria: Spinner
 
 
     @SuppressLint("MissingInflatedId")
@@ -38,12 +42,12 @@ class Principal_cliente : AppCompatActivity() {
         val spinner_paises = findViewById<Spinner>(R.id.spinner_pais_destino)
         val spinner_departamento1 = findViewById<Spinner>(R.id.spinner_depto_origen)
         val spinner_departamento2 = findViewById<Spinner>(R.id.spinner_depto_destino)
-        val spinner_ciudades1 = findViewById<Spinner>(R.id.spinner_ciudad_origen)
-        val spinner_ciudades2 = findViewById<Spinner>(R.id.spinner_ciudad_destino)
+        spinner_ciudades1 = findViewById(R.id.spinner_ciudad_origen)
+        spinner_ciudades2 = findViewById(R.id.spinner_ciudad_destino)
         val txtDireccionOrigen = findViewById<EditText>(R.id.txt_direccion_origen)
         val spinner_pasajeros = findViewById<Spinner>(R.id.spinner_cantidad_pasajeros)
         val spinner_tipos = findViewById<Spinner>(R.id.spinner_tipo_servicio)
-        val spinner_categoria = findViewById<Spinner>(R.id.spinner_categoria_servicio)
+        spinner_categoria = findViewById(R.id.spinner_categoria_servicio)
         val spinner_pago = findViewById<Spinner>(R.id.spinner_metodo_pago)
 
         txtKmRecorrido = findViewById(R.id.txt_km_recorrido)
@@ -189,7 +193,9 @@ class Principal_cliente : AppCompatActivity() {
         // MENÚ LATERAL
 
         findViewById<TextView>(R.id.editarperfil).setOnClickListener {
-            startActivity(Intent(this, Perfil_cliente::class.java))
+            val intent = Intent(this, Perfil_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail)
+            startActivity(intent)
         }
 
         findViewById<TextView>(R.id.cambiocontra).setOnClickListener {
@@ -374,18 +380,17 @@ class Principal_cliente : AppCompatActivity() {
                     "Debes entregarle el efectivo una vez que llegue el conductor",
                     Toast.LENGTH_LONG
                 ).show()
+                val intent = Intent(this, Historial_serv_cliente::class.java)
+                startActivity(intent)
             } else {
                 val intent = Intent(this, Transferencia::class.java)
+                intent.putExtra("TOTAL_PAGAR", totalPagar)
                 startActivity(intent)
             }
         }
     }
 
     private fun calcularYActualizarTotal() {
-        val spinner_ciudades1 = findViewById<Spinner>(R.id.spinner_ciudad_origen)
-        val spinner_ciudades2 = findViewById<Spinner>(R.id.spinner_ciudad_destino)
-        val spinner_categoria = findViewById<Spinner>(R.id.spinner_categoria_servicio)
-
         val origenPosition = spinner_ciudades1.selectedItemPosition
         val destinoPosition = spinner_ciudades2.selectedItemPosition
         val categoriaPosition = spinner_categoria.selectedItemPosition
@@ -399,12 +404,13 @@ class Principal_cliente : AppCompatActivity() {
             val valorKm = categoriaSeleccionada.valor_km
 
             val distancia = (10..100).random()
-            val total = distancia * valorKm
+            totalPagar = distancia * valorKm
 
             txtKmRecorrido.text = "$distancia km"
-            txtTotalPagar.text = String.format("$%,.2f", total)
+            txtTotalPagar.text = String.format("$%,.2f", totalPagar)
 
         } else {
+            totalPagar = 0.0
             txtKmRecorrido.text = "0 km"
             txtTotalPagar.text = "$0"
         }

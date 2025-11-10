@@ -26,9 +26,14 @@ class Transferencia : AppCompatActivity() {
         val tvBank: TextView = findViewById(R.id.tvBank)
         val tvAccount: TextView = findViewById(R.id.tvAccount)
         val tvHolder: TextView = findViewById(R.id.tvHolder)
+        val tvAmount: TextView = findViewById(R.id.tvAmount)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         val tvState: TextView = findViewById(R.id.tvState)
         val layoutResult: LinearLayout = findViewById(R.id.layoutResult)
+
+        // Recibir el total a pagar del Intent
+        val totalPagar = intent.getDoubleExtra("TOTAL_PAGAR", 0.0)
+        tvAmount.text = String.format("$ %,.2f", totalPagar)
 
         val dots = listOf(
             findViewById<TextView>(R.id.dot1),
