@@ -4,17 +4,56 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import transportadora.Almacenados.Historial_servicio_almacenados
 import transportadora.Login.R
 
 class Historial_serv_cliente : AppCompatActivity() {
+
+    private lateinit var historialAdapter: HistorialAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_historial_serv_cliente)
+
+        // 1. Configurar RecyclerView
+        val recyclerHistorial = findViewById<RecyclerView>(R.id.recyclerHistorial)
+        recyclerHistorial.layoutManager = LinearLayoutManager(this)
+        historialAdapter = HistorialAdapter(emptyList())
+        recyclerHistorial.adapter = historialAdapter
+
+        // 2. Cargar Datos
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", null)
+
+        if (userEmail != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val historial = withContext(Dispatchers.IO) {
+                        Historial_servicio_almacenados.obtenerHistorial(userEmail)
+                    }
+                    if (historial.isNotEmpty()) {
+                        historialAdapter.updateData(historial)
+                    } else {
+                        Toast.makeText(this@Historial_serv_cliente, "No tienes servicios en tu historial.", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this@Historial_serv_cliente, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        } else {
+            Toast.makeText(this, "Error: No se pudo identificar al usuario.", Toast.LENGTH_LONG).show()
+            finish()
+        }
 
 
         //Menu lateral
@@ -56,18 +95,6 @@ class Historial_serv_cliente : AppCompatActivity() {
             scrollView.post {
                 scrollView.smoothScrollTo(0, 0)
             }
-        }
-
-        // botones de cada servicio
-        val btndetalles = findViewById<TextView>(R.id.btnDetalle)
-        btndetalles.setOnClickListener {
-            val intent = Intent(this, Seguimiento_serv_cliente::class.java)
-            startActivity(intent)
-        }
-        val btneditar = findViewById<TextView>(R.id.btnEditar)
-        btneditar.setOnClickListener {
-            val intent = Intent(this, Act_serv::class.java)
-            startActivity(intent)
         }
     }
 }

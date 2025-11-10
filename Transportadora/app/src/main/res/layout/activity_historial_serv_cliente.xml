@@ -131,124 +131,12 @@
                             android:layout_marginTop="40dp"
                             android:layout_marginBottom="24dp" />
 
-                        <!-- Lista contenedora -->
-                        <LinearLayout
-                            android:id="@+id/layoutHistorialServicios"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerHistorial"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:divider="@drawable/divider_line"
-                            android:showDividers="middle" />
-
-                        <!-- Ejemplo de un servicio -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:background="@drawable/bg_servicio_card"
-                            android:padding="12dp"
-                            android:layout_marginBottom="12dp"
-                            android:elevation="3dp">
-
-                            <!-- Columna izquierda (datos del servicio) -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tvServicio"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Servicio: Envío Paquete #A1423"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/negro"
-                                    android:textSize="16sp" />
-
-                                <TextView
-                                    android:id="@+id/tvFecha"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Fecha: 12/09/2025"
-                                    android:textColor="#616161"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="2dp" />
-
-                                <TextView
-                                    android:id="@+id/tvOrigen"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Origen: Calle 45 #12-30, Bogotá"
-                                    android:textColor="#616161"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="2dp" />
-
-                                <TextView
-                                    android:id="@+id/tvDestino"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Destino: Carrera 10 #20-15, Medellín"
-                                    android:textColor="#616161"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="2dp" />
-
-                                <TextView
-                                    android:id="@+id/tvTipoServicio"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Tipo: Pasajeros"
-                                    android:textColor="#616161"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="2dp" />
-
-                                <TextView
-                                    android:id="@+id/tvEstado"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Estado: Finalizado"
-                                    android:textColor="#616161"
-                                    android:textSize="14sp"
-                                    android:layout_marginTop="2dp" />
-                            </LinearLayout>
-
-                            <!-- Columna derecha (botones) -->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center">
-
-                                <Button
-                                    android:id="@+id/btnDetalle"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Detalles"
-                                    android:textSize="12sp"
-                                    android:backgroundTint="@color/naranja"
-                                    android:textColor="#FFFFFF"
-                                    android:layout_marginBottom="4dp" />
-
-                                <Button
-                                    android:id="@+id/btnEditar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Editar"
-                                    android:textSize="12sp"
-                                    android:backgroundTint="@color/grisoscuro"
-                                    android:textColor="#FFFFFF"
-                                    android:layout_marginBottom="4dp" />
-
-                                <Button
-                                    android:id="@+id/btnCancelar"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Cancelar"
-                                    android:textSize="12sp"
-                                    android:backgroundTint="@color/amarillo"
-                                    android:textColor="#FFFFFF" />
-                            </LinearLayout>
-                        </LinearLayout>
+                            tools:listitem="@layout/item_historial"
+                            tools:itemCount="3" />
                     </LinearLayout>
                 </ScrollView>
 
