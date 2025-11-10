@@ -5,15 +5,15 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
 import transportadora.Network.ApiHelper
-import transportadora.Modelos.Pais
+import transportadora.Modelos.Categoria_servicio
 
-object Pais_almacenados {
-    suspend fun obtenerPaises(): List<Pais> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_paises.php"
-        val response = ApiHelper.getRequest(url) // devuelve el JSON como String
+object Categorias_almacenados {
 
-        // Parseamos la estructura { "datos": [ {id_pais, nombre}, ... ], "success": "1" }
-        val lista = mutableListOf<Pais>()
+    suspend fun obtener_categoria_servicio(): List<Categoria_servicio> = withContext(Dispatchers.IO) {
+        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_categoria_servicio.php"
+        val response = ApiHelper.getRequest(url)
+
+        val lista = mutableListOf<Categoria_servicio>()
         val json = JSONObject(response)
         // Manejar caso "no hay registros" (success == "1" y mensaje)
         if (json.optString("success") == "1") {
@@ -22,8 +22,9 @@ object Pais_almacenados {
                 for (i in 0 until datos.length()) {
                     val obj = datos.getJSONObject(i)
                     lista.add(
-                        Pais(
-                            nombre = obj.optString("nombre")
+                        Categoria_servicio(
+                            descripcion = obj.optString("descripcion"),
+                            valor_km = obj.optString("valor_km")
                         )
                     )
                 }
@@ -33,4 +34,5 @@ object Pais_almacenados {
         }
         lista
     }
+
 }

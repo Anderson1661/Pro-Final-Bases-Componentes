@@ -1,5 +1,5 @@
 package transportadora.Modelos
 
-data class Tipo_servicio(
+data class Metodo_pago(
     val descripcion: String
 )

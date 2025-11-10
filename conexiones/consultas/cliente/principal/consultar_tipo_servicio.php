@@ -1,5 +1,5 @@
 <?php
-include('../config/conexion.php');
+include('../../../config/conexion.php');
 $link = Conectar();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -7,15 +7,14 @@ header('Content-Type: application/json; charset=utf-8');
 $res = array();
 $res['datos'] = array();
 
-$sql = "SELECT id_pais, nombre FROM pais ORDER BY nombre";
+$sql = "SELECT id_tipo_servicio, descripcion FROM tipo_servicio ORDER BY descripcion";
 $res1 = mysqli_query($link, $sql);
 
 if ($res1) {
     if (mysqli_num_rows($res1) > 0) {
         while ($row = mysqli_fetch_assoc($res1)) {
             $item = array(
-                "id_pais" => (int)$row['id_pais'],
-                "nombre"  => $row['nombre']
+                "descripcion"  => $row['descripcion']
             );
             array_push($res['datos'], $item);
         }

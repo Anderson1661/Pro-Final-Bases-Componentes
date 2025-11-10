@@ -9,7 +9,7 @@ import transportadora.Modelos.Tipo_servicio
 
 object Tipo_servicio_almacenados {
     suspend fun obtener_tipo_servicio(): List<Tipo_servicio> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/consultar_tipo_servicio.php"
+        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_tipo_servicio.php"
         val response = ApiHelper.getRequest(url) // devuelve el JSON como String
 
         val lista = mutableListOf<Tipo_servicio>()
@@ -22,7 +22,6 @@ object Tipo_servicio_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Tipo_servicio(
-                            id_tipo_servicio = obj.optInt("id_tipo_servicio"),
                             descripcion = obj.optString("descripcion")
                         )
                     )
