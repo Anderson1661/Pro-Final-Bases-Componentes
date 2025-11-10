@@ -9,9 +9,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 import transportadora.Almacenados.*
+import transportadora.Modelos.*
 import transportadora.Login.R
+import kotlin.collections.getOrNull
 
 class Principal_cliente : AppCompatActivity() {
+
+    private var listaPaisesCompleta: List<Pais> = emptyList()
+    private var perfilCliente: PerfilCliente? = null
+    private var departamentosOrigen: List<String> = emptyList()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,22 +59,6 @@ class Principal_cliente : AppCompatActivity() {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        // Departamentos
-        val departamentos = listOf("Cundinamarca", "Meta")
-        val adapterDepartamentos = ArrayAdapter(this, android.R.layout.simple_spinner_item, departamentos).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        spinner_departamento1.adapter = adapterDepartamentos
-        spinner_departamento2.adapter = adapterDepartamentos
-
-        // Ciudades
-        val ciudades = listOf("Bogota", "Villavicencio")
-        val adapterCiudades = ArrayAdapter(this, android.R.layout.simple_spinner_item, ciudades).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        spinner_ciudades1.adapter = adapterCiudades
-        spinner_ciudades2.adapter = adapterCiudades
-
         // Cantidad de pasajeros
         val cantidad_pasajeros = listOf("1", "2", "3", "4")
         spinner_pasajeros.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cantidad_pasajeros).apply {
@@ -93,13 +83,34 @@ class Principal_cliente : AppCompatActivity() {
         // ==============================
         // CARGA DE DATOS DESDE BD
 
+        // Perfil del Cliente
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", null)
+
+        if (userEmail != null) {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    perfilCliente = withContext(Dispatchers.IO) { Perfil_cliente_almacenados.obtenerPerfil(userEmail) }
+                    // Una vez cargado el perfil, la selección inicial del spinner de dirección lo usará.
+                    spinner_direcciones.setSelection(0) // Dispara el listener con los datos ya cargados
+                } catch (e: Exception) {
+                    Toast.makeText(this@Principal_cliente, "Error al cargar perfil: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        } else {
+            Toast.makeText(this@Principal_cliente, "No se pudo identificar al usuario.", Toast.LENGTH_LONG).show()
+            // Aquí podrías redirigir al login
+        }
+
+
         // Paises
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val paises = withContext(Dispatchers.IO) { Pais_almacenados.obtenerPaises() }
                 if (paises.isNotEmpty()) {
-                    val listapaises = paises.map { it.nombre }
-                    spinner_paises.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listapaises).apply {
+                    listaPaisesCompleta = paises
+                    val listapaisesNombres = paises.map { it.nombre }
+                    spinner_paises.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listapaisesNombres).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 } else {
@@ -109,6 +120,10 @@ class Principal_cliente : AppCompatActivity() {
                 Toast.makeText(this@Principal_cliente, "Error al cargar paises: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
+
+        // Departamentos Origen (Colombia ID 1) - Se carga para tener la lista disponible
+        cargarDepartamentos(1, spinner_departamento1, true)
+
 
         // Tipos de servicio
         CoroutineScope(Dispatchers.Main).launch {
@@ -197,10 +212,6 @@ class Principal_cliente : AppCompatActivity() {
             startActivity(Intent(this, Historial_serv_cliente::class.java))
         }
 
-        findViewById<TextView>(R.id.btn_continuar).setOnClickListener {
-            startActivity(Intent(this, Transferencia::class.java))
-        }
-
         // ==============================
         // LISTENERS DE SPINNERS
 
@@ -208,11 +219,36 @@ class Principal_cliente : AppCompatActivity() {
         spinner_direcciones.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val seleccion = parent.getItemAtPosition(position).toString()
-                val habilitar = seleccion == "Otra direccion"
-                txtDireccionOrigen.isEnabled = habilitar
-                spinner_departamento1.isEnabled = habilitar
-                spinner_ciudades1.isEnabled = habilitar
-                txtDireccionOrigen.hint = if (habilitar) "Ingresa otra dirección (Ej: Calle 45 #10-23)" else "Usando tu dirección de residencia"
+                if (seleccion == "Mi direccion") {
+                    // Usar dirección del perfil
+                    txtDireccionOrigen.isEnabled = false
+                    spinner_departamento1.isEnabled = false
+                    spinner_ciudades1.isEnabled = false
+
+                    perfilCliente?.let { perfil ->
+                        txtDireccionOrigen.hint = "Usando tu dirección (${perfil.direccion})"
+                        
+                        // Seleccionar departamento del perfil
+                        val deptoIndex = departamentosOrigen.indexOf(perfil.departamento)
+                        if (deptoIndex != -1) {
+                            spinner_departamento1.setSelection(deptoIndex)
+                            // Cargar ciudades y luego seleccionar la del perfil
+                            cargarCiudades(1, perfil.departamento, spinner_ciudades1, perfil.ciudad)
+                        }
+                    }
+                } else {
+                    // Usar "Otra direccion"
+                    txtDireccionOrigen.isEnabled = true
+                    spinner_departamento1.isEnabled = true
+                    spinner_ciudades1.isEnabled = true
+                    txtDireccionOrigen.hint = "Ingresa otra dirección (Ej: Calle 45 #10-23)"
+                    txtDireccionOrigen.text.clear()
+                    
+                    // Cargar la lista completa de departamentos de Colombia si no está ya
+                    spinner_departamento1.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, departamentosOrigen).apply {
+                        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    }
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -253,6 +289,42 @@ class Principal_cliente : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Listener: País Destino
+        spinner_paises.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val paisSeleccionado = listaPaisesCompleta.getOrNull(position)
+                paisSeleccionado?.let {
+                    cargarDepartamentos(it.id_pais, spinner_departamento2)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Listener: Departamento Origen
+        spinner_departamento1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (spinner_direcciones.selectedItem.toString() == "Otra direccion") {
+                    val deptoSeleccionado = parent.getItemAtPosition(position).toString()
+                    cargarCiudades(1, deptoSeleccionado, spinner_ciudades1)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Listener: Departamento Destino
+        spinner_departamento2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val deptoSeleccionado = parent.getItemAtPosition(position).toString()
+                val posPais = spinner_paises.selectedItemPosition
+                val paisSeleccionado = listaPaisesCompleta.getOrNull(posPais)
+                paisSeleccionado?.let {
+                    cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades2)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+
         //Listener boton de continuar
         btnContinuar.setOnClickListener {
             val metodoPagoSeleccionado = spinner_pago.selectedItem?.toString() ?: ""
@@ -269,4 +341,43 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
     }
+
+    private fun cargarDepartamentos(idPais: Int, spinner: Spinner, esOrigen: Boolean = false) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val departamentos = withContext(Dispatchers.IO) { Departamento_almacenados.obtenerDepartamentos(idPais) }
+                val listaNombres = departamentos.map { it.nombre }
+                if (esOrigen) {
+                    departamentosOrigen = listaNombres
+                }
+                spinner.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@Principal_cliente, "Error al cargar departamentos: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun cargarCiudades(idPais: Int, depto: String, spinner: Spinner, ciudadSeleccionada: String? = null) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val ciudades = withContext(Dispatchers.IO) { Ciudad_almacenados.obtenerCiudades(idPais, depto) }
+                val listaNombres = ciudades.map { it.nombre }
+                spinner.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+                // Si se pasó una ciudad para seleccionar, la buscamos y la seleccionamos
+                ciudadSeleccionada?.let {
+                    val ciudadIndex = listaNombres.indexOf(it)
+                    if (ciudadIndex != -1) {
+                        spinner.setSelection(ciudadIndex)
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@Principal_cliente, "Error al cargar ciudades: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 }
+

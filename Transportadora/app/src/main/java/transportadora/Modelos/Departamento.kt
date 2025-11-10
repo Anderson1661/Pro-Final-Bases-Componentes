@@ -1,6 +1,5 @@
 package transportadora.Modelos
 
-data class Pais(
-    val id_pais: Int,
+data class Departamento(
     val nombre: String
 )

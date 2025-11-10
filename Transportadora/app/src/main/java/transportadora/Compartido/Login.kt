@@ -79,11 +79,24 @@ class Login : AppCompatActivity() {
                     if (json.getBoolean("success")) {
                         val tipoUsuario = json.getInt("id_tipo_usuario")
 
-                        when (tipoUsuario) {
-                            1 -> startActivity(Intent(this@Login, Principal_administrador::class.java))
-                            2 -> startActivity(Intent(this@Login, Principal_conductor::class.java))
-                            3 -> startActivity(Intent(this@Login, Principal_cliente::class.java))
-                            else -> Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
+                        // Guardar correo en SharedPreferences
+                        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putString("user_email", correo)
+                            apply()
+                        }
+
+                        val intent = when (tipoUsuario) {
+                            1 -> Intent(this@Login, Principal_administrador::class.java)
+                            2 -> Intent(this@Login, Principal_conductor::class.java)
+                            3 -> Intent(this@Login, Principal_cliente::class.java)
+                            else -> null
+                        }
+
+                        if (intent != null) {
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
                         }
 
                         Toast.makeText(this@Login, "Sesión iniciada", Toast.LENGTH_SHORT).show()

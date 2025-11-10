@@ -14,6 +14,7 @@ if ($res1) {
     if (mysqli_num_rows($res1) > 0) {
         while ($row = mysqli_fetch_assoc($res1)) {
             $item = array(
+                "id_pais" => $row['id_pais'],
                 "nombre"  => $row['nombre']
             );
             array_push($res['datos'], $item);
