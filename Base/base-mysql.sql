@@ -215,6 +215,75 @@ CREATE TABLE IF NOT EXISTS respuestas_seguridad (
 );
 
 
+-- ======== TRIGGERS ========
+
+DELIMITER //
+
+-- Trigger insertar usuario automático para cliente
+CREATE TRIGGER trg_insert_usuario_cliente
+AFTER INSERT ON cliente
+FOR EACH ROW
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
+    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
+    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    FROM tipo_usuario
+    WHERE descripcion = 'Cliente'
+    LIMIT 1;
+  END IF;
+END//
+
+-- Trigger insertar usuario automático para conductor
+CREATE TRIGGER trg_insert_usuario_conductor
+AFTER INSERT ON conductor
+FOR EACH ROW
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
+    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
+    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    FROM tipo_usuario
+    WHERE descripcion = 'Conductor'
+    LIMIT 1;
+  END IF;
+END//
+
+-- Trigger insertar usuario automático para administrador
+CREATE TRIGGER trg_insert_usuario_admin
+AFTER INSERT ON administrador
+FOR EACH ROW
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
+    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
+    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    FROM tipo_usuario
+    WHERE descripcion = 'Administrador'
+    LIMIT 1;
+  END IF;
+END//
+
+-- Trigger calcular total de ruta
+CREATE TRIGGER trg_calcular_total_ruta
+BEFORE INSERT ON ruta
+FOR EACH ROW
+BEGIN
+  DECLARE precio_km DECIMAL(12,2);
+  SELECT valor_km INTO precio_km FROM categoria_servicio WHERE id_categoria_servicio = NEW.id_categoria_servicio LIMIT 1;
+  SET NEW.total = NEW.distancia_km * precio_km;
+END//
+
+-- Trigger calcular pago del conductor (30%)
+CREATE TRIGGER trg_calcular_pago_conductor
+BEFORE INSERT ON ruta
+FOR EACH ROW
+BEGIN
+  IF NEW.total IS NOT NULL THEN
+    SET NEW.pago_conductor = ROUND(NEW.total * 0.30, 2);
+  END IF;
+END//
+
+DELIMITER ;
+
+
 -- ======== DATOS DE PRUEBA ========
 
 -- Tablas maestras básicas
@@ -324,79 +393,6 @@ UNION ALL
 SELECT 1, id_usuario, 'Max' FROM usuario WHERE correo = 'conductor1@empresa.com'
 UNION ALL
 SELECT 3, id_usuario, 'San José' FROM usuario WHERE correo = 'admin@empresa.com';
-
-
-
--- ======== TRIGGERS ========
-
-DELIMITER //
-
--- Trigger insertar usuario automático para cliente
-CREATE TRIGGER trg_insert_usuario_cliente
-AFTER INSERT ON cliente
-FOR EACH ROW
-BEGIN
-  DECLARE tipo INT;
-  DECLARE existe INT DEFAULT 0;
-  SELECT id_tipo_usuario INTO tipo FROM tipo_usuario WHERE descripcion = 'Cliente' LIMIT 1;
-  SELECT COUNT(*) INTO existe FROM usuario WHERE correo = NEW.correo;
-  IF existe = 0 THEN
-    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    VALUES (tipo, NEW.correo, NEW.correo);
-  END IF;
-END//
-
--- Trigger insertar usuario automático para conductor
-CREATE TRIGGER trg_insert_usuario_conductor
-AFTER INSERT ON conductor
-FOR EACH ROW
-BEGIN
-  DECLARE tipo INT;
-  DECLARE existe INT DEFAULT 0;
-  SELECT id_tipo_usuario INTO tipo FROM tipo_usuario WHERE descripcion = 'Conductor' LIMIT 1;
-  SELECT COUNT(*) INTO existe FROM usuario WHERE correo = NEW.correo;
-  IF existe = 0 THEN
-    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    VALUES (tipo, NEW.correo, NEW.correo);
-  END IF;
-END//
-
--- Trigger insertar usuario automático para administrador
-CREATE TRIGGER trg_insert_usuario_admin
-AFTER INSERT ON administrador
-FOR EACH ROW
-BEGIN
-  DECLARE tipo INT;
-  DECLARE existe INT DEFAULT 0;
-  SELECT id_tipo_usuario INTO tipo FROM tipo_usuario WHERE descripcion = 'Administrador' LIMIT 1;
-  SELECT COUNT(*) INTO existe FROM usuario WHERE correo = NEW.correo;
-  IF existe = 0 THEN
-    INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    VALUES (tipo, NEW.correo, NEW.correo);
-  END IF;
-END//
-
--- Trigger calcular total de ruta
-CREATE TRIGGER trg_calcular_total_ruta
-BEFORE INSERT ON ruta
-FOR EACH ROW
-BEGIN
-  DECLARE precio_km DECIMAL(12,2);
-  SELECT valor_km INTO precio_km FROM categoria_servicio WHERE id_categoria_servicio = NEW.id_categoria_servicio LIMIT 1;
-  SET NEW.total = NEW.distancia_km * precio_km;
-END//
-
--- Trigger calcular pago del conductor (30%)
-CREATE TRIGGER trg_calcular_pago_conductor
-BEFORE INSERT ON ruta
-FOR EACH ROW
-BEGIN
-  IF NEW.total IS NOT NULL THEN
-    SET NEW.pago_conductor = ROUND(NEW.total * 0.30, 2);
-  END IF;
-END//
-
-DELIMITER ;
 
 -- ======== VISTAS ========
 
