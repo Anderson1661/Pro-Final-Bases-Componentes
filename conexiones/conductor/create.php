@@ -3,6 +3,7 @@ include('../config/conexion.php');
 $link = Conectar();
 
 $id_conductor = isset($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : '';
+$id_estado_conductor = isset($_REQUEST['id_estado_conductor']) ? $_REQUEST['id_estado_conductor'] : '';
 $placa_vehiculo = isset($_REQUEST['placa_vehiculo']) ? $_REQUEST['placa_vehiculo'] : '';
 $identificacion = isset($_REQUEST['identificacion']) ? $_REQUEST['identificacion'] : '';
 $id_tipo_identificacion = isset($_REQUEST['id_tipo_identificacion']) ? $_REQUEST['id_tipo_identificacion'] : '';
@@ -14,12 +15,13 @@ $codigo_postal = isset($_REQUEST['codigo_postal']) ? $_REQUEST['codigo_postal'] 
 $id_pais_nacionalidad = isset($_REQUEST['id_pais_nacionalidad']) ? $_REQUEST['id_pais_nacionalidad'] : '';
 $url_foto = isset($_REQUEST['url_foto']) ? $_REQUEST['url_foto'] : '';
 
-if (empty($id_conductor) || empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
+if (empty($id_conductor) || empty($id_estado_conductor) ||empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
     empty($nombre) || empty($direccion) || empty($correo) || empty($id_genero) || 
     empty($codigo_postal) || empty($id_pais_nacionalidad) || empty($url_foto)) {
     echo json_encode(array("success" => "0", "mensaje" => "Todos los campos son requeridos"));
 } else {
     $id_conductor = mysqli_real_escape_string($link, $id_conductor);
+    $id_estado_conductor = mysqli_real_escape_string($link, $id_estado_conductor);
     $placa_vehiculo = mysqli_real_escape_string($link, $placa_vehiculo);
     $identificacion = mysqli_real_escape_string($link, $identificacion);
     $id_tipo_identificacion = mysqli_real_escape_string($link, $id_tipo_identificacion);
@@ -31,8 +33,8 @@ if (empty($id_conductor) || empty($placa_vehiculo) || empty($identificacion) || 
     $id_pais_nacionalidad = mysqli_real_escape_string($link, $id_pais_nacionalidad);
     $url_foto = mysqli_real_escape_string($link, $url_foto);
     
-    $sql = "INSERT INTO conductor (id_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) 
-            VALUES ('$id_conductor', '$placa_vehiculo', '$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$codigo_postal', '$id_pais_nacionalidad', '$url_foto')";
+    $sql = "INSERT INTO conductor (id_conductor,id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) 
+            VALUES ('$id_conductor', '$id_estado_conductor', '$placa_vehiculo', '$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$codigo_postal', '$id_pais_nacionalidad', '$url_foto')";
     $res = mysqli_query($link, $sql);
     
     if ($res) {

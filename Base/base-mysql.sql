@@ -122,8 +122,14 @@ CREATE TABLE IF NOT EXISTS vehiculo (
   CONSTRAINT check_modelo CHECK (modelo >= 2010)
 );
 
+CREATE TABLE IF NOT EXISTS estado_conductor (
+  id_estado_conductor INT AUTO_INCREMENT PRIMARY KEY,
+  descripcion VARCHAR(30) NOT NULL UNIQUE
+);
+
 CREATE TABLE IF NOT EXISTS conductor (
   id_conductor INT AUTO_INCREMENT PRIMARY KEY,
+  id_estado_conductor INT NOT NULL,
   placa_vehiculo VARCHAR(20) NOT NULL UNIQUE,
   identificacion VARCHAR(20) NOT NULL UNIQUE,
   id_tipo_identificacion INT NOT NULL,
@@ -134,6 +140,7 @@ CREATE TABLE IF NOT EXISTS conductor (
   codigo_postal VARCHAR(10) NOT NULL,
   id_pais_nacionalidad INT NOT NULL,
   url_foto VARCHAR(255) NOT NULL UNIQUE,
+  FOREIGN KEY (id_estado_conductor) REFERENCES estado_conductor (id_estado_conductor),
   FOREIGN KEY (placa_vehiculo) REFERENCES vehiculo (placa),
   FOREIGN KEY (id_tipo_identificacion) REFERENCES tipo_identificacion (id_tipo_identificacion),
   FOREIGN KEY (id_genero) REFERENCES genero (id_genero),
@@ -172,9 +179,9 @@ CREATE TABLE IF NOT EXISTS ruta (
   id_codigo_postal_destino VARCHAR(10) NOT NULL,
   distancia_km DECIMAL(8,2) NOT NULL,
   fecha_hora_reserva DATETIME NOT NULL,
-  fecha_hora_origen DATETIME NOT NULL,
-  fecha_hora_destino DATETIME NOT NULL,
-  id_conductor INT NOT NULL,
+  fecha_hora_origen DATETIME,
+  fecha_hora_destino DATETIME,
+  id_conductor INT,
   id_tipo_servicio INT NOT NULL,
   id_cliente INT NOT NULL,
   id_estado_servicio INT NOT NULL,
@@ -348,12 +355,15 @@ INSERT INTO telefono_cliente (id_cliente, telefono) VALUES
 (2, 3187654321),
 (3, 3156789012);
 
+-- Estados de conductor
+INSERT INTO estado_conductor (descripcion) VALUES ('Conectado'), ('Desconectado');
+
 -- Conductores (los triggers crearán los usuarios automáticamente)
 -- Nota: Necesitan URL de foto válida y placa de vehículo existente
-INSERT INTO conductor (placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) VALUES 
-('ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://example.com/fotos/conductor1.jpg'),
-('DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://example.com/fotos/conductor2.jpg'),
-('GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://example.com/fotos/conductor3.jpg');
+INSERT INTO conductor (id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) VALUES 
+(1, 'ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://example.com/fotos/conductor1.jpg'),
+(2, 'DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://example.com/fotos/conductor2.jpg'),
+(2, 'GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://example.com/fotos/conductor3.jpg');
 
 -- Teléfonos de conductores
 INSERT INTO telefono_conductor (id_conductor, telefono) VALUES 
