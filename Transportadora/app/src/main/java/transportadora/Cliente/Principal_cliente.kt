@@ -35,6 +35,8 @@ class Principal_cliente : AppCompatActivity() {
         val spinner_categoria = findViewById<Spinner>(R.id.spinner_categoria_servicio)
         val spinner_pago = findViewById<Spinner>(R.id.spinner_metodo_pago)
 
+        val btnContinuar = findViewById<TextView>(R.id.btn_continuar)
+
         val pasajero_1 = findViewById<EditText>(R.id.txt_pasajero1)
         val pasajero_2 = findViewById<EditText>(R.id.txt_pasajero2)
         val pasajero_3 = findViewById<EditText>(R.id.txt_pasajero3)
@@ -249,6 +251,22 @@ class Principal_cliente : AppCompatActivity() {
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        //Listener boton de continuar
+        btnContinuar.setOnClickListener {
+            val metodoPagoSeleccionado = spinner_pago.selectedItem?.toString() ?: ""
+
+            if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
+                Toast.makeText(
+                    this,
+                    "Debes entregarle el efectivo una vez que llegue el conductor",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                val intent = Intent(this, Transferencia::class.java)
+                startActivity(intent)
+            }
         }
     }
 }
