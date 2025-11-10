@@ -18,6 +18,11 @@ class Principal_cliente : AppCompatActivity() {
     private var listaPaisesCompleta: List<Pais> = emptyList()
     private var perfilCliente: PerfilCliente? = null
     private var departamentosOrigen: List<String> = emptyList()
+    private var listaCategoriasCompleta: List<Categoria_servicio> = emptyList()
+
+    private lateinit var txtKmRecorrido: TextView
+    private lateinit var txtTotalPagar: TextView
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +45,9 @@ class Principal_cliente : AppCompatActivity() {
         val spinner_tipos = findViewById<Spinner>(R.id.spinner_tipo_servicio)
         val spinner_categoria = findViewById<Spinner>(R.id.spinner_categoria_servicio)
         val spinner_pago = findViewById<Spinner>(R.id.spinner_metodo_pago)
+
+        txtKmRecorrido = findViewById(R.id.txt_km_recorrido)
+        txtTotalPagar = findViewById(R.id.txt_total_pagar)
 
         val btnContinuar = findViewById<TextView>(R.id.btn_continuar)
 
@@ -147,8 +155,9 @@ class Principal_cliente : AppCompatActivity() {
             try {
                 val categorias = withContext(Dispatchers.IO) { Categorias_almacenados.obtener_categoria_servicio() }
                 if (categorias.isNotEmpty()) {
-                    val listaCategorias = categorias.map { "${it.descripcion} — $${it.valor_km}/km" }
-                    spinner_categoria.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaCategorias).apply {
+                    listaCategoriasCompleta = categorias
+                    val listaCategoriasNombres = categorias.map { "${it.descripcion} — $${it.valor_km}/km" }
+                    spinner_categoria.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaCategoriasNombres).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 } else {
@@ -249,6 +258,7 @@ class Principal_cliente : AppCompatActivity() {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 }
+                calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -296,6 +306,7 @@ class Principal_cliente : AppCompatActivity() {
                 paisSeleccionado?.let {
                     cargarDepartamentos(it.id_pais, spinner_departamento2)
                 }
+                calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -307,6 +318,7 @@ class Principal_cliente : AppCompatActivity() {
                     val deptoSeleccionado = parent.getItemAtPosition(position).toString()
                     cargarCiudades(1, deptoSeleccionado, spinner_ciudades1)
                 }
+                calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -320,8 +332,35 @@ class Principal_cliente : AppCompatActivity() {
                 paisSeleccionado?.let {
                     cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades2)
                 }
+                calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Listener para recalcular si cambian las ciudades o categoría
+        spinner_ciudades1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                calcularYActualizarTotal()
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                calcularYActualizarTotal()
+            }
+        }
+        spinner_ciudades2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                calcularYActualizarTotal()
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                calcularYActualizarTotal()
+            }
+        }
+        spinner_categoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                calcularYActualizarTotal()
+            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                calcularYActualizarTotal()
+            }
         }
 
 
@@ -339,6 +378,35 @@ class Principal_cliente : AppCompatActivity() {
                 val intent = Intent(this, Transferencia::class.java)
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun calcularYActualizarTotal() {
+        val spinner_ciudades1 = findViewById<Spinner>(R.id.spinner_ciudad_origen)
+        val spinner_ciudades2 = findViewById<Spinner>(R.id.spinner_ciudad_destino)
+        val spinner_categoria = findViewById<Spinner>(R.id.spinner_categoria_servicio)
+
+        val origenPosition = spinner_ciudades1.selectedItemPosition
+        val destinoPosition = spinner_ciudades2.selectedItemPosition
+        val categoriaPosition = spinner_categoria.selectedItemPosition
+
+        if (origenPosition != AdapterView.INVALID_POSITION &&
+            destinoPosition != AdapterView.INVALID_POSITION &&
+            categoriaPosition != AdapterView.INVALID_POSITION &&
+            listaCategoriasCompleta.isNotEmpty()) {
+
+            val categoriaSeleccionada = listaCategoriasCompleta[categoriaPosition]
+            val valorKm = categoriaSeleccionada.valor_km
+
+            val distancia = (10..100).random()
+            val total = distancia * valorKm
+
+            txtKmRecorrido.text = "$distancia km"
+            txtTotalPagar.text = String.format("$%,.2f", total)
+
+        } else {
+            txtKmRecorrido.text = "0 km"
+            txtTotalPagar.text = "$0"
         }
     }
 

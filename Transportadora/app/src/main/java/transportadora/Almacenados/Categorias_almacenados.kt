@@ -24,7 +24,7 @@ object Categorias_almacenados {
                     lista.add(
                         Categoria_servicio(
                             descripcion = obj.optString("descripcion"),
-                            valor_km = obj.optString("valor_km")
+                            valor_km = obj.optDouble("valor_km")
                         )
                     )
                 }
