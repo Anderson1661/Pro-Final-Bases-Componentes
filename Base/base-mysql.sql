@@ -241,13 +241,13 @@ INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES
 ('Logan', 2),
 ('Versa', 3);
 INSERT INTO color_vehiculo (descripcion) VALUES ('Blanco'), ('Negro'), ('Gris'), ('Rojo'), ('Azul');
-INSERT INTO tipo_servicio (descripcion) VALUES ('Transporte de Pasajeros'), ('Transporte de Alimentos'), ('Transporte de Paquetes');
+INSERT INTO tipo_servicio (descripcion) VALUES ('Pasajeros'),('Alimentos'),('Pasajeros y alimentos');
 INSERT INTO categoria_servicio (descripcion, valor_km) VALUES 
 ('Económico', 2500.00),
 ('Estándar', 3500.00),
 ('Premium', 5000.00);
-INSERT INTO estado_servicio (descripcion) VALUES ('Pendiente'), ('En Curso'), ('Completado'), ('Cancelado');
-INSERT INTO metodo_pago (descripcion) VALUES ('Tarjeta de Crédito'), ('Tarjeta de Débito'), ('Efectivo'), ('Nequi'), ('Daviplata');
+insert into estado_servicio (descripcion) VALUES ('Pendiente'),('En proceso'),('Finalizado');
+INSERT INTO metodo_pago (descripcion) VALUES ('Efectivo'),('Tarjeta Debito'),('Tarjeta Credito'),('Transferencia');
 
 -- Vehículos (deben crearse antes de los conductores)
 INSERT INTO vehiculo (placa, linea_vehiculo, modelo, id_color, id_marca, id_tipo_servicio, id_estado_vehiculo) VALUES 

@@ -159,7 +159,7 @@
                         android:id="@+id/txt_direccion_origen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ejemplo: Calle 123 #45-67"
+                        android:hint="Direccion"
                         android:inputType="textPostalAddress"
                         android:padding="10dp" />
 
