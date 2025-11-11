@@ -215,7 +215,11 @@ class Principal_cliente : AppCompatActivity() {
 
         val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
         findViewById<TextView>(R.id.menu1).setOnClickListener { scrollView.post { scrollView.smoothScrollTo(0, 0) } }
-        findViewById<TextView>(R.id.menu2).setOnClickListener { startActivity(Intent(this, Seguimiento_serv_cliente::class.java)) }
+        findViewById<TextView>(R.id.menu2).setOnClickListener {
+            val intent = Intent(this, Seguimiento_serv_cliente::class.java)
+            intent.putExtra("USER_ID", userId)
+            startActivity(intent)
+        }
         findViewById<TextView>(R.id.menu3).setOnClickListener { startActivity(Intent(this, Historial_serv_cliente::class.java)) }
 
         spinner_direcciones.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

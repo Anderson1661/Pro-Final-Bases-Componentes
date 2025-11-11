@@ -12,6 +12,7 @@ if (!empty($id_ruta)) {
     // Consulta principal de la ruta
     $sql = "SELECT 
             r.id_ruta,
+            r.id_cliente,       
             r.fecha_hora_origen AS fecha_inicio,
             es.descripcion AS estado,
             r.fecha_hora_reserva,
@@ -26,7 +27,7 @@ if (!empty($id_ruta)) {
             ts.descripcion AS tipo_servicio,
             cs.descripcion AS categoria_servicio,
             cs.valor_km AS precio_km,
-            r.distancia_km AS distancia_km,  
+            r.distancia_km AS distancia_km,
             r.total,
             mp.descripcion AS metodo_pago,
             r.fecha_hora_destino AS fecha_entrega,
@@ -43,6 +44,7 @@ if (!empty($id_ruta)) {
         LEFT JOIN codigo_postal cp_dest ON r.id_codigo_postal_destino = cp_dest.id_codigo_postal
         LEFT JOIN pais p_dest ON cp_dest.id_pais = p_dest.id_pais
         WHERE r.id_ruta = ? LIMIT 1";
+
 
 
     $stmt = mysqli_prepare($link, $sql);
@@ -92,6 +94,7 @@ if (!empty($id_ruta)) {
             // Preparar respuesta
             $datos = [
                 'id_ruta' => (int)$row['id_ruta'],
+                'id_cliente' => (int)$row['id_cliente'], 
                 'fecha_inicio' => $row['fecha_inicio'],
                 'estado' => $row['estado'],
                 'fecha_reserva' => $row['fecha_hora_reserva'],
@@ -111,13 +114,14 @@ if (!empty($id_ruta)) {
                 'destino_departamento' => $row['destino_departamento'],
                 'destino_ciudad' => $row['destino_ciudad'],
                 'precio_km' => $row['precio_km'],
-                'distancia_km' => $row['distancia_km'],   
+                'distancia_km' => $row['distancia_km'],
                 'total' => $row['total'],
                 'metodo_pago' => $row['metodo_pago'],
                 'fecha_entrega' => $row['fecha_entrega'],
                 'nombre_conductor' => $row['nombre_conductor'],
                 'placa_vehiculo' => $row['placa_vehiculo']
             ];
+
 
 
             $res = [
