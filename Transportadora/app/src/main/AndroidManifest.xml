@@ -286,9 +286,6 @@
             android:name="transportadora.Conductor.Principal_conductor"
             android:exported="false" />
         <activity
-            android:name=".Conductor.DetalleServicioConductorActivity"
-            android:exported="false" />
-        <activity
             android:name="transportadora.Cliente.Transferencia"
             android:exported="false" />
         <activity
