@@ -99,7 +99,7 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
             // 🧠 Consulta al servidor
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val url = URL("${ApiConfig.BASE_URL}consultas/cliente/ruta/consultar_ruta.php")
+                    val url = URL("${ApiConfig.BASE_URL}/consultas/cliente/ruta/consultar_ruta.php")
                     val params = "id_ruta=$id_ruta"
 
                     val connection = (url.openConnection() as HttpURLConnection).apply {
