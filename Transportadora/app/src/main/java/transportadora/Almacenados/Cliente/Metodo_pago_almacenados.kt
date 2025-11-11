@@ -1,10 +1,10 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
-import transportadora.Modelos.Metodo_pago
+import transportadora.Modelos.Cliente.Metodo_pago
 import transportadora.Network.ApiHelper
 
 object Metodo_pago_almacenados {
@@ -22,6 +22,7 @@ object Metodo_pago_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Metodo_pago(
+                            id_metodo_pago = obj.optInt("id_metodo_pago"),
                             descripcion = obj.optString("descripcion")
                         )
                     )

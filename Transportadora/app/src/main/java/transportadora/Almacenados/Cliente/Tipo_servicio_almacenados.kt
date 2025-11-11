@@ -1,19 +1,18 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
 import transportadora.Network.ApiHelper
-import transportadora.Modelos.Pais
+import transportadora.Modelos.Cliente.Tipo_servicio
 
-object Pais_almacenados {
-    suspend fun obtenerPaises(): List<Pais> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_paises.php"
+object Tipo_servicio_almacenados {
+    suspend fun obtener_tipo_servicio(): List<Tipo_servicio> = withContext(Dispatchers.IO) {
+        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_tipo_servicio.php"
         val response = ApiHelper.getRequest(url) // devuelve el JSON como String
 
-        // Parseamos la estructura { "datos": [ {id_pais, nombre}, ... ], "success": "1" }
-        val lista = mutableListOf<Pais>()
+        val lista = mutableListOf<Tipo_servicio>()
         val json = JSONObject(response)
         // Manejar caso "no hay registros" (success == "1" y mensaje)
         if (json.optString("success") == "1") {
@@ -22,9 +21,9 @@ object Pais_almacenados {
                 for (i in 0 until datos.length()) {
                     val obj = datos.getJSONObject(i)
                     lista.add(
-                        Pais(
-                            id_pais = obj.optInt("id_pais"),
-                            nombre = obj.optString("nombre")
+                        Tipo_servicio(
+                            id_tipo_servicio = obj.optInt("id_tipo_servicio"),
+                            descripcion = obj.optString("descripcion")
                         )
                     )
                 }
@@ -34,4 +33,6 @@ object Pais_almacenados {
         }
         lista
     }
+
+
 }

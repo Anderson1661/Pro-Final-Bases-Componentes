@@ -185,19 +185,6 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Fecha de reserva del envio"
-                            android:textColor="@color/negro"
-                            android:layout_marginTop="10dp" />
-                        <TextView
-                            android:id="@+id/txt_fecha_reserva"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="12/12/2024"
-                            android:textColor="@color/grisoscuro" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:text="Direccion de origen"
                             android:textColor="@color/negro"
                             android:layout_marginTop="10dp" />

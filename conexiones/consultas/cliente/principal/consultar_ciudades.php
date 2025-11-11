@@ -12,7 +12,7 @@ $id_pais = isset($_POST['id_pais']) ? (int)$_POST['id_pais'] : 0;
 $departamento = isset($_POST['departamento']) ? trim($_POST['departamento']) : '';
 
 if ($id_pais > 0 && !empty($departamento)) {
-    $sql = "SELECT ciudad 
+    $sql = "SELECT id_codigo_postal, ciudad 
             FROM codigo_postal 
             WHERE id_pais = ? AND departamento = ?
             ORDER BY ciudad";
@@ -25,6 +25,7 @@ if ($id_pais > 0 && !empty($departamento)) {
         if (mysqli_num_rows($res1) > 0) {
             while ($row = mysqli_fetch_assoc($res1)) {
                 $item = array(
+                    "id_codigo_postal" => $row['id_codigo_postal'],
                     "nombre"  => $row['ciudad']
                 );
                 array_push($res['datos'], $item);

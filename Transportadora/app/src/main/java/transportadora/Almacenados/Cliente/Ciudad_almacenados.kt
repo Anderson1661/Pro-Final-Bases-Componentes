@@ -1,10 +1,10 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
-import transportadora.Modelos.Ciudad
+import transportadora.Modelos.Cliente.Ciudad
 import transportadora.Network.ApiHelper
 
 object Ciudad_almacenados {
@@ -25,6 +25,7 @@ object Ciudad_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Ciudad(
+                            id_codigo_postal = obj.optString("id_codigo_postal"),
                             nombre = obj.optString("nombre")
                         )
                     )
