@@ -2,6 +2,9 @@ package transportadora.Conductor
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,22 +20,33 @@ class Principal_conductor : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ServicioConductorAdapter
+    private lateinit var progressBar: ProgressBar
+    private lateinit var textViewStatus: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_principal_conductor)
 
         recyclerView = findViewById(R.id.recyclerViewServicios)
+        progressBar = findViewById(R.id.progressBar)
+        textViewStatus = findViewById(R.id.textViewStatus)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // El ID del conductor debería pasarse desde la actividad de Login.
-        // Usaremos un valor fijo (ej: 1) para esta implementación.
-        val idConductor = intent.getIntExtra("id_usuario", 1)
+        val idConductor = intent.getIntExtra("id_usuario", -1)
+
+        if (idConductor == -1) {
+            Toast.makeText(this, "Error: ID de conductor no válido.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         fetchServicios(idConductor)
     }
 
     private fun fetchServicios(idConductor: Int) {
+        showLoading("Cargando servicios...")
+
         val queue = Volley.newRequestQueue(this)
         val url = "${ApiConfig.BASE_URL}consultas/servicios_conductor.php"
 
@@ -44,19 +58,24 @@ class Principal_conductor : AppCompatActivity() {
                     val success = jsonResponse.getBoolean("success")
                     if (success) {
                         val serviciosArray = jsonResponse.getJSONArray("servicios")
-                        adapter = ServicioConductorAdapter(serviciosArray)
-                        recyclerView.adapter = adapter
+                        if (serviciosArray.length() > 0) {
+                            adapter = ServicioConductorAdapter(serviciosArray)
+                            recyclerView.adapter = adapter
+                            showData()
+                        } else {
+                            showStatus("No tiene servicios asignados.")
+                        }
                     } else {
                         val message = jsonResponse.getString("message")
-                        Toast.makeText(this, "Error: $message", Toast.LENGTH_LONG).show()
+                        showStatus("Error: $message")
                     }
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error al procesar la respuesta: ${e.message}", Toast.LENGTH_LONG).show()
+                    showStatus("Error al procesar la respuesta.")
                     Log.e("FetchServicios", "Error parsing JSON", e)
                 }
             },
             { error ->
-                Toast.makeText(this, "Error de red: ${error.message}", Toast.LENGTH_LONG).show()
+                showStatus("Error de red. Verifique su conexión.")
                 Log.e("FetchServicios", "Volley error", error)
             }) {
             override fun getParams(): MutableMap<String, String> {
@@ -66,5 +85,25 @@ class Principal_conductor : AppCompatActivity() {
             }
         }
         queue.add(stringRequest)
+    }
+
+    private fun showLoading(message: String) {
+        progressBar.visibility = View.VISIBLE
+        textViewStatus.text = message
+        textViewStatus.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+    }
+
+    private fun showData() {
+        progressBar.visibility = View.GONE
+        textViewStatus.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+    }
+
+    private fun showStatus(message: String) {
+        progressBar.visibility = View.GONE
+        textViewStatus.text = message
+        textViewStatus.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
     }
 }

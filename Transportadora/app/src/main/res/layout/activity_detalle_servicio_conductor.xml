@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".Conductor.DetalleServicioConductorActivity">
+
+    <TextView
+        android:id="@+id/detail_id_servicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Servicio #: 123" />
+
+    <TextView
+        android:id="@+id/detail_fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Fecha: 2025-11-10" />
+
+    <TextView
+        android:id="@+id/detail_origen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Origen: Calle Falsa 123" />
+
+    <TextView
+        android:id="@+id/detail_destino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Destino: Avenida Siempre Viva 742" />
+
+    <TextView
+        android:id="@+id/detail_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        tools:text="Estado: Asignado" />
+
+    <!-- Se pueden agregar más detalles del cliente, etc. si es necesario -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp">
+
+        <Button
+            android:id="@+id/buttonIniciarViaje"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Iniciar Viaje"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/buttonFinalizarViaje"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Finalizar Viaje"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>
