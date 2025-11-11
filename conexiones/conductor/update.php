@@ -4,7 +4,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $link = Conectar();
     
     $id_conductor = isset($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : '';
-    $id_estado_conductor = isset($_REQUEST['id_estado_conductor']) ? $_REQUEST['id_estado_conductor'] : '';
     $placa_vehiculo = isset($_REQUEST['placa_vehiculo']) ? $_REQUEST['placa_vehiculo'] : '';
     $identificacion = isset($_REQUEST['identificacion']) ? $_REQUEST['identificacion'] : '';
     $id_tipo_identificacion = isset($_REQUEST['id_tipo_identificacion']) ? $_REQUEST['id_tipo_identificacion'] : '';
@@ -18,13 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (empty($id_conductor)) {
         echo json_encode(array("success" => "0", "mensaje" => "ID requerido"));
-    } else if (empty ($id_estado_conductor) ||empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
+    } else if (empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
                empty($nombre) || empty($direccion) || empty($correo) || empty($id_genero) || 
                empty($codigo_postal) || empty($id_pais_nacionalidad) || empty($url_foto)) {
         echo json_encode(array("success" => "0", "mensaje" => "Todos los campos son requeridos"));
     } else {
         $id_conductor = mysqli_real_escape_string($link, $id_conductor);
-        $id_estado_conductor = mysqli_real_escape_string($link, $id_estado_conductor);
         $placa_vehiculo = mysqli_real_escape_string($link, $placa_vehiculo);
         $identificacion = mysqli_real_escape_string($link, $identificacion);
         $id_tipo_identificacion = mysqli_real_escape_string($link, $id_tipo_identificacion);
@@ -36,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id_pais_nacionalidad = mysqli_real_escape_string($link, $id_pais_nacionalidad);
         $url_foto = mysqli_real_escape_string($link, $url_foto);
         
-        $sql = "UPDATE conductor SET id_estado_conductor='$id_estado_conductor', placa_vehiculo='$placa_vehiculo', identificacion='$identificacion', 
+        $sql = "UPDATE conductor SET placa_vehiculo='$placa_vehiculo', identificacion='$identificacion', 
                 id_tipo_identificacion='$id_tipo_identificacion', nombre='$nombre', direccion='$direccion', 
                 correo='$correo', id_genero='$id_genero', codigo_postal='$codigo_postal', 
                 id_pais_nacionalidad='$id_pais_nacionalidad', url_foto='$url_foto' 

@@ -14,7 +14,6 @@ if ($res1) {
         while ($row = mysqli_fetch_array($res1)) {
             $item = array();
             $item['id_conductor'] = $row['id_conductor'];
-            $item['id_estado_conductor'] = $row['id_estado_conductor'];
             $item['placa_vehiculo'] = $row['placa_vehiculo'];
             $item['identificacion'] = $row['identificacion'];
             $item['id_tipo_identificacion'] = $row['id_tipo_identificacion'];
