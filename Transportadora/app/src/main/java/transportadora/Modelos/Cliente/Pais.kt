@@ -1,4 +1,4 @@
-package transportadora.Modelos
+package transportadora.Modelos.Cliente
 
 data class Pais(
     val id_pais: Int,

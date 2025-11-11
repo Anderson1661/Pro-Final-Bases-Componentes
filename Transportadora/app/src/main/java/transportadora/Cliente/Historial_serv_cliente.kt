@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import transportadora.Almacenados.Historial_servicio_almacenados
+import transportadora.Almacenados.Cliente.Historial_servicio_almacenados
 import transportadora.Login.R
 
 class Historial_serv_cliente : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package transportadora.Modelos
+package transportadora.Modelos.Cliente
 
 data class PerfilClienteCompleto(
     val tipo_identificacion: String,

@@ -1,10 +1,10 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
-import transportadora.Modelos.Ciudad
+import transportadora.Modelos.Cliente.Ciudad
 import transportadora.Network.ApiHelper
 
 object Ciudad_almacenados {
