@@ -78,21 +78,17 @@ class Login : AppCompatActivity() {
 
                     if (json.getBoolean("success")) {
                         val tipoUsuario = json.getInt("id_tipo_usuario")
-                        val idUsuario = json.getInt("id_usuario") // Extraer id_usuario
 
                         // Guardar correo en SharedPreferences
                         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
                         with(sharedPreferences.edit()) {
                             putString("user_email", correo)
-                            putInt("id_usuario", idUsuario) // Opcional: guardar también el ID
                             apply()
                         }
 
                         val intent = when (tipoUsuario) {
                             1 -> Intent(this@Login, Principal_administrador::class.java)
-                            2 -> Intent(this@Login, Principal_conductor::class.java).apply {
-                                putExtra("id_usuario", idUsuario) // Pasar el ID del usuario
-                            }
+                            2 -> Intent(this@Login, Principal_conductor::class.java)
                             3 -> Intent(this@Login, Principal_cliente::class.java)
                             else -> null
                         }
