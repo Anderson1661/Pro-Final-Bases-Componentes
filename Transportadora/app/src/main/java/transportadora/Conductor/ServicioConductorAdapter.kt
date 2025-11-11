@@ -1,5 +1,6 @@
 package transportadora.Conductor
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,14 @@ class ServicioConductorAdapter(private val servicios: JSONArray) : RecyclerView.
         holder.textViewDestino.text = "Destino: ${servicio.getString("destino")}"
         holder.textViewFecha.text = "Fecha: ${servicio.getString("fecha")}"
         holder.textViewEstado.text = "Estado: ${servicio.getString("estado")}"
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetalleServicioConductorActivity::class.java).apply {
+                putExtra("servicio_json", servicio.toString())
+            }
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = servicios.length()
