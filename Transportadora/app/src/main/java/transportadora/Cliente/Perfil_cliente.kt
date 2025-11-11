@@ -8,12 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import transportadora.Compartido.Preg_seguridad
 import transportadora.Login.R
 import kotlinx.coroutines.*
-import transportadora.Almacenados.Perfil_cliente_completo_almacenados
+import transportadora.Almacenados.Cliente.Perfil_cliente_completo_almacenados
 
 class Perfil_cliente : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")

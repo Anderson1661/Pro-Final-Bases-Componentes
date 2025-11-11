@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import transportadora.Almacenados.Pais_almacenados
+import transportadora.Almacenados.Cliente.Pais_almacenados
 import transportadora.Login.R
 
 class Registrar1 : AppCompatActivity() {

@@ -1,19 +1,18 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
+import transportadora.Modelos.Cliente.Metodo_pago
 import transportadora.Network.ApiHelper
-import transportadora.Modelos.Pais
 
-object Pais_almacenados {
-    suspend fun obtenerPaises(): List<Pais> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_paises.php"
+object Metodo_pago_almacenados {
+    suspend fun obtener_metodo_pago(): List<Metodo_pago> = withContext(Dispatchers.IO) {
+        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_metodo_pago.php"
         val response = ApiHelper.getRequest(url) // devuelve el JSON como String
 
-        // Parseamos la estructura { "datos": [ {id_pais, nombre}, ... ], "success": "1" }
-        val lista = mutableListOf<Pais>()
+        val lista = mutableListOf<Metodo_pago>()
         val json = JSONObject(response)
         // Manejar caso "no hay registros" (success == "1" y mensaje)
         if (json.optString("success") == "1") {
@@ -22,9 +21,8 @@ object Pais_almacenados {
                 for (i in 0 until datos.length()) {
                     val obj = datos.getJSONObject(i)
                     lista.add(
-                        Pais(
-                            id_pais = obj.optInt("id_pais"),
-                            nombre = obj.optString("nombre")
+                        Metodo_pago(
+                            descripcion = obj.optString("descripcion")
                         )
                     )
                 }

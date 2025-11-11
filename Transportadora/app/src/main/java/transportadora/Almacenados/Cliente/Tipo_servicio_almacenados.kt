@@ -1,18 +1,18 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
-import transportadora.Modelos.Metodo_pago
 import transportadora.Network.ApiHelper
+import transportadora.Modelos.Cliente.Tipo_servicio
 
-object Metodo_pago_almacenados {
-    suspend fun obtener_metodo_pago(): List<Metodo_pago> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_metodo_pago.php"
+object Tipo_servicio_almacenados {
+    suspend fun obtener_tipo_servicio(): List<Tipo_servicio> = withContext(Dispatchers.IO) {
+        val url = ApiConfig.BASE_URL + "consultas/cliente/principal/consultar_tipo_servicio.php"
         val response = ApiHelper.getRequest(url) // devuelve el JSON como String
 
-        val lista = mutableListOf<Metodo_pago>()
+        val lista = mutableListOf<Tipo_servicio>()
         val json = JSONObject(response)
         // Manejar caso "no hay registros" (success == "1" y mensaje)
         if (json.optString("success") == "1") {
@@ -21,7 +21,7 @@ object Metodo_pago_almacenados {
                 for (i in 0 until datos.length()) {
                     val obj = datos.getJSONObject(i)
                     lista.add(
-                        Metodo_pago(
+                        Tipo_servicio(
                             descripcion = obj.optString("descripcion")
                         )
                     )
@@ -32,4 +32,6 @@ object Metodo_pago_almacenados {
         }
         lista
     }
+
+
 }

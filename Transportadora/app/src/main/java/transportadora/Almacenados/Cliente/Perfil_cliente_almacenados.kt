@@ -1,10 +1,10 @@
-package transportadora.Almacenados
+package transportadora.Almacenados.Cliente
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
-import transportadora.Modelos.PerfilCliente
+import transportadora.Modelos.Cliente.PerfilCliente
 import transportadora.Network.ApiHelper
 
 object Perfil_cliente_almacenados {

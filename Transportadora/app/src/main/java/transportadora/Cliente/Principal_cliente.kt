@@ -8,9 +8,17 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
-import transportadora.Almacenados.*
-import transportadora.Modelos.*
+import transportadora.Almacenados.Cliente.Categorias_almacenados
+import transportadora.Almacenados.Cliente.Ciudad_almacenados
+import transportadora.Almacenados.Cliente.Departamento_almacenados
+import transportadora.Almacenados.Cliente.Metodo_pago_almacenados
+import transportadora.Almacenados.Cliente.Pais_almacenados
+import transportadora.Almacenados.Cliente.Perfil_cliente_almacenados
+import transportadora.Almacenados.Cliente.Tipo_servicio_almacenados
 import transportadora.Login.R
+import transportadora.Modelos.Cliente.Categoria_servicio
+import transportadora.Modelos.Cliente.Pais
+import transportadora.Modelos.Cliente.PerfilCliente
 import kotlin.collections.getOrNull
 
 class Principal_cliente : AppCompatActivity() {
