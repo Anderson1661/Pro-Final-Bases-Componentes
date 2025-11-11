@@ -1,0 +1,30 @@
+package transportadora.Modelos.Cliente
+
+data class Servicio(
+    val id_ruta: Int,
+    val fecha_reserva: String?,
+    val estado: String?,
+    val direccion_origen: String?,
+    val origen_pais: String?,
+    val origen_departamento: String?,
+    val origen_ciudad: String?,
+    val fecha_inicio: String?,
+    val tipo_servicio: String?,
+    val cantidad_pasajeros: Int?,
+    val nombre_pasajero1: String?,
+    val nombre_pasajero2: String?,
+    val nombre_pasajero3: String?,
+    val nombre_pasajero4: String?,
+    val categoria_servicio: String?,
+    val direccion_destino: String?,
+    val destino_pais: String?,
+    val destino_departamento: String?,
+    val destino_ciudad: String?,
+    val precio_km: Double?,
+    val distancia_km: Double?,
+    val total: Double?,
+    val metodo_pago: String?,
+    val fecha_entrega: String?,
+    val nombre_conductor: String?,
+    val placa_vehiculo: String?
+)

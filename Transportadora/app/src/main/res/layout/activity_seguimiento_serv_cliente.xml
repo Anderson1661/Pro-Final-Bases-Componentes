@@ -128,7 +128,7 @@
                         android:textColorHint="@color/grisclaro"
                         android:layout_marginTop="20dp" />
                     <EditText
-                        android:id="@+id/txt_direccion_origen"
+                        android:id="@+id/txt_id_servicio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Ingrese codigo"
@@ -159,11 +159,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Fecha programada para el envio"
+                            android:text="Fecha de Reserva"
                             android:textColor="@color/negro"
                             android:layout_marginTop="20dp" />
                         <TextView
-                            android:id="@+id/txt_fecha_envio"
+                            android:id="@+id/txt_fecha_reserva"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="12/12/2024"
