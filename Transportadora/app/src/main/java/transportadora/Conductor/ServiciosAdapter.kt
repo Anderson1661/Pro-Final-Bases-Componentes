@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import transportadora.Modelos.HistorialServicio
+import transportadora.Modelos.Conductor.HistorialServicio
 import transportadora.Login.R
 import java.text.SimpleDateFormat
 import java.util.Locale
