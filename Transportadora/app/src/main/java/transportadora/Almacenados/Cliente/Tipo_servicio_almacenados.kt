@@ -22,6 +22,7 @@ object Tipo_servicio_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Tipo_servicio(
+                            id_tipo_servicio = obj.optInt("id_tipo_servicio"),
                             descripcion = obj.optString("descripcion")
                         )
                     )

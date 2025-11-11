@@ -25,6 +25,7 @@ object Ciudad_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Ciudad(
+                            id_codigo_postal = obj.optString("id_codigo_postal"),
                             nombre = obj.optString("nombre")
                         )
                     )

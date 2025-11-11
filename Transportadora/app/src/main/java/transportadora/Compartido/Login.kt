@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -61,7 +58,7 @@ class Login : AppCompatActivity() {
     }
 
     private fun autenticarUsuario(correo: String, contrasenia: String) {
-        val url = ApiConfig.BASE_URL + "consultas/login.php" // cambia por tu ruta
+        val url = ApiConfig.BASE_URL + "consultas/login.php"
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -78,14 +75,17 @@ class Login : AppCompatActivity() {
 
                     if (json.getBoolean("success")) {
                         val tipoUsuario = json.getInt("id_tipo_usuario")
+                        val idUsuario = json.getInt("id_usuario") // aquí obtenemos el ID
 
-                        // Guardar correo en SharedPreferences
+                        // Guardar correo e id_usuario en SharedPreferences
                         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
                         with(sharedPreferences.edit()) {
                             putString("user_email", correo)
+                            putInt("user_id", idUsuario) // guardamos el ID
                             apply()
                         }
 
+                        // Navegar según el tipo de usuario
                         val intent = when (tipoUsuario) {
                             1 -> Intent(this@Login, Principal_administrador::class.java)
                             2 -> Intent(this@Login, Principal_conductor::class.java)
@@ -95,11 +95,11 @@ class Login : AppCompatActivity() {
 
                         if (intent != null) {
                             startActivity(intent)
+                            Toast.makeText(this@Login, "Sesión iniciada", Toast.LENGTH_SHORT).show()
                         } else {
                             Toast.makeText(this@Login, "Tipo de usuario desconocido", Toast.LENGTH_SHORT).show()
                         }
 
-                        Toast.makeText(this@Login, "Sesión iniciada", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this@Login, json.getString("message"), Toast.LENGTH_SHORT).show()
                     }

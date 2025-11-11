@@ -19,7 +19,6 @@ $id_metodo_pago = isset($_REQUEST['id_metodo_pago']) ? $_REQUEST['id_metodo_pago
 
 if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_postal_origen) || 
     empty($id_codigo_postal_destino) || empty($distancia_km) || empty($fecha_hora_reserva) || 
-    empty($fecha_hora_origen) || empty($fecha_hora_destino) || empty($id_conductor) || 
     empty($id_tipo_servicio) || empty($id_cliente) || empty($id_estado_servicio) || 
     empty($id_categoria_servicio) || empty($id_metodo_pago)) {
     echo json_encode(array("success" => "0", "mensaje" => "Todos los campos son requeridos"));
@@ -30,9 +29,11 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
     $id_codigo_postal_destino = mysqli_real_escape_string($link, $id_codigo_postal_destino);
     $distancia_km = mysqli_real_escape_string($link, $distancia_km);
     $fecha_hora_reserva = mysqli_real_escape_string($link, $fecha_hora_reserva);
-    $fecha_hora_origen = mysqli_real_escape_string($link, $fecha_hora_origen);
-    $fecha_hora_destino = mysqli_real_escape_string($link, $fecha_hora_destino);
-    $id_conductor = mysqli_real_escape_string($link, $id_conductor);
+    
+    $fecha_hora_origen = !empty($fecha_hora_origen) ? "'" . mysqli_real_escape_string($link, $fecha_hora_origen) . "'" : "NULL";
+    $fecha_hora_destino = !empty($fecha_hora_destino) ? "'" . mysqli_real_escape_string($link, $fecha_hora_destino) . "'" : "NULL";
+    $id_conductor = !empty($id_conductor) ? "'" . mysqli_real_escape_string($link, $id_conductor) . "'" : "NULL";
+
     $id_tipo_servicio = mysqli_real_escape_string($link, $id_tipo_servicio);
     $id_cliente = mysqli_real_escape_string($link, $id_cliente);
     $id_estado_servicio = mysqli_real_escape_string($link, $id_estado_servicio);
@@ -44,7 +45,7 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
             distancia_km, fecha_hora_reserva, fecha_hora_origen, fecha_hora_destino, id_conductor, id_tipo_servicio, 
             id_cliente, id_estado_servicio, id_categoria_servicio, id_metodo_pago) 
             VALUES ('$direccion_origen', '$direccion_destino', '$id_codigo_postal_origen', '$id_codigo_postal_destino', 
-            '$distancia_km', '$fecha_hora_reserva', '$fecha_hora_origen', '$fecha_hora_destino', '$id_conductor', 
+            '$distancia_km', '$fecha_hora_reserva', $fecha_hora_origen, $fecha_hora_destino, $id_conductor, 
             '$id_tipo_servicio', '$id_cliente', '$id_estado_servicio', '$id_categoria_servicio', '$id_metodo_pago')";
     $res = mysqli_query($link, $sql);
     
