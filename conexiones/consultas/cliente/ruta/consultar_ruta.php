@@ -11,37 +11,39 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (!empty($id_ruta)) {
     // Consulta principal de la ruta
     $sql = "SELECT 
-                r.id_ruta,
-                r.fecha_hora_origen AS fecha_inicio,
-                es.descripcion AS estado,
-                r.fecha_hora_reserva,
-                r.direccion_origen,
-                cp_ori.departamento AS origen_departamento,
-                cp_ori.ciudad AS origen_ciudad,
-                p_ori.nombre AS origen_pais,
-                r.direccion_destino,
-                cp_dest.departamento AS destino_departamento,
-                cp_dest.ciudad AS destino_ciudad,
-                p_dest.nombre AS destino_pais,
-                ts.descripcion AS tipo_servicio,
-                cs.descripcion AS categoria_servicio,
-                cs.valor_km AS precio_km,
-                r.total,
-                mp.descripcion AS metodo_pago,
-                r.fecha_hora_destino AS fecha_entrega,
-                c.nombre AS nombre_conductor,
-                c.placa_vehiculo
-            FROM ruta r
-            LEFT JOIN estado_servicio es ON r.id_estado_servicio = es.id_estado_servicio
-            LEFT JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio
-            LEFT JOIN categoria_servicio cs ON r.id_categoria_servicio = cs.id_categoria_servicio
-            LEFT JOIN metodo_pago mp ON r.id_metodo_pago = mp.id_metodo_pago
-            LEFT JOIN conductor c ON r.id_conductor = c.id_conductor
-            LEFT JOIN codigo_postal cp_ori ON r.id_codigo_postal_origen = cp_ori.id_codigo_postal
-            LEFT JOIN pais p_ori ON cp_ori.id_pais = p_ori.id_pais
-            LEFT JOIN codigo_postal cp_dest ON r.id_codigo_postal_destino = cp_dest.id_codigo_postal
-            LEFT JOIN pais p_dest ON cp_dest.id_pais = p_dest.id_pais
-            WHERE r.id_ruta = ? LIMIT 1";
+            r.id_ruta,
+            r.fecha_hora_origen AS fecha_inicio,
+            es.descripcion AS estado,
+            r.fecha_hora_reserva,
+            r.direccion_origen,
+            cp_ori.departamento AS origen_departamento,
+            cp_ori.ciudad AS origen_ciudad,
+            p_ori.nombre AS origen_pais,
+            r.direccion_destino,
+            cp_dest.departamento AS destino_departamento,
+            cp_dest.ciudad AS destino_ciudad,
+            p_dest.nombre AS destino_pais,
+            ts.descripcion AS tipo_servicio,
+            cs.descripcion AS categoria_servicio,
+            cs.valor_km AS precio_km,
+            r.distancia_km AS distancia_km,  
+            r.total,
+            mp.descripcion AS metodo_pago,
+            r.fecha_hora_destino AS fecha_entrega,
+            c.nombre AS nombre_conductor,
+            c.placa_vehiculo
+        FROM ruta r
+        LEFT JOIN estado_servicio es ON r.id_estado_servicio = es.id_estado_servicio
+        LEFT JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio
+        LEFT JOIN categoria_servicio cs ON r.id_categoria_servicio = cs.id_categoria_servicio
+        LEFT JOIN metodo_pago mp ON r.id_metodo_pago = mp.id_metodo_pago
+        LEFT JOIN conductor c ON r.id_conductor = c.id_conductor
+        LEFT JOIN codigo_postal cp_ori ON r.id_codigo_postal_origen = cp_ori.id_codigo_postal
+        LEFT JOIN pais p_ori ON cp_ori.id_pais = p_ori.id_pais
+        LEFT JOIN codigo_postal cp_dest ON r.id_codigo_postal_destino = cp_dest.id_codigo_postal
+        LEFT JOIN pais p_dest ON cp_dest.id_pais = p_dest.id_pais
+        WHERE r.id_ruta = ? LIMIT 1";
+
 
     $stmt = mysqli_prepare($link, $sql);
     if ($stmt) {
@@ -109,12 +111,14 @@ if (!empty($id_ruta)) {
                 'destino_departamento' => $row['destino_departamento'],
                 'destino_ciudad' => $row['destino_ciudad'],
                 'precio_km' => $row['precio_km'],
+                'distancia_km' => $row['distancia_km'],   
                 'total' => $row['total'],
                 'metodo_pago' => $row['metodo_pago'],
                 'fecha_entrega' => $row['fecha_entrega'],
                 'nombre_conductor' => $row['nombre_conductor'],
                 'placa_vehiculo' => $row['placa_vehiculo']
             ];
+
 
             $res = [
                 "success" => "1",
