@@ -2,6 +2,7 @@ package transportadora.Cliente
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -16,9 +17,7 @@ import transportadora.Almacenados.Cliente.Pais_almacenados
 import transportadora.Almacenados.Cliente.Perfil_cliente_almacenados
 import transportadora.Almacenados.Cliente.Tipo_servicio_almacenados
 import transportadora.Login.R
-import transportadora.Modelos.Cliente.Categoria_servicio
-import transportadora.Modelos.Cliente.Pais
-import transportadora.Modelos.Cliente.PerfilCliente
+import transportadora.Modelos.Cliente.*
 import kotlin.collections.getOrNull
 
 class Principal_cliente : AppCompatActivity() {
@@ -27,7 +26,12 @@ class Principal_cliente : AppCompatActivity() {
     private var perfilCliente: PerfilCliente? = null
     private var departamentosOrigen: List<String> = emptyList()
     private var listaCategoriasCompleta: List<Categoria_servicio> = emptyList()
+    private var listaMetodosPago: List<Metodo_pago> = emptyList()
+    private var listaTiposServicio: List<Tipo_servicio> = emptyList()
     private var totalPagar: Double = 0.0
+
+    private var listaCiudadesOrigen: List<Ciudad> = emptyList()
+    private var listaCiudadesDestino: List<Ciudad> = emptyList()
 
     private lateinit var txtKmRecorrido: TextView
     private lateinit var txtTotalPagar: TextView
@@ -42,9 +46,38 @@ class Principal_cliente : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_principal_cliente)
 
-        // ==============================
-        // DEFINICIÓN DE VISTAS
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("user_id", -1)
 
+        if (userId == -1) {
+            Toast.makeText(this, "No se pudo identificar el ID del usuario.", Toast.LENGTH_LONG).show()
+        }
+
+        val txtFechaEnvio = findViewById<EditText>(R.id.txt_fecha_envio)
+        txtFechaEnvio.isFocusable = false
+        txtFechaEnvio.isFocusableInTouchMode = false
+        try {
+            txtFechaEnvio.showSoftInputOnFocus = false
+        } catch (e: Exception) {
+            // non-critical
+        }
+
+        txtFechaEnvio.setOnClickListener {
+            val now = java.util.Calendar.getInstance()
+            val datePicker = android.app.DatePickerDialog(this, { _, year, month, day ->
+                val timePicker = android.app.TimePickerDialog(this, { _, hour, minute ->
+                    val cal = java.util.Calendar.getInstance().apply {
+                        set(year, month, day, hour, minute, 0)
+                    }
+                    val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                    txtFechaEnvio.setText(sdf.format(cal.time))
+                }, now.get(java.util.Calendar.HOUR_OF_DAY), now.get(java.util.Calendar.MINUTE), true)
+                timePicker.setTitle("Selecciona la hora")
+                timePicker.show()
+            }, now.get(java.util.Calendar.YEAR), now.get(java.util.Calendar.MONTH), now.get(java.util.Calendar.DAY_OF_MONTH))
+            datePicker.setTitle("Selecciona la fecha")
+            datePicker.show()
+        }
 
         val spinner_direcciones = findViewById<Spinner>(R.id.spinner_origen_tipo)
         val spinner_paises = findViewById<Spinner>(R.id.spinner_pais_destino)
@@ -57,7 +90,6 @@ class Principal_cliente : AppCompatActivity() {
         val spinner_tipos = findViewById<Spinner>(R.id.spinner_tipo_servicio)
         spinner_categoria = findViewById(R.id.spinner_categoria_servicio)
         val spinner_pago = findViewById<Spinner>(R.id.spinner_metodo_pago)
-
         txtKmRecorrido = findViewById(R.id.txt_km_recorrido)
         txtTotalPagar = findViewById(R.id.txt_total_pagar)
 
@@ -69,61 +101,39 @@ class Principal_cliente : AppCompatActivity() {
         val pasajero_4 = findViewById<EditText>(R.id.txt_pasajero4)
         val txt_pasajeros = listOf(pasajero_1, pasajero_2, pasajero_3, pasajero_4)
 
-        // ==============================
-        // CONFIGURACIÓN INICIAL DE SPINNERS
-
-
-        // Dirección de origen
         val direcciones = listOf("Mi direccion", "Otra direccion")
         spinner_direcciones.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, direcciones).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        // Cantidad de pasajeros
         val cantidad_pasajeros = listOf("1", "2", "3", "4")
         spinner_pasajeros.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cantidad_pasajeros).apply {
             setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         }
 
-        // ==============================
-        // ESTADO INICIAL DE CAMPOS
-
         txtDireccionOrigen.isEnabled = false
         spinner_departamento1.isEnabled = false
         spinner_ciudades1.isEnabled = false
         spinner_pasajeros.isEnabled = false
-        spinner_direcciones.setSelection(0)
-        spinner_tipos.setSelection(0)
-
         txt_pasajeros.forEach {
             it.isEnabled = false
             it.hint = "No disponible"
         }
 
-        // ==============================
-        // CARGA DE DATOS DESDE BD
-
-        // Perfil del Cliente
-        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", null)
-
         if (userEmail != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     perfilCliente = withContext(Dispatchers.IO) { Perfil_cliente_almacenados.obtenerPerfil(userEmail) }
-                    // Una vez cargado el perfil, la selección inicial del spinner de dirección lo usará.
-                    spinner_direcciones.setSelection(0) // Dispara el listener con los datos ya cargados
+                    spinner_direcciones.setSelection(0)
                 } catch (e: Exception) {
                     Toast.makeText(this@Principal_cliente, "Error al cargar perfil: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             Toast.makeText(this@Principal_cliente, "No se pudo identificar al usuario.", Toast.LENGTH_LONG).show()
-            // Aquí podrías redirigir al login
         }
 
-
-        // Paises
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val paises = withContext(Dispatchers.IO) { Pais_almacenados.obtenerPaises() }
@@ -141,17 +151,15 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
 
-        // Departamentos Origen (Colombia ID 1) - Se carga para tener la lista disponible
         cargarDepartamentos(1, spinner_departamento1, true)
 
-
-        // Tipos de servicio
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val tipos = withContext(Dispatchers.IO) { Tipo_servicio_almacenados.obtener_tipo_servicio() }
                 if (tipos.isNotEmpty()) {
-                    val listaTipos = tipos.map { it.descripcion }
-                    spinner_tipos.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaTipos).apply {
+                    listaTiposServicio = tipos
+                    val listaTiposNombres = tipos.map { it.descripcion }
+                    spinner_tipos.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaTiposNombres).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 } else {
@@ -162,7 +170,6 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
 
-        // Categorías de servicio
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val categorias = withContext(Dispatchers.IO) { Categorias_almacenados.obtener_categoria_servicio() }
@@ -180,13 +187,13 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
 
-        // Metodos de pago
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val metodos = withContext(Dispatchers.IO) { Metodo_pago_almacenados.obtener_metodo_pago() }
                 if (metodos.isNotEmpty()) {
-                    val listametodos = metodos.map { it.descripcion }
-                    spinner_pago.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listametodos).apply {
+                    listaMetodosPago = metodos
+                    val listametodosNombres = metodos.map { it.descripcion }
+                    spinner_pago.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listametodosNombres).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 } else {
@@ -197,93 +204,58 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
 
-        // ==============================
-        // MENÚ LATERAL
-
         findViewById<TextView>(R.id.editarperfil).setOnClickListener {
             val intent = Intent(this, Perfil_cliente::class.java)
             intent.putExtra("USER_EMAIL", userEmail)
             startActivity(intent)
         }
-
-        findViewById<TextView>(R.id.cambiocontra).setOnClickListener {
-            startActivity(Intent(this, transportadora.Compartido.Preg_seguridad::class.java))
-        }
-
-        findViewById<TextView>(R.id.cerrarsesion).setOnClickListener {
-            startActivity(Intent(this, transportadora.Compartido.Main::class.java))
-        }
-
-        findViewById<TextView>(R.id.ayuda).setOnClickListener {
-            startActivity(Intent(this, transportadora.Compartido.Ayuda::class.java))
-        }
-
-        // ==============================
-        // MENÚ INFERIOR
+        findViewById<TextView>(R.id.cambiocontra).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Preg_seguridad::class.java)) }
+        findViewById<TextView>(R.id.cerrarsesion).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Main::class.java)) }
+        findViewById<TextView>(R.id.ayuda).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Ayuda::class.java)) }
 
         val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
+        findViewById<TextView>(R.id.menu1).setOnClickListener { scrollView.post { scrollView.smoothScrollTo(0, 0) } }
+        findViewById<TextView>(R.id.menu2).setOnClickListener { startActivity(Intent(this, Seguimiento_serv_cliente::class.java)) }
+        findViewById<TextView>(R.id.menu3).setOnClickListener { startActivity(Intent(this, Historial_serv_cliente::class.java)) }
 
-        findViewById<TextView>(R.id.menu1).setOnClickListener {
-            scrollView.post { scrollView.smoothScrollTo(0, 0) }
-        }
-
-        findViewById<TextView>(R.id.menu2).setOnClickListener {
-            startActivity(Intent(this, Seguimiento_serv_cliente::class.java))
-        }
-
-        findViewById<TextView>(R.id.menu3).setOnClickListener {
-            startActivity(Intent(this, Historial_serv_cliente::class.java))
-        }
-
-        // ==============================
-        // LISTENERS DE SPINNERS
-
-        // Listener: selección de dirección
         spinner_direcciones.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val seleccion = parent.getItemAtPosition(position).toString()
                 if (seleccion == "Mi direccion") {
-                    // Usar dirección del perfil
                     txtDireccionOrigen.isEnabled = false
                     spinner_departamento1.isEnabled = false
                     spinner_ciudades1.isEnabled = false
-
                     perfilCliente?.let { perfil ->
-                        txtDireccionOrigen.hint = "Usando tu dirección (${perfil.direccion})"
-                        
-                        // Seleccionar departamento del perfil
-                        val deptoIndex = departamentosOrigen.indexOf(perfil.departamento)
-                        if (deptoIndex != -1) {
-                            spinner_departamento1.setSelection(deptoIndex)
-                            // Cargar ciudades y luego seleccionar la del perfil
-                            cargarCiudades(1, perfil.departamento, spinner_ciudades1, perfil.ciudad)
+                        txtDireccionOrigen.setText(perfil.direccion)
+                        txtDireccionOrigen.hint = "Usando tu dirección del perfil"
+                        cargarDepartamentos(1, spinner_departamento1, true)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(300)
+                            val deptoIndex = departamentosOrigen.indexOf(perfil.departamento)
+                            if (deptoIndex != -1) {
+                                spinner_departamento1.setSelection(deptoIndex)
+                            }
+                            cargarCiudades(1, perfil.departamento, spinner_ciudades1, true, perfil.ciudad)
                         }
-                    }
-                } else {
-                    // Usar "Otra direccion"
+                    } ?: Toast.makeText(this@Principal_cliente, "No se pudo obtener tu dirección del perfil.", Toast.LENGTH_SHORT).show()
+                } else if (seleccion == "Otra direccion") {
                     txtDireccionOrigen.isEnabled = true
                     spinner_departamento1.isEnabled = true
                     spinner_ciudades1.isEnabled = true
                     txtDireccionOrigen.hint = "Ingresa otra dirección (Ej: Calle 45 #10-23)"
                     txtDireccionOrigen.text.clear()
-                    
-                    // Cargar la lista completa de departamentos de Colombia si no está ya
-                    spinner_departamento1.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, departamentosOrigen).apply {
-                        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    }
+                    cargarDepartamentos(1, spinner_departamento1, true)
                 }
                 calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener: tipo de servicio
         spinner_tipos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val seleccion = parent.getItemAtPosition(position).toString()
                 val esPasajeros = seleccion == "Pasajeros"
                 spinner_pasajeros.isEnabled = esPasajeros
-
                 if (esPasajeros) {
                     pasajero_1.isEnabled = true
                     pasajero_1.hint = "Nombre completo"
@@ -299,7 +271,6 @@ class Principal_cliente : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener: cantidad de pasajeros
         spinner_pasajeros.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val cantidad = parent.getItemAtPosition(position).toString().toIntOrNull() ?: 1
@@ -313,11 +284,9 @@ class Principal_cliente : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener: País Destino
         spinner_paises.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val paisSeleccionado = listaPaisesCompleta.getOrNull(position)
-                paisSeleccionado?.let {
+                listaPaisesCompleta.getOrNull(position)?.let {
                     cargarDepartamentos(it.id_pais, spinner_departamento2)
                 }
                 calcularYActualizarTotal()
@@ -325,75 +294,139 @@ class Principal_cliente : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener: Departamento Origen
         spinner_departamento1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (spinner_direcciones.selectedItem.toString() == "Otra direccion") {
                     val deptoSeleccionado = parent.getItemAtPosition(position).toString()
-                    cargarCiudades(1, deptoSeleccionado, spinner_ciudades1)
+                    cargarCiudades(1, deptoSeleccionado, spinner_ciudades1, true)
                 }
                 calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener: Departamento Destino
         spinner_departamento2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val deptoSeleccionado = parent.getItemAtPosition(position).toString()
                 val posPais = spinner_paises.selectedItemPosition
-                val paisSeleccionado = listaPaisesCompleta.getOrNull(posPais)
-                paisSeleccionado?.let {
-                    cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades2)
+                listaPaisesCompleta.getOrNull(posPais)?.let {
+                    cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades2, false)
                 }
                 calcularYActualizarTotal()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Listener para recalcular si cambian las ciudades o categoría
-        spinner_ciudades1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                calcularYActualizarTotal()
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                calcularYActualizarTotal()
-            }
+        val recalculateListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) { calcularYActualizarTotal() }
+            override fun onNothingSelected(p0: AdapterView<*>?) { calcularYActualizarTotal() }
         }
-        spinner_ciudades2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                calcularYActualizarTotal()
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                calcularYActualizarTotal()
-            }
-        }
-        spinner_categoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                calcularYActualizarTotal()
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                calcularYActualizarTotal()
-            }
-        }
+        spinner_ciudades1.onItemSelectedListener = recalculateListener
+        spinner_ciudades2.onItemSelectedListener = recalculateListener
+        spinner_categoria.onItemSelectedListener = recalculateListener
 
-
-        //Listener boton de continuar
         btnContinuar.setOnClickListener {
-            val metodoPagoSeleccionado = spinner_pago.selectedItem?.toString() ?: ""
-
-            if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
-                Toast.makeText(
-                    this,
-                    "Debes entregarle el efectivo una vez que llegue el conductor",
-                    Toast.LENGTH_LONG
-                ).show()
-                val intent = Intent(this, Historial_serv_cliente::class.java)
-                startActivity(intent)
+            val direccionOrigen = if (spinner_direcciones.selectedItem.toString() == "Mi direccion") {
+                perfilCliente?.direccion ?: ""
             } else {
-                val intent = Intent(this, Transferencia::class.java)
-                intent.putExtra("TOTAL_PAGAR", totalPagar)
-                startActivity(intent)
+                findViewById<EditText>(R.id.txt_direccion_origen).text.toString().trim()
+            }
+            val ciudadDestinoNombre = spinner_ciudades2.selectedItem?.toString() ?: ""
+            val fechaEnvioTexto = txtFechaEnvio.text.toString().trim()
+
+            if (direccionOrigen.isEmpty() || ciudadDestinoNombre.isEmpty() || fechaEnvioTexto.isEmpty()) {
+                Toast.makeText(this, "Por favor completa todos los campos.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if (userId == -1) {
+                Toast.makeText(this, "Error: No se encontró el ID del cliente.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val formatterSalida = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+            val fechaReserva = try {
+                val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
+                val date = sdf.parse(fechaEnvioTexto)
+                formatterSalida.format(date)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Formato de fecha inválido. Usa: yyyy-MM-dd HH:mm", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val posMetodoPago = spinner_pago.selectedItemPosition
+            val posCategoria = spinner_categoria.selectedItemPosition
+            val posTipoServicio = spinner_tipos.selectedItemPosition
+            val posCiudadOrigen = spinner_ciudades1.selectedItemPosition
+            val posCiudadDestino = spinner_ciudades2.selectedItemPosition
+
+            if (posMetodoPago < 0 || posCategoria < 0 || posTipoServicio < 0 || posCiudadOrigen < 0 || posCiudadDestino < 0) {
+                Toast.makeText(this, "Asegúrate de seleccionar todas las opciones.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val idMetodoPago = listaMetodosPago.getOrNull(posMetodoPago)?.id_metodo_pago ?: -1
+            val idCategoria = listaCategoriasCompleta.getOrNull(posCategoria)?.id_categoria_servicio ?: -1
+            val idTipoServicio = listaTiposServicio.getOrNull(posTipoServicio)?.id_tipo_servicio ?: -1
+            val idCodigoPostalOrigen = listaCiudadesOrigen.getOrNull(posCiudadOrigen)?.id_codigo_postal ?: "-1"
+            val idCodigoPostalDestino = listaCiudadesDestino.getOrNull(posCiudadDestino)?.id_codigo_postal ?: "-1"
+
+            if (idMetodoPago == -1 || idCategoria == -1 || idTipoServicio == -1 || idCodigoPostalOrigen == "-1" || idCodigoPostalDestino == "-1") {
+                Toast.makeText(this, "Error al obtener IDs. Revisa las selecciones.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val idEstadoServicio = 1
+            val distancia = txtKmRecorrido.text.toString().replace(" km", "").trim()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "ruta/create.php")
+                    val params = "direccion_origen=${java.net.URLEncoder.encode(direccionOrigen, "UTF-8")}" +
+                            "&direccion_destino=${java.net.URLEncoder.encode(ciudadDestinoNombre, "UTF-8")}" +
+                            "&id_codigo_postal_origen=$idCodigoPostalOrigen" +
+                            "&id_codigo_postal_destino=$idCodigoPostalDestino" +
+                            "&distancia_km=$distancia" +
+                            "&fecha_hora_reserva=$fechaReserva" +
+                            "&fecha_hora_origen=" + "" +
+                            "&fecha_hora_destino=" + "" +
+                            "&id_conductor=" + "" +
+                            "&id_tipo_servicio=$idTipoServicio" +
+                            "&id_cliente=$userId" +
+                            "&id_estado_servicio=$idEstadoServicio" +
+                            "&id_categoria_servicio=$idCategoria" +
+                            "&id_metodo_pago=$idMetodoPago"
+
+                    val connection = url.openConnection() as java.net.HttpURLConnection
+                    connection.requestMethod = "POST"
+                    connection.doOutput = true
+                    connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+                    val response = connection.inputStream.bufferedReader().use { it.readText() }
+
+                    withContext(Dispatchers.Main) {
+                        val json = org.json.JSONObject(response)
+                        if (json.getString("success") == "1") {
+                            Toast.makeText(this@Principal_cliente, "Ruta creada correctamente", Toast.LENGTH_LONG).show()
+                            val metodoPagoSeleccionado = listaMetodosPago.getOrNull(posMetodoPago)?.descripcion ?: ""
+                            if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
+                                Toast.makeText(this@Principal_cliente, "Debes entregarle el efectivo una vez que llegue el conductor", Toast.LENGTH_LONG).show()
+                                startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
+                            } else {
+                                val intent = Intent(this@Principal_cliente, Transferencia::class.java)
+                                intent.putExtra("TOTAL_PAGAR", totalPagar)
+                                startActivity(intent)
+                            }
+                        } else {
+                            Toast.makeText(this@Principal_cliente, json.getString("mensaje"), Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    connection.disconnect()
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@Principal_cliente, "Error al registrar ruta: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
     }
@@ -441,15 +474,21 @@ class Principal_cliente : AppCompatActivity() {
         }
     }
 
-    private fun cargarCiudades(idPais: Int, depto: String, spinner: Spinner, ciudadSeleccionada: String? = null) {
+    private fun cargarCiudades(idPais: Int, depto: String, spinner: Spinner, esOrigen: Boolean, ciudadSeleccionada: String? = null) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val ciudades = withContext(Dispatchers.IO) { Ciudad_almacenados.obtenerCiudades(idPais, depto) }
+                if (esOrigen) {
+                    listaCiudadesOrigen = ciudades
+                } else {
+                    listaCiudadesDestino = ciudades
+                }
+
                 val listaNombres = ciudades.map { it.nombre }
                 spinner.adapter = ArrayAdapter(this@Principal_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
                     setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 }
-                // Si se pasó una ciudad para seleccionar, la buscamos y la seleccionamos
+
                 ciudadSeleccionada?.let {
                     val ciudadIndex = listaNombres.indexOf(it)
                     if (ciudadIndex != -1) {

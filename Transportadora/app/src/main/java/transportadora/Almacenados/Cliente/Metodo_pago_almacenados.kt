@@ -22,6 +22,7 @@ object Metodo_pago_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Metodo_pago(
+                            id_metodo_pago = obj.optInt("id_metodo_pago"),
                             descripcion = obj.optString("descripcion")
                         )
                     )

@@ -23,6 +23,7 @@ object Categorias_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         Categoria_servicio(
+                            id_categoria_servicio = obj.optInt("id_categoria_servicio"),
                             descripcion = obj.optString("descripcion"),
                             valor_km = obj.optDouble("valor_km")
                         )
