@@ -1,10 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="transportadora.Conductor.Principal_conductor">
+
+    <ImageView
+        android:id="@+id/imageViewFondo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/fondo_cliente" />
+
+    <LinearLayout
+        android:id="@+id/layoutPrincipal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/menuLateral"
+            android:layout_width="67dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="top|center_horizontal"
+            android:paddingTop="50dp"
+            android:paddingStart="1dp"
+            android:paddingEnd="3dp">
+
+            <TextView
+                android:id="@+id/editarperfil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar\nPerfil"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="50dp"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="50dp" />
+
+            <TextView
+                android:id="@+id/cambiocontra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cambiar\nContraseña"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="55dp"
+                android:gravity="top|center_horizontal"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/cerrarsesion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cerrar\nSesión"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:gravity="top|center_horizontal"
+                android:layout_marginTop="95dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/ayuda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ayuda"
+                android:textSize="12dp"
+                android:gravity="top|center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@color/blanco"
+                android:layout_marginTop="440dp" />
+        </LinearLayout>
+
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp">
+
+            <ScrollView
+                android:id="@+id/scrollContenido"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:paddingBottom="73dp"> <!-- espacio para que el contenido no quede debajo del menú inferior -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Contenido principal -->
+                    <TextView
+                        android:id="@+id/textViewTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Servicios hoy"
+                        android:textAlignment="center"
+                        android:textColor="@color/naranja"
+                        android:fontFamily="@font/gorditas_bold"
+                        android:textSize="30sp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="0dp" />
+
+                    <TextView
+                        android:id="@+id/textViewTitulo2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="0dp"
+                        android:text="Vehiculo de placa:"
+                        android:textAlignment="center"
+                        android:textColor="@color/negro"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_placa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="GHO908"
+                        android:textAlignment="center"
+                        android:textColor="@color/negro"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/textViewTitulo3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="00dp"
+                        android:text="Tipo de servicio:"
+                        android:textAlignment="center"
+                        android:textColor="@color/negro"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_tipo_servicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="GHO908"
+                        android:textAlignment="center"
+                        android:textColor="@color/negro"
+                        android:textSize="15dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerServicios_hoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_servicios"
+                        tools:itemCount="3" />
+
+                </LinearLayout>
+            </ScrollView>
+
+            <!-- Menú inferior fijo (está fuera del ScrollView y siempre visible en la parte inferior) -->
+            <LinearLayout
+                android:id="@+id/menuInferior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_gravity="bottom">
+
+                <TextView
+                    android:id="@+id/menu1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:text="Nuevo\nServicio"
+                    android:textAlignment="center"
+                    android:textColor="@color/naranja"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/menu2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Seguimiento\nde Servicio"
+                    android:textColor="@color/amarillo"
+                    android:textAlignment="center"
+                    android:layout_marginEnd="20dp"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/menu3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Historial de\nServicios"
+                    android:textAlignment="center"
+                    android:textColor="@color/amarillo"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
