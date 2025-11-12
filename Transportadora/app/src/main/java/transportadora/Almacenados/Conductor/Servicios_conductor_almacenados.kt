@@ -9,7 +9,7 @@ import transportadora.Network.ApiHelper
 
 object Servicios_conductor_almacenados {
     suspend fun obtenerServiciosConductor(correo: String): List<HistorialServicio> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/conductor/servicios_hoy/consultar_servicios_hoy.php"
+        val url = ApiConfig.BASE_URL + "consultas/conductor/servicios/consultar_servicios.php"
         val params = mapOf("correo" to correo)
         val response = ApiHelper.postRequest(url, params)
         val lista = mutableListOf<HistorialServicio>()
