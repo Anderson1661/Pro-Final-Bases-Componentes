@@ -20,6 +20,7 @@ import transportadora.Login.R
 import transportadora.Modelos.Cliente.Ruta
 import java.net.HttpURLConnection
 import java.net.URL
+import android.widget.Toast;
 
 class Seguimiento_serv_cliente : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -120,6 +121,22 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                             if (success == "1") {
                                 val datos = json.getJSONObject("datos")
 
+                                /*
+                                val idClienteServidor = datos.optString("id_cliente")
+                                val userId = intent.getIntExtra("USER_ID", -1)
+                                if (userId == -1) {
+                                    Toast.makeText(this, "Error: No se recibió el ID del cliente.", Toast.LENGTH_LONG).show()
+                                    return
+                                }
+
+                                // 🔍 Comprobamos si la ruta pertenece al usuario logueado
+                                if (idClienteServidor != userId.toString()) {
+                                    Toast.makeText(this@Seguimiento_serv_cliente, "⚠️ Este servicio no pertenece a tu cuenta.", Toast.LENGTH_LONG).show()
+                                    layoutDatos.visibility = View.GONE
+                                    return@withContext
+                                }
+                                */
+                                // ✅ Si pertenece al usuario, mostramos los datos
                                 fun limpiar(valor: String?): String {
                                     return if (valor.isNullOrEmpty() || valor == "null") "" else valor
                                 }
@@ -145,7 +162,6 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                                 txtDepDestino.text = limpiar(datos.optString("destino_departamento"))
                                 txtCiuDestino.text = limpiar(datos.optString("destino_ciudad"))
 
-                                // precio_km y distancia_km vienen como strings/decimales desde el PHP
                                 val precioKm = limpiar(datos.optString("precio_km"))
                                 val distanciaKm = limpiar(datos.optString("distancia_km"))
                                 txtPrecioKm.text = if (precioKm.isNotEmpty()) "$$precioKm" else ""
@@ -157,23 +173,10 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                                 txtConductor.text = limpiar(datos.optString("nombre_conductor"))
                                 txtPlaca.text = limpiar(datos.optString("placa_vehiculo"))
 
-                                // ocultar labels si están vacíos (opcional)
-                                if (txtNomPas1.text.isEmpty()) {
-                                    txtNomPas3.visibility = View.GONE
-                                } else txtNomPas3.visibility = View.VISIBLE
-
-                                if (txtNomPas2.text.isEmpty()) {
-                                    txtNomPas4.visibility = View.GONE
-                                } else txtNomPas4.visibility = View.VISIBLE
-                                if (txtNomPas3.text.isEmpty()) {
-                                    txtNomPas3.visibility = View.GONE
-                                } else txtNomPas3.visibility = View.VISIBLE
-
-                                if (txtNomPas4.text.isEmpty()) {
-                                    txtNomPas4.visibility = View.GONE
-                                } else txtNomPas4.visibility = View.VISIBLE
+                                // 👇 Ocultamos labels vacíos (opcional)
+                                val nombres = listOf(txtNomPas1, txtNomPas2, txtNomPas3, txtNomPas4)
+                                nombres.forEach { it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE }
                             }
-
                             else {
                                 Toast.makeText(this@Seguimiento_serv_cliente, mensaje, Toast.LENGTH_LONG).show()
                             }
