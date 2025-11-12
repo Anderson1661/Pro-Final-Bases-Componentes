@@ -1,6 +1,8 @@
 package transportadora.Conductor
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import transportadora.Administrador.Perfil_administrador
 import transportadora.Almacenados.Conductor.Servicios_conductor_almacenados
 import transportadora.Login.R
 
@@ -48,5 +51,28 @@ class Principal_conductor : AppCompatActivity() {
             Toast.makeText(this, "Error: No se pudo identificar al usuario.", Toast.LENGTH_LONG).show()
             finish()
         }
+
+        //Menu lateral
+        val txteditarperfil = findViewById<TextView>(R.id.editarperfil)
+        txteditarperfil.setOnClickListener {
+            val intent = Intent(this, Perfil_conductor::class.java)
+            startActivity(intent)
+        }
+        val txtcambiarcontra = findViewById<TextView>(R.id.cambiocontra)
+        txtcambiarcontra.setOnClickListener {
+            val intent = Intent(this@Principal_conductor, transportadora.Compartido.Preg_seguridad::class.java)
+            startActivity(intent)
+        }
+        val txtcerrarsesion = findViewById<TextView>(R.id.cerrarsesion)
+        txtcerrarsesion.setOnClickListener {
+            val intent = Intent(this@Principal_conductor, transportadora.Compartido.Main::class.java)
+            startActivity(intent)
+        }
+        val txtayuda = findViewById<TextView>(R.id.ayuda)
+        txtayuda.setOnClickListener {
+            val intent = Intent(this@Principal_conductor, transportadora.Compartido.Ayuda::class.java)
+            startActivity(intent)
+        }
+
     }
 }
