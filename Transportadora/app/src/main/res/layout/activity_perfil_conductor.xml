@@ -1,10 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="transportadora.Conductor.Perfil_conductor">
+
+    <!-- Fondo -->
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/fondo_boton_volver" />
+
+    <!-- Texto fijo: Volver -->
+    <TextView
+        android:id="@+id/txt_volver_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
+        android:text="Volver"
+        android:textStyle="bold"
+        android:textColor="@color/negro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Contenido desplazable -->
+    <ScrollView
+        android:id="@+id/scroll_contenido"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/txt_volver_login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="32dp"
+            android:paddingBottom="40dp">
+
+            <!-- Bienvenida -->
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="70dp"
+                android:fontFamily="@font/gorditas_bold"
+                android:text="¡Bienvenido!"
+                android:textColor="@color/naranja"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgPerfil"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/fondo_main"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:layout_gravity="center_horizontal" />
+            />
+            <!-- Campos consultados de BD -->
+            <LinearLayout
+                android:id="@+id/layoutCampos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de identificación"
+                    android:textColor="@color/negro" />
+
+                <TextView
+                    android:id="@+id/txt_tipo_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cédula"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Número de identificación"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_identificacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1029"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre completo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Usuario"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Genero"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_tel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Masculino"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nacionalidad"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_nacionalidad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Colombia"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Correo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_correo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="correo@ejemplo.com"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dirección"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_direccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calle 28 #10-26"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="País"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_pais"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Colombia"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Departamento"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_departamento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cundinamarca"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ciudad"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_ciudad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bogotá"
+                    android:textColor="@color/grisoscuro" />
+
+                <!-- Botones al final -->
+                <Button
+                    android:id="@+id/boton_act_datos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="@color/naranja"
+                    android:text="Modificar Datos"
+                    android:textColor="@color/blanco"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:id="@+id/boton_cambiar_contra"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/naranja"
+                    android:text="Cambiar contraseña"
+                    android:textColor="@color/blanco"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
+                    android:id="@+id/boton_preguntas_seg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/naranja"
+                    android:text="Cambiar Preguntas de seguridad"
+                    android:textColor="@color/blanco"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
