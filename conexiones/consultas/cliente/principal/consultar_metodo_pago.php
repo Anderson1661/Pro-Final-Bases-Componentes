@@ -14,6 +14,7 @@ if ($res1) {
     if (mysqli_num_rows($res1) > 0) {
         while ($row = mysqli_fetch_assoc($res1)) {
             $item = array(
+                "id_categoria_servicio" => (int)$row['id_categoria_servicio'],
                 "descripcion"  => $row['descripcion']
             );
             array_push($res['datos'], $item);

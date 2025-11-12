@@ -329,6 +329,7 @@ INSERT INTO metodo_pago (descripcion) VALUES ('Efectivo'),('Tarjeta Debito'),('T
 INSERT INTO vehiculo (placa, linea_vehiculo, modelo, id_color, id_marca, id_tipo_servicio, id_estado_vehiculo) VALUES 
 ('ABC123', 'N300', 2020, 1, 1, 1, 1),
 ('DEF456', 'Spark', 2021, 2, 1, 1, 1),
+('SEX69H', 'Logan', 2026, 5, 2, 3, 1),
 ('GHI789', 'Logan', 2019, 3, 2, 1, 1);
 
 -- Administradores (los triggers crearán los usuarios automáticamente)
@@ -346,6 +347,7 @@ INSERT INTO telefono_administrador (id_administrador, telefono) VALUES
 INSERT INTO cliente (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, id_pais_nacionalidad, codigo_postal) VALUES 
 ('1023456789', 1, 'Ana Sofía Martínez Gómez', 'Calle 100 # 15-30', 'ana.martinez@email.com', 2, 1, '110111'),
 ('1034567890', 1, 'Juan Pablo Herrera Sánchez', 'Carrera 7 # 45-12', 'juan.herrera@email.com', 1, 1, '110111'),
+('1029141647', 1, 'William dog', 'Calle 100 # 15-30', '1@1.com', 1, 1, '760001'),
 ('1045678901', 1, 'Laura Camila Torres Ramírez', 'Avenida 68 # 25-40', 'laura.torres@email.com', 2, 1, '110111');
 
 -- Teléfonos de clientes
@@ -363,6 +365,7 @@ INSERT INTO estado_conductor (descripcion) VALUES ('Conectado'), ('Desconectado'
 INSERT INTO conductor (id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) VALUES 
 (1, 'ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://example.com/fotos/conductor1.jpg'),
 (2, 'DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://example.com/fotos/conductor2.jpg'),
+(2, 'SEX69H', '1000000000', 1, 'Mostro', 'Carrera 30 # 50-25', '2@2.com', 3, '050001', 1, 'https://example.com/fotos/mostro.jpg'),
 (2, 'GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://example.com/fotos/conductor3.jpg');
 
 -- Teléfonos de conductores
