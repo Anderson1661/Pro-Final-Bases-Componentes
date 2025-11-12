@@ -33,8 +33,7 @@ class Historial_serv_cliente : AppCompatActivity() {
 
         // 2. Cargar Datos
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        val userEmail = sharedPreferences.getString("user_email", null)
-
+        val userEmail = intent.getStringExtra("USER_EMAIL") // <-- Se captura el email del Intent
         if (userEmail != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
@@ -60,6 +59,7 @@ class Historial_serv_cliente : AppCompatActivity() {
         val txteditarperfil = findViewById<TextView>(R.id.editarperfil)
         txteditarperfil.setOnClickListener {
             val intent = Intent(this, Perfil_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail)
             startActivity(intent)
         }
         val txtcambiarcontra = findViewById<TextView>(R.id.cambiocontra)
@@ -83,11 +83,13 @@ class Historial_serv_cliente : AppCompatActivity() {
         val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
         txtmenu1.setOnClickListener {
             val intent = Intent(this, Principal_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail) // <-- Se añade el email
             startActivity(intent)
         }
         val txtmenu2 = findViewById<TextView>(R.id.menu2)
         txtmenu2.setOnClickListener {
             val intent = Intent(this, Seguimiento_serv_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail) // <-- Se añade el email
             startActivity(intent)
         }
         val txtmenu3 = findViewById<TextView>(R.id.menu3)
