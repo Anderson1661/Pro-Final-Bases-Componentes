@@ -234,9 +234,17 @@ class Principal_cliente : AppCompatActivity() {
         findViewById<TextView>(R.id.menu2).setOnClickListener {
             val intent = Intent(this, Seguimiento_serv_cliente::class.java)
             intent.putExtra("USER_ID", id_cliente_actual)
+            intent.putExtra("USER_EMAIL", userEmail)
             startActivity(intent)
         }
-        findViewById<TextView>(R.id.menu3).setOnClickListener { startActivity(Intent(this, Historial_serv_cliente::class.java)) }
+
+        findViewById<TextView>(R.id.menu3).setOnClickListener {
+            val intent = Intent(this, Historial_serv_cliente::class.java)
+            // Puedes enviar tanto el email como el ID, aunque el ID del cliente ya se utiliza
+            intent.putExtra("USER_ID", id_cliente_actual)
+            intent.putExtra("USER_EMAIL", userEmail)
+            startActivity(intent)
+        }
 
         spinner_direcciones.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {

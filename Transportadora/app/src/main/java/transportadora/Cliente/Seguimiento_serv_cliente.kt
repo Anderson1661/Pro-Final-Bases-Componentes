@@ -29,9 +29,24 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_seguimiento_serv_cliente)
 
+        // Seguimiento_serv_cliente.kt (Añadir al inicio de onCreate, cerca de la línea 24)
+
+        // Capturar los datos del Intent
+        val userEmail = intent.getStringExtra("USER_EMAIL")
+        val userId = intent.getIntExtra("USER_ID", -1)
+
+        // Opcional: Manejar el caso donde no hay datos de usuario
+        if (userEmail.isNullOrEmpty() || userId == -1) {
+            Toast.makeText(this, "Error al cargar datos del usuario. Vuelve a iniciar sesión.", Toast.LENGTH_LONG).show()
+        }
+
         // 📋 Menú lateral
-        findViewById<TextView>(R.id.editarperfil).setOnClickListener {
-            startActivity(Intent(this, Perfil_cliente::class.java))
+        val txteditarperfil = findViewById<TextView>(R.id.editarperfil)
+        txteditarperfil.setOnClickListener {
+            val intent = Intent(this, Perfil_cliente::class.java)
+            // AÑADIR: Pasamos el email del usuario
+            intent.putExtra("USER_EMAIL", userEmail)
+            startActivity(intent)
         }
         findViewById<TextView>(R.id.cambiocontra).setOnClickListener {
             startActivity(Intent(this, transportadora.Compartido.Preg_seguridad::class.java))
@@ -46,13 +61,17 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
         // 📱 Menú inferior
         val scrollView = findViewById<ScrollView>(R.id.scrollContenido)
         findViewById<TextView>(R.id.menu1).setOnClickListener {
-            startActivity(Intent(this, Principal_cliente::class.java))
+            val intent = Intent(this, Principal_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail) // <-- Se añade el email
+            startActivity(intent)
         }
         findViewById<TextView>(R.id.menu2).setOnClickListener {
             scrollView.post { scrollView.smoothScrollTo(0, 0) }
         }
         findViewById<TextView>(R.id.menu3).setOnClickListener {
-            startActivity(Intent(this, Historial_serv_cliente::class.java))
+            val intent = Intent(this, Historial_serv_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail) // <-- Se añade el email
+            startActivity(intent)
         }
 
         // 🔍 Buscar Ruta
