@@ -1,8 +1,7 @@
 package transportadora.Cliente
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.os.Bundle
+import android.widget.AdapterView // Added import
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -27,6 +26,12 @@ import transportadora.Modelos.Cliente.Ciudad
 import transportadora.Modelos.Cliente.Genero
 import transportadora.Modelos.Cliente.Pais
 import transportadora.Modelos.Cliente.Tipo_identificacion
+import transportadora.Almacenados.Cliente.Departamento_almacenados // Added import
+import transportadora.Almacenados.Cliente.Ciudad_almacenados // Added import
+import android.os.Bundle
+import android.widget.Toast.makeText
+import android.view.View
+import android.content.Intent
 
 class Act_perfil_cliente : AppCompatActivity() {
     private var listaPaisesCompleta: List<Pais> = emptyList()
@@ -84,7 +89,7 @@ class Act_perfil_cliente : AppCompatActivity() {
                     Toast.makeText(this@Act_perfil_cliente, "No se encontraron generos", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast.LENGTH_LONG).show()
+makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -160,8 +165,18 @@ class Act_perfil_cliente : AppCompatActivity() {
                         if (indexPaisResidencia != -1) {
                             spinner_paises.setSelection(indexPaisResidencia)
                         }
-                        //txtDepartamento.text = perfil.departamento
-                        //txtCiudad.text = perfil.ciudad
+
+                        // Load departments for the selected country and pre-select the user's department
+                        val selectedPais = listaPaisesCompleta.getOrNull(spinner_paises.selectedItemPosition)
+                        selectedPais?.let { pais ->
+                            cargarDepartamentos(pais.id_pais, spinner_departamentos, perfil.departamento) {
+                                // Callback after departments are loaded and selected
+                                val selectedDepto = departamentosOrigen.getOrNull(spinner_departamentos.selectedItemPosition)
+                                selectedDepto?.let { depto ->
+                                    cargarCiudades(pais.id_pais, depto, spinner_ciudades, perfil.ciudad)
+                                }
+                            }
+                        }
 
                         // Teléfonos (muestra máximo dos)
                         txtTel1.text = perfil.telefonos.getOrNull(0) ?: "No registrado"
@@ -180,6 +195,25 @@ class Act_perfil_cliente : AppCompatActivity() {
             finish()
         }
 
+        spinner_paises.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                listaPaisesCompleta.getOrNull(position)?.let {
+                    cargarDepartamentos(it.id_pais, spinner_departamentos)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        spinner_departamentos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val deptoSeleccionado = parent.getItemAtPosition(position).toString()
+                val posPais = spinner_paises.selectedItemPosition
+                listaPaisesCompleta.getOrNull(posPais)?.let {
+                    cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         // escuchar botones y volver
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_reg2)
@@ -212,5 +246,52 @@ class Act_perfil_cliente : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    private fun cargarDepartamentos(idPais: Int, spinner: Spinner, departamentoSeleccionado: String? = null, onComplete: (() -> Unit)? = null) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val departamentos = withContext(Dispatchers.IO) { transportadora.Almacenados.Cliente.Departamento_almacenados.obtenerDepartamentos(idPais) }
+                val listaNombres = departamentos.map { it.nombre }
+                departamentosOrigen = listaNombres // Assuming this is for the origin, consistent with Principal_cliente
+
+                spinner.adapter = ArrayAdapter(this@Act_perfil_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+
+                departamentoSeleccionado?.let {
+                    val deptoIndex = listaNombres.indexOf(it)
+                    if (deptoIndex != -1) {
+                        spinner.setSelection(deptoIndex)
+                    }
+                }
+                onComplete?.invoke()
+            } catch (e: Exception) {
+                Toast.makeText(this@Act_perfil_cliente, "Error al cargar departamentos: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun cargarCiudades(idPais: Int, depto: String, spinner: Spinner, ciudadSeleccionada: String? = null) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val ciudades = withContext(Dispatchers.IO) { transportadora.Almacenados.Cliente.Ciudad_almacenados.obtenerCiudades(idPais, depto) }
+                listaCiudadesOrigen = ciudades // Assuming this is for the origin, consistent with Principal_cliente
+
+                val listaNombres = ciudades.map { it.nombre }
+                spinner.adapter = ArrayAdapter(this@Act_perfil_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
+                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                }
+
+                ciudadSeleccionada?.let {
+                    val ciudadIndex = listaNombres.indexOf(it)
+                    if (ciudadIndex != -1) {
+                        spinner.setSelection(ciudadIndex)
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@Act_perfil_cliente, "Error al cargar ciudades: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
