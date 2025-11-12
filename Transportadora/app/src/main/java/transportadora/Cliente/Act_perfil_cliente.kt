@@ -41,6 +41,12 @@ class Act_perfil_cliente : AppCompatActivity() {
     private var listaCiudadesOrigen: List<Ciudad> = emptyList()
     private var listaCiudadesDestino: List<Ciudad> = emptyList()
     private lateinit var spinner_ciudades1: Spinner
+    private lateinit var spinner_tipos_id: Spinner
+    private lateinit var spinner_paises: Spinner
+    private lateinit var spinner_departamentos: Spinner
+    private lateinit var spinner_ciudades: Spinner
+    private lateinit var spinner_nacionalidad: Spinner
+    private lateinit var spinner_genero: Spinner
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,16 +54,26 @@ class Act_perfil_cliente : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_act_perfil_cliente)
 
-        // Asignar valores al spinner de tipos id
-        val spinner_tipos_id = findViewById<Spinner>(R.id.txt_tipo_id)
-        val spinner_paises = findViewById<Spinner>(R.id.txt_pais)
-        val spinner_departamentos = findViewById<Spinner>(R.id.txt_departamento)
-        val spinner_ciudades = findViewById<Spinner>(R.id.txt_ciudad)
-        val spinner_nacionalidad = findViewById<Spinner>(R.id.txt_nacionalidad)
-        val spinner_genero = findViewById<Spinner>(R.id.txt_genero)
+        // Initialize views
+        spinner_tipos_id = findViewById(R.id.txt_tipo_id)
+        spinner_paises = findViewById(R.id.txt_pais)
+        spinner_departamentos = findViewById(R.id.txt_departamento)
+        spinner_ciudades = findViewById(R.id.txt_ciudad)
+        spinner_nacionalidad = findViewById(R.id.txt_nacionalidad)
+        spinner_genero = findViewById(R.id.txt_genero)
+
+        val txtIdentificacion = findViewById<TextView>(R.id.txt_id)
+        val txtNombre = findViewById<TextView>(R.id.txt_nombre)
+        val txtTel1 = findViewById<TextView>(R.id.txt_tel1)
+        val txtTel2 = findViewById<TextView>(R.id.txt_tel2)
+        val txtCorreo = findViewById<TextView>(R.id.txt_email)
+        val txtDireccion = findViewById<TextView>(R.id.txt_dir)
+
+        val userEmail = intent.getStringExtra("USER_EMAIL")
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                // Load all static data first
                 val paises = withContext(Dispatchers.IO) { Pais_almacenados.obtenerPaises() }
                 if (paises.isNotEmpty()) {
                     listaPaisesCompleta = paises
@@ -71,13 +87,7 @@ class Act_perfil_cliente : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@Act_perfil_cliente, "No se encontraron paises", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@Act_perfil_cliente, "Error al cargar paises: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-        }
 
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
                 val generos = withContext(Dispatchers.IO) { Genero_almacen.obtener_generos() }
                 if (generos.isNotEmpty()) {
                     listagenero = generos
@@ -88,13 +98,7 @@ class Act_perfil_cliente : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@Act_perfil_cliente, "No se encontraron generos", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-        }
 
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
                 val tipos_id = withContext(Dispatchers.IO) { Tipo_identificacion_almacenado.obtener_tipos_identificacion() }
                 if (tipos_id.isNotEmpty()) {
                     listatiposid = tipos_id
@@ -103,28 +107,11 @@ makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                 } else {
-                    Toast.makeText(this@Act_perfil_cliente, "No se encontraron paises", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Act_perfil_cliente, "No se encontraron tipos de identificacion", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@Act_perfil_cliente, "Error al cargar paises: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-        }
 
-
-
-
-        val txtIdentificacion = findViewById<TextView>(R.id.txt_id)
-        val txtNombre = findViewById<TextView>(R.id.txt_nombre)
-        val txtTel1 = findViewById<TextView>(R.id.txt_tel1)
-        val txtTel2 = findViewById<TextView>(R.id.txt_tel2)
-        val txtCorreo = findViewById<TextView>(R.id.txt_email)
-        val txtDireccion = findViewById<TextView>(R.id.txt_dir)
-
-        val userEmail = intent.getStringExtra("USER_EMAIL")
-
-        if (userEmail != null) {
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
+                // Now load profile data and perform pre-selection
+                if (userEmail != null) {
                     val perfil = withContext(Dispatchers.IO) {
                         transportadora.Almacenados.Cliente.Datos_perfil_almacenados.obtener_datos_perfil(userEmail)
                     }
@@ -136,7 +123,6 @@ makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast
                         val indexId = listaDescripcionesId.indexOf(tipoIdSeleccionado)
 
                         if (indexId != -1) {
-                            // Selecciona la opción en el Spinner si se encontró el índice
                             spinner_tipos_id.setSelection(indexId)
                         }
                         txtIdentificacion.text = perfil.identificacion
@@ -186,15 +172,17 @@ makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast
                         Toast.makeText(this@Act_perfil_cliente, "No se pudo cargar el perfil.", Toast.LENGTH_LONG).show()
                     }
 
-                } catch (e: Exception) {
-                    Toast.makeText(this@Act_perfil_cliente, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@Act_perfil_cliente, "Error: No se ha proporcionado un email de usuario.", Toast.LENGTH_LONG).show()
+                    finish()
                 }
+
+            } catch (e: Exception) {
+                Toast.makeText(this@Act_perfil_cliente, "Error general al cargar datos: ${e.message}", Toast.LENGTH_LONG).show()
             }
-        } else {
-            Toast.makeText(this, "Error: No se ha proporcionado un email de usuario.", Toast.LENGTH_LONG).show()
-            finish()
         }
 
+        // Set up listeners for cascading spinners
         spinner_paises.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 listaPaisesCompleta.getOrNull(position)?.let {
@@ -253,7 +241,7 @@ makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast
             try {
                 val departamentos = withContext(Dispatchers.IO) { transportadora.Almacenados.Cliente.Departamento_almacenados.obtenerDepartamentos(idPais) }
                 val listaNombres = departamentos.map { it.nombre }
-                departamentosOrigen = listaNombres // Assuming this is for the origin, consistent with Principal_cliente
+                departamentosOrigen = listaNombres
 
                 spinner.adapter = ArrayAdapter(this@Act_perfil_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
                     setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -263,6 +251,8 @@ makeText(this@Act_perfil_cliente, "Error al cargar generos: ${e.message}", Toast
                     val deptoIndex = listaNombres.indexOf(it)
                     if (deptoIndex != -1) {
                         spinner.setSelection(deptoIndex)
+                        // Add a small delay to allow UI to update before invoking callback
+                        kotlinx.coroutines.delay(100) // Small delay, adjust if needed
                     }
                 }
                 onComplete?.invoke()
