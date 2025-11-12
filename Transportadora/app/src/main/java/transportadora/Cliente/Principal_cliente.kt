@@ -2,7 +2,6 @@ package transportadora.Cliente
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -210,7 +209,12 @@ class Principal_cliente : AppCompatActivity() {
             startActivity(intent)
         }
         findViewById<TextView>(R.id.cambiocontra).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Preg_seguridad::class.java)) }
-        findViewById<TextView>(R.id.cerrarsesion).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Main::class.java)) }
+        findViewById<TextView>(R.id.cerrarsesion).setOnClickListener {
+            val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+            prefs.edit().clear().apply()
+            startActivity(Intent(this, transportadora.Compartido.Main::class.java))
+            finish()
+        }
         findViewById<TextView>(R.id.ayuda).setOnClickListener { startActivity(Intent(this, transportadora.Compartido.Ayuda::class.java)) }
 
         val scrollView = findViewById<ScrollView>(R.id.scrollContenido)

@@ -5,10 +5,8 @@
         <item>2</item>
     </string-array>
     <string-array name="tipos_id">
-        <item>"Cedula de ciudadania"</item>
-        <item>"Cedula de extranjeria"</item>
-        <item>"Pasaporte"</item>
-        <item>"Nit"</item>
+        <item>"tipo 1"</item>
+        <item>"tipo 2"</item>
     </string-array>
     <string-array name="tipos_servicio">
         <item>"Pasajeros"</item>
@@ -21,23 +19,20 @@
         <item>"Urgente"</item>
     </string-array>
     <string-array name="paises">
-        <item>"Colombia"</item>
-        <item>"Peru"</item>
-        <item>"Ecuador"</item>
+        <item>"pais 1"</item>
+        <item>"pais 2"</item>
     </string-array>
     <string-array name="departamentos">
-        <item>"Cundinamarca"</item>
-        <item>"Meta"</item>
-        <item>"Amazonas"</item>
+        <item>"depto 1"</item>
+        <item>"depto 2"</item>
     </string-array>
     <string-array name="ciudades">
-        <item>"Bogota"</item>
-        <item>"Villavicencio"</item>
-        <item>"Leticia"</item>
+        <item>"ciudad 1"</item>
+        <item>"ciudad 2"</item>
     </string-array>
     <string-array name="genero">
-        <item>"Masculino"</item>
-        <item>"Femenino"</item>
+        <item>"genero 1"</item>
+        <item>"genero 2"</item>
     </string-array>
     <string-array name="rutas">
         <item>"Ruta 1"</item>
@@ -62,13 +57,12 @@
         <item>"4"</item>
     </string-array>
     <string-array name="metodos_pago">
-        <item>"Efectivo"</item>
-        <item>"Tarjeta"</item>
+        <item>"metodo 1"</item>
+        <item>"metodo 2"</item>
     </string-array>
     <string-array name="tipos_usuario">
-        <item>"Administrador"</item>
-        <item>"Cliente"</item>
-        <item>"Conductor"</item>
+        <item>"tipo 1"</item>
+        <item>"tipo 2"</item>
     </string-array>
     <string-array name="marcas_vehiculo">
         <item>"Marca 1"</item>

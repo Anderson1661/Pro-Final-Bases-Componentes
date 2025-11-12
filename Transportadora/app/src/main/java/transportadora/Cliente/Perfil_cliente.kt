@@ -81,6 +81,7 @@ class Perfil_cliente : AppCompatActivity() {
 
         botonactualizar.setOnClickListener {
             val intent = Intent(this, Act_perfil_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail)
             startActivity(intent)
         }
 
