@@ -29,6 +29,7 @@ class Principal_cliente : AppCompatActivity() {
     private var listaTiposServicio: List<Tipo_servicio> = emptyList()
     private var totalPagar: Double = 0.0
 
+    private var id_cliente_actual: Int = -1
     private var listaCiudadesOrigen: List<Ciudad> = emptyList()
     private var listaCiudadesDestino: List<Ciudad> = emptyList()
 
@@ -38,6 +39,9 @@ class Principal_cliente : AppCompatActivity() {
     private lateinit var spinner_ciudades2: Spinner
     private lateinit var spinner_categoria: Spinner
 
+    // EditTexts de pasajeros definidos como propiedad de clase
+    private lateinit var txt_pasajeros: List<EditText>
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +50,20 @@ class Principal_cliente : AppCompatActivity() {
         setContentView(R.layout.activity_principal_cliente)
 
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        val userId = sharedPreferences.getInt("user_id", -1)
+        val userEmail = sharedPreferences.getString("user_email", null)
 
-        if (userId == -1) {
-            Toast.makeText(this, "No se pudo identificar el ID del usuario.", Toast.LENGTH_LONG).show()
+        if (userEmail.isNullOrEmpty()) {
+            Toast.makeText(this, "No se pudo identificar el correo del usuario.", Toast.LENGTH_LONG).show()
+        } else {
+            // 1. Obtener el id_cliente por correo (nueva lógica)
+            CoroutineScope(Dispatchers.Main).launch {
+                id_cliente_actual = obtenerIdClientePorCorreo(userEmail)
+                if (id_cliente_actual == -1) {
+                    Toast.makeText(this@Principal_cliente, "Error: No se pudo obtener el ID del cliente. Verifica tu sesión.", Toast.LENGTH_LONG).show()
+                }
+            }
         }
+// FIN DE LA SECCIÓN MODIFICADA
 
         val txtFechaEnvio = findViewById<EditText>(R.id.txt_fecha_envio)
         txtFechaEnvio.isFocusable = false
@@ -98,7 +111,7 @@ class Principal_cliente : AppCompatActivity() {
         val pasajero_2 = findViewById<EditText>(R.id.txt_pasajero2)
         val pasajero_3 = findViewById<EditText>(R.id.txt_pasajero3)
         val pasajero_4 = findViewById<EditText>(R.id.txt_pasajero4)
-        val txt_pasajeros = listOf(pasajero_1, pasajero_2, pasajero_3, pasajero_4)
+        txt_pasajeros = listOf(pasajero_1, pasajero_2, pasajero_3, pasajero_4) // Asignación a la propiedad de la clase
 
         val direcciones = listOf("Mi direccion", "Otra direccion")
         spinner_direcciones.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, direcciones).apply {
@@ -119,7 +132,6 @@ class Principal_cliente : AppCompatActivity() {
             it.hint = "No disponible"
         }
 
-        val userEmail = sharedPreferences.getString("user_email", null)
         if (userEmail != null) {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
@@ -221,7 +233,7 @@ class Principal_cliente : AppCompatActivity() {
         findViewById<TextView>(R.id.menu1).setOnClickListener { scrollView.post { scrollView.smoothScrollTo(0, 0) } }
         findViewById<TextView>(R.id.menu2).setOnClickListener {
             val intent = Intent(this, Seguimiento_serv_cliente::class.java)
-            intent.putExtra("USER_ID", userId)
+            intent.putExtra("USER_ID", id_cliente_actual)
             startActivity(intent)
         }
         findViewById<TextView>(R.id.menu3).setOnClickListener { startActivity(Intent(this, Historial_serv_cliente::class.java)) }
@@ -334,24 +346,47 @@ class Principal_cliente : AppCompatActivity() {
         spinner_categoria.onItemSelectedListener = recalculateListener
 
         btnContinuar.setOnClickListener {
-            val direccionOrigen = if (spinner_direcciones.selectedItem.toString() == "Mi direccion") {
-                perfilCliente?.direccion ?: ""
-            } else {
-                findViewById<EditText>(R.id.txt_direccion_origen).text.toString().trim()
+            val tipoDireccionOrigen = spinner_direcciones.selectedItem.toString()
+            val direccionOrigen: String
+            var isDireccionOrigenValid = true
+
+            if (tipoDireccionOrigen == "Mi direccion") {
+                direccionOrigen = perfilCliente?.direccion ?: ""
+                if (perfilCliente == null || direccionOrigen.isEmpty()) {
+                    isDireccionOrigenValid = false
+                    Toast.makeText(this, "Error: No se pudo obtener tu dirección del perfil. Asegúrate de que tu perfil esté completo.", Toast.LENGTH_LONG).show()
+                }
+            } else { // "Otra direccion"
+                direccionOrigen = findViewById<EditText>(R.id.txt_direccion_origen).text.toString().trim()
+                if (direccionOrigen.isEmpty()) {
+                    isDireccionOrigenValid = false
+                }
             }
+
+            val txtDireccionDestino = findViewById<EditText>(R.id.txt_direccion_entrega)
+            val direccionDestino = txtDireccionDestino.text.toString().trim()
+
             val ciudadDestinoNombre = spinner_ciudades2.selectedItem?.toString() ?: ""
             val fechaEnvioTexto = txtFechaEnvio.text.toString().trim()
 
-            if (direccionOrigen.isEmpty() || ciudadDestinoNombre.isEmpty() || fechaEnvioTexto.isEmpty()) {
-                Toast.makeText(this, "Por favor completa todos los campos.", Toast.LENGTH_LONG).show()
+            android.util.Log.d("Principal_cliente", "Validation Check 1:")
+            android.util.Log.d("Principal_cliente", "direccionOrigen: '$direccionOrigen' (Valid: $isDireccionOrigenValid)")
+            android.util.Log.d("Principal_cliente", "direccionDestino: '$direccionDestino'")
+            android.util.Log.d("Principal_cliente", "ciudadDestinoNombre: '$ciudadDestinoNombre'")
+            android.util.Log.d("Principal_cliente", "fechaEnvioTexto: '$fechaEnvioTexto'")
+
+            if (!isDireccionOrigenValid || direccionDestino.isEmpty() || ciudadDestinoNombre.isEmpty() || fechaEnvioTexto.isEmpty()) {
+                Toast.makeText(this, "Por favor completa todos los campos requeridos.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            if (userId == -1) {
-                Toast.makeText(this, "Error: No se encontró el ID del cliente.", Toast.LENGTH_LONG).show()
+            // CÓDIGO REEMPLAZADO DENTRO DE btnContinuar.setOnClickListener
+            if (id_cliente_actual == -1) { // <-- Usa la variable de clase
+                Toast.makeText(this, "Error: No se encontró el ID del cliente. Recarga la pantalla.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
+            // Se usa "yyyy-MM-dd HH:mm" para entrada y se formatea a "yyyy-MM-dd HH:mm:ss" para la base de datos MySQL
             val formatterSalida = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
             val fechaReserva = try {
                 val sdf = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm", java.util.Locale.getDefault())
@@ -368,16 +403,31 @@ class Principal_cliente : AppCompatActivity() {
             val posCiudadOrigen = spinner_ciudades1.selectedItemPosition
             val posCiudadDestino = spinner_ciudades2.selectedItemPosition
 
+            android.util.Log.d("Principal_cliente", "Validation Check 2 (Spinner Positions):")
+            android.util.Log.d("Principal_cliente", "posMetodoPago: $posMetodoPago")
+            android.util.Log.d("Principal_cliente", "posCategoria: $posCategoria")
+            android.util.Log.d("Principal_cliente", "posTipoServicio: $posTipoServicio")
+            android.util.Log.d("Principal_cliente", "posCiudadOrigen: $posCiudadOrigen")
+            android.util.Log.d("Principal_cliente", "posCiudadDestino: $posCiudadDestino")
+
             if (posMetodoPago < 0 || posCategoria < 0 || posTipoServicio < 0 || posCiudadOrigen < 0 || posCiudadDestino < 0) {
                 Toast.makeText(this, "Asegúrate de seleccionar todas las opciones.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
-            val idMetodoPago = listaMetodosPago.getOrNull(posMetodoPago)?.id_metodo_pago ?: -1
-            val idCategoria = listaCategoriasCompleta.getOrNull(posCategoria)?.id_categoria_servicio ?: -1
-            val idTipoServicio = listaTiposServicio.getOrNull(posTipoServicio)?.id_tipo_servicio ?: -1
+            val idMetodoPago = posMetodoPago + 1
+            val idCategoria = posCategoria + 1
+            val idTipoServicio = posTipoServicio + 1
             val idCodigoPostalOrigen = listaCiudadesOrigen.getOrNull(posCiudadOrigen)?.id_codigo_postal ?: "-1"
             val idCodigoPostalDestino = listaCiudadesDestino.getOrNull(posCiudadDestino)?.id_codigo_postal ?: "-1"
+
+
+            android.util.Log.d("Principal_cliente", "Validation Check 3 (IDs):")
+            android.util.Log.d("Principal_cliente", "idMetodoPago: $idMetodoPago")
+            android.util.Log.d("Principal_cliente", "idCategoria: $idCategoria")
+            android.util.Log.d("Principal_cliente", "idTipoServicio: $idTipoServicio")
+            android.util.Log.d("Principal_cliente", "idCodigoPostalOrigen: '$idCodigoPostalOrigen'")
+            android.util.Log.d("Principal_cliente", "idCodigoPostalDestino: '$idCodigoPostalDestino'")
 
             if (idMetodoPago == -1 || idCategoria == -1 || idTipoServicio == -1 || idCodigoPostalOrigen == "-1" || idCodigoPostalDestino == "-1") {
                 Toast.makeText(this, "Error al obtener IDs. Revisa las selecciones.", Toast.LENGTH_LONG).show()
@@ -385,25 +435,55 @@ class Principal_cliente : AppCompatActivity() {
             }
 
             val idEstadoServicio = 1
-            val distancia = txtKmRecorrido.text.toString().replace(" km", "").trim()
+            val distanciaStr = txtKmRecorrido.text.toString().replace(" km", "").trim()
+            val distancia = distanciaStr.toDoubleOrNull() ?: 0.0
+
+            // Verificar si es servicio de pasajeros y recolectar nombres
+            val tipoServicioSeleccionado = listaTiposServicio.getOrNull(posTipoServicio)?.descripcion ?: ""
+            val esPasajeros = tipoServicioSeleccionado.equals("Pasajeros", ignoreCase = true)
+            val pasajeros = mutableListOf<String>()
+
+            if (esPasajeros) {
+                txt_pasajeros.forEach { editText ->
+                    val name = editText.text.toString().trim()
+                    if (editText.isEnabled && name.isNotEmpty()) {
+                        pasajeros.add(name)
+                    }
+                }
+                if (pasajeros.isEmpty()) {
+                    Toast.makeText(this, "Debe ingresar al menos un pasajero para el servicio de Pasajeros.", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
+            }
+
+
+            // Chequeo final de listas de datos
+            if (listaMetodosPago.isEmpty() || listaCategoriasCompleta.isEmpty() || listaTiposServicio.isEmpty() ||
+                listaCiudadesOrigen.isEmpty() || listaCiudadesDestino.isEmpty()) {
+                Toast.makeText(this, "Aún se están cargando los datos. Por favor, espera un momento y vuelve a intentarlo.", Toast.LENGTH_LONG).show()
+                android.util.Log.e("Principal_cliente", "Error: Data lists not fully loaded.")
+                return@setOnClickListener
+            }
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "ruta/create.php")
+                    val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/ruta/crear_ruta.php")
+
+                    // CORRECCIÓN: Se envía fecha_hora_reserva y total
                     val params = "direccion_origen=${java.net.URLEncoder.encode(direccionOrigen, "UTF-8")}" +
-                            "&direccion_destino=${java.net.URLEncoder.encode(ciudadDestinoNombre, "UTF-8")}" +
+                            "&direccion_destino=${java.net.URLEncoder.encode(direccionDestino, "UTF-8")}" +
                             "&id_codigo_postal_origen=$idCodigoPostalOrigen" +
                             "&id_codigo_postal_destino=$idCodigoPostalDestino" +
                             "&distancia_km=$distancia" +
-                            "&fecha_hora_reserva=$fechaReserva" +
-                            "&fecha_hora_origen=" + "" +
-                            "&fecha_hora_destino=" + "" +
-                            "&id_conductor=" + "" +
                             "&id_tipo_servicio=$idTipoServicio" +
-                            "&id_cliente=$userId" +
-                            "&id_estado_servicio=$idEstadoServicio" +
+                            "&id_cliente=$id_cliente_actual" +
                             "&id_categoria_servicio=$idCategoria" +
-                            "&id_metodo_pago=$idMetodoPago"
+                            "&id_metodo_pago=$idMetodoPago" +
+                            "&id_estado_servicio=$idEstadoServicio" +
+                            "&fecha_hora_reserva=${java.net.URLEncoder.encode(fechaReserva, "UTF-8")}" +
+                            "&total=$totalPagar" // Se incluye el total
+
+                    android.util.Log.d("Principal_cliente", "Sending params: $params")
 
                     val connection = url.openConnection() as java.net.HttpURLConnection
                     connection.requestMethod = "POST"
@@ -411,28 +491,47 @@ class Principal_cliente : AppCompatActivity() {
                     connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
 
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
+                    android.util.Log.d("Principal_cliente", "Received response: $response")
 
                     withContext(Dispatchers.Main) {
                         val json = org.json.JSONObject(response)
                         if (json.getString("success") == "1") {
-                            Toast.makeText(this@Principal_cliente, "Ruta creada correctamente", Toast.LENGTH_LONG).show()
-                            val metodoPagoSeleccionado = listaMetodosPago.getOrNull(posMetodoPago)?.descripcion ?: ""
-                            if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
-                                Toast.makeText(this@Principal_cliente, "Debes entregarle el efectivo una vez que llegue el conductor", Toast.LENGTH_LONG).show()
-                                startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
-                            } else {
-                                val intent = Intent(this@Principal_cliente, Transferencia::class.java)
-                                intent.putExtra("TOTAL_PAGAR", totalPagar)
-                                startActivity(intent)
+                            val idRuta = json.optInt("id_ruta", -1) // Se extrae el ID creado del JSON
+
+                            var registroPasajerosExitoso = true
+                            if (esPasajeros && idRuta != -1) {
+                                // Ejecutar la lógica de registro de pasajeros
+                                registroPasajerosExitoso = withContext(Dispatchers.IO) {
+                                    registrarPasajeros(idRuta, pasajeros)
+                                }
                             }
+
+                            if (registroPasajerosExitoso) {
+                                Toast.makeText(this@Principal_cliente, "Ruta creada correctamente", Toast.LENGTH_LONG).show()
+                                val metodoPagoSeleccionado = listaMetodosPago.getOrNull(posMetodoPago)?.descripcion ?: ""
+                                if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
+                                    Toast.makeText(this@Principal_cliente, "Debes entregarle el efectivo una vez que llegue el conductor", Toast.LENGTH_LONG).show()
+                                    startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
+                                } else {
+                                    val intent = Intent(this@Principal_cliente, Transferencia::class.java)
+                                    intent.putExtra("TOTAL_PAGAR", totalPagar)
+                                    startActivity(intent)
+                                }
+                            } else if (esPasajeros) {
+                                // Si la ruta se creó pero falló el registro de pasajeros
+                                Toast.makeText(this@Principal_cliente, "Ruta creada, pero **falló el registro de pasajeros**. Contacta a soporte.", Toast.LENGTH_LONG).show()
+                                startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
+                            }
+
                         } else {
-                            Toast.makeText(this@Principal_cliente, json.getString("mensaje"), Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@Principal_cliente, "Error al crear ruta: ${json.getString("mensaje")}", Toast.LENGTH_LONG).show()
                         }
                     }
                     connection.disconnect()
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@Principal_cliente, "Error al registrar ruta: ${e.message}", Toast.LENGTH_LONG).show()
+                        android.util.Log.e("Principal_cliente", "Error al registrar ruta: ${e.message}", e)
+                        Toast.makeText(this@Principal_cliente, "Error de conexión o servidor: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -452,6 +551,7 @@ class Principal_cliente : AppCompatActivity() {
             val categoriaSeleccionada = listaCategoriasCompleta[categoriaPosition]
             val valorKm = categoriaSeleccionada.valor_km
 
+            // La distancia es un valor random para la demostración
             val distancia = (10..100).random()
             totalPagar = distancia * valorKm
 
@@ -463,6 +563,37 @@ class Principal_cliente : AppCompatActivity() {
             txtKmRecorrido.text = "0 km"
             txtTotalPagar.text = "$0"
         }
+    }
+
+    // Función para registrar pasajeros en la tabla secundaria
+    private suspend fun registrarPasajeros(idRuta: Int, pasajeros: List<String>): Boolean {
+        var allSuccess = true
+        for (nombrePasajero in pasajeros) {
+            try {
+                // Endpoint para manejar la tabla pasajero_ruta
+                val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/ruta/crear_pasajero_ruta.php")
+                val params = "id_ruta=$idRuta" +
+                        "&nombre_pasajero=${java.net.URLEncoder.encode(nombrePasajero, "UTF-8")}"
+
+                val connection = url.openConnection() as java.net.HttpURLConnection
+                connection.requestMethod = "POST"
+                connection.doOutput = true
+                connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                connection.disconnect()
+
+                val json = org.json.JSONObject(response)
+                if (json.getString("success") != "1") {
+                    android.util.Log.e("Principal_cliente", "Fallo al registrar pasajero '$nombrePasajero': ${json.getString("mensaje")}")
+                    allSuccess = false
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("Principal_cliente", "Error de red al registrar pasajero: ${e.message}", e)
+                allSuccess = false
+            }
+        }
+        return allSuccess
     }
 
     private fun cargarDepartamentos(idPais: Int, spinner: Spinner, esOrigen: Boolean = false) {
@@ -508,5 +639,32 @@ class Principal_cliente : AppCompatActivity() {
             }
         }
     }
-}
 
+    private suspend fun obtenerIdClientePorCorreo(email: String): Int = withContext(Dispatchers.IO) {
+        var idCliente = -1
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/ruta/obtener_id_cliente_por_correo.php")
+            val params = "correo=${java.net.URLEncoder.encode(email, "UTF-8")}"
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            if (json.getString("success") == "1") {
+                // El campo se llama 'id_cliente' en el JSON de respuesta
+                idCliente = json.getInt("id_cliente")
+                android.util.Log.d("Principal_cliente", "ID Cliente obtenido: $idCliente")
+            } else {
+                android.util.Log.e("Principal_cliente", "Error PHP al obtener ID: ${json.getString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Principal_cliente", "Error de red/JSON al obtener ID: ${e.message}", e)
+        }
+        return@withContext idCliente
+    }
+}

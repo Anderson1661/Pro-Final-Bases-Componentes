@@ -317,7 +317,7 @@ INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES
 ('Logan', 2),
 ('Versa', 3);
 INSERT INTO color_vehiculo (descripcion) VALUES ('Blanco'), ('Negro'), ('Gris'), ('Rojo'), ('Azul');
-INSERT INTO tipo_servicio (descripcion) VALUES ('Pasajeros'),('Alimentos'),('Pasajeros y alimentos');
+INSERT INTO tipo_servicio (descripcion) VALUES ('Alimentos'),('Pasajeros'),('Pasajeros y alimentos');
 INSERT INTO categoria_servicio (descripcion, valor_km) VALUES 
 ('Económico', 2500.00),
 ('Estándar', 3500.00),
