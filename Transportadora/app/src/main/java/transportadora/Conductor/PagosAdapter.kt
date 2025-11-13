@@ -32,7 +32,7 @@ class PagosAdapter(private var servicios: List<HistorialServicio>) :
     override fun getItemCount(): Int = servicios.size
 
     fun updateData(newServicios: List<PagoConductor>) {
-        servicios = newServicios
+        //val also = newServicios.also { servicios = it }
         notifyDataSetChanged()
     }
 

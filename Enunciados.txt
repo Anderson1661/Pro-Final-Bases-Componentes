@@ -1,4 +1,4 @@
-Bases de Datos avanzadas: (Punto 1,2 y 3 10 de noviembre)
+Bases de Datos avanzadas: (Punto 1,2 y 3 13 de noviembre)
     ENUNCIADO
         La compañía transportadora AVENTUREROS S.A. está dedicada al transporte de pasajeros y de alimentos.  
         Esta compañía desea contar con una aplicación de software que le permita llevar el control de los datos más importantes de su operación.  
