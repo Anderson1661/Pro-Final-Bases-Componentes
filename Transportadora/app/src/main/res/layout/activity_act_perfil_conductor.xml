@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="transportadora.Conductor.Act_perfil_conductor">
+    tools:context="transportadora.Conductor.Act_preguntas_conductor">
 
     <ImageView
-        android:id="@+id/imageViewFondo"
+        android:id="@+id/imageViewFond8IUo"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -204,7 +204,8 @@
                 android:id="@+id/btn_actualizar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Actualizar Datos" />
+                android:text="Actualizar Datos"
+                android:backgroundTint="@color/naranja"/>
 
         </LinearLayout>
     </ScrollView>

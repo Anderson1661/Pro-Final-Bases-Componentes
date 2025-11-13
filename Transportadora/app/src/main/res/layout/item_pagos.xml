@@ -1,162 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="18dp"
-    android:background="@drawable/bg_servicio_card"
-    android:elevation="9dp">
+    android:padding="12dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/borde_cuadro">
 
+    <!-- Título principal -->
     <TextView
-        android:id="@+id/tvServicio"
-        android:layout_width="wrap_content"
+        android:id="@+id/txt_id_servicio"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Servicio 5"
-        android:textSize="18sp"
+        android:text="Servicio #101"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"
-        android:textColor="?android:attr/textColorPrimary"/>
+        android:textColor="@color/naranja"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- Estado del servicio -->
-    <RelativeLayout
+    <!-- Cliente -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
 
-        </RelativeLayout>
-    <!-- Estado -->
-    <RelativeLayout
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cliente:"
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
+
+        <TextView
+            android:id="@+id/txt_cliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ana Martínez"
+            android:textColor="@color/negro"/>
+    </LinearLayout>
+
+    <!-- Tipo de servicio -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Estado:"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12dp" />
+            android:layout_weight="1"
+            android:text="Tipo de servicio:"
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
 
         <TextView
-            android:id="@+id/tvNombre"
+            android:id="@+id/txt_tipo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Carlos"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:text="Alimentos - Estándar"
+            android:textColor="@color/negro"/>
+    </LinearLayout>
+
     <!-- Método de pago -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
+            android:layout_weight="1"
             android:text="Método de pago:"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12dp" />
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
 
         <TextView
-            android:id="@+id/tvMetodoPago"
+            android:id="@+id/txt_metodo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Efectivo"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:text="Transferencia"
+            android:textColor="@color/negro"/>
+    </LinearLayout>
 
-
-
-    <!-- Dirección de origen -->
-    <RelativeLayout
+    <!-- Fecha -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Dirección de origen:"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12dp" />
+            android:layout_weight="1"
+            android:text="Fecha:"
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
 
         <TextView
-            android:id="@+id/tvDireccionOrigen"
+            android:id="@+id/txt_fecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Calle 45 #12-30, Bogotá"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12dp" />
-    </RelativeLayout>
+            android:text="2025-11-12"
+            android:textColor="@color/grisoscuro"/>
+    </LinearLayout>
 
-    <!-- Dirección de destino -->
-    <RelativeLayout
+    <!-- Total servicio -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Dirección de destino:"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12dp" />
+            android:layout_weight="1"
+            android:text="Total servicio:"
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
 
         <TextView
-            android:id="@+id/tvDireccionDestino"
+            android:id="@+id/txt_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Carrera 10 #20-15, Medellín"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12dp" />
-    </RelativeLayout>
+            android:text="$150.000"
+            android:textColor="@color/negro"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
-    <!-- Valor -->
-    <RelativeLayout
+    <!-- Pago al conductor -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="8dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="2dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:text="Valor:"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="12dp" />
+            android:layout_weight="1"
+            android:text="Pago recibido:"
+            android:textStyle="bold"
+            android:textColor="@color/negro"/>
 
         <TextView
-            android:id="@+id/tvValor"
+            android:id="@+id/txt_pago_conductor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="130000"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12dp" />
-    </RelativeLayout>
+            android:text="$45.000"
+            android:textColor="@color/amarillo"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
 </LinearLayout>

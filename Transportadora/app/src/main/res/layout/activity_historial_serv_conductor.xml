@@ -150,28 +150,28 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="00dp"
-                        android:text="Tipo de servicio:"
+                        android:text="Total recibido:"
                         android:textAlignment="center"
                         android:textColor="@color/negro"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/txt_tipo_servicio"
+                        android:id="@+id/txt_total_recibido"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:layout_marginBottom="10dp"
-                        android:text="Alimentos"
+                        android:text="10000000"
                         android:textAlignment="center"
                         android:textColor="@color/negro"
                         android:textSize="15dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerServicios_hoy"
+                        android:id="@+id/recyclerPagos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_servicios"
+                        tools:listitem="@layout/item_pagos"
                         tools:itemCount="3" />
 
                 </LinearLayout>

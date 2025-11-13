@@ -7,11 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import transportadora.Modelos.Conductor.HistorialServicio
 import transportadora.Login.R
+import transportadora.Modelos.Conductor.PagoConductor
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class ServiciosAdapter(private var servicios: List<HistorialServicio>) :
-    RecyclerView.Adapter<ServiciosAdapter.HistorialViewHolder>() {
+class PagosAdapter(private var servicios: List<HistorialServicio>) :
+    RecyclerView.Adapter<PagosAdapter.HistorialViewHolder>() {
 
     // Formateadores de fecha
     private val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -30,7 +31,7 @@ class ServiciosAdapter(private var servicios: List<HistorialServicio>) :
 
     override fun getItemCount(): Int = servicios.size
 
-    fun updateData(newServicios: List<HistorialServicio>) {
+    fun updateData(newServicios: List<PagoConductor>) {
         servicios = newServicios
         notifyDataSetChanged()
     }

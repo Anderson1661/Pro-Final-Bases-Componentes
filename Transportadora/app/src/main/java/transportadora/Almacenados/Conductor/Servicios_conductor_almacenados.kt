@@ -23,13 +23,13 @@ object Servicios_conductor_almacenados {
                     lista.add(
                         HistorialServicio(
                             id_ruta = obj.optInt("id_ruta"),
-                            fecha_hora_reserva = obj.optString("fecha_hora_reserva"),
+                            fecha_inicio = obj.optString("fecha_inicio"),
                             direccion_origen = obj.optString("direccion_origen"),
                             ciudad_origen = obj.optString("ciudad_origen"),
                             direccion_destino = obj.optString("direccion_destino"),
                             ciudad_destino = obj.optString("ciudad_destino"),
                             tipo_servicio = obj.optString("tipo_servicio"),
-                            estado_servicio = obj.optString("estado_servicio"),
+                            estado = obj.optString("estado"),
                             metodo_pago = obj.optString("metodo_pago")
                         )
                     )
