@@ -23,6 +23,8 @@ import java.net.URL
 import android.widget.Toast;
 
 class Seguimiento_serv_cliente : AppCompatActivity() {
+    private var id_cliente_actual: Int = -1
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +33,19 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
 
         // Seguimiento_serv_cliente.kt (Añadir al inicio de onCreate, cerca de la línea 24)
 
-        // Capturar los datos del Intent
-        val userEmail = intent.getStringExtra("USER_EMAIL")
-        val userId = intent.getIntExtra("USER_ID", -1)
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("user_email", null)
 
-        // Opcional: Manejar el caso donde no hay datos de usuario
-        if (userEmail.isNullOrEmpty() || userId == -1) {
-            Toast.makeText(this, "Error al cargar datos del usuario. Vuelve a iniciar sesión.", Toast.LENGTH_LONG).show()
+        if (userEmail.isNullOrEmpty()) {
+            Toast.makeText(this, "No se pudo identificar el correo del usuario.", Toast.LENGTH_LONG).show()
+        } else {
+            // 1. Obtener el id_cliente por correo (nueva lógica)
+            CoroutineScope(Dispatchers.Main).launch {
+                id_cliente_actual = obtenerIdClientePorCorreo(userEmail)
+                if (id_cliente_actual == -1) {
+                    Toast.makeText(this@Seguimiento_serv_cliente, "Error: No se pudo obtener el ID del cliente. Verifica tu sesión.", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         // 📋 Menú lateral
@@ -113,8 +121,9 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            layoutDatos.visibility = View.VISIBLE
-            scrollView.post { scrollView.smoothScrollTo(0, layoutDatos.top) }
+            // AÑADIDO: Ocultar el layout inmediatamente para limpiar la pantalla
+            // mientras se hace la consulta.
+            layoutDatos.visibility = View.GONE
 
             // 🧠 Consulta al servidor
             CoroutineScope(Dispatchers.IO).launch {
@@ -139,22 +148,27 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
 
                             if (success == "1") {
                                 val datos = json.getJSONObject("datos")
-
-                                /*
                                 val idClienteServidor = datos.optString("id_cliente")
-                                val userId = intent.getIntExtra("USER_ID", -1)
-                                if (userId == -1) {
-                                    Toast.makeText(this, "Error: No se recibió el ID del cliente.", Toast.LENGTH_LONG).show()
-                                    return
-                                }
 
                                 // 🔍 Comprobamos si la ruta pertenece al usuario logueado
-                                if (idClienteServidor != userId.toString()) {
-                                    Toast.makeText(this@Seguimiento_serv_cliente, "⚠️ Este servicio no pertenece a tu cuenta.", Toast.LENGTH_LONG).show()
-                                    layoutDatos.visibility = View.GONE
+                                if (idClienteServidor != id_cliente_actual.toString()) {
+                                    val toast = Toast.makeText(
+                                        this@Seguimiento_serv_cliente,
+                                        "⚠️ Este servicio no pertenece a tu cuenta. ⚠️",
+                                        Toast.LENGTH_LONG
+                                    )
+                                    val view = toast.view
+                                    val text = view?.findViewById<TextView>(android.R.id.message)
+                                    text?.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                                    toast.show()
+                                    layoutDatos.visibility = View.GONE // Importante: ocultar si no pertenece
                                     return@withContext
                                 }
-                                */
+
+                                // ✅ SOLO AQUÍ HACEMOS VISIBLE EL LAYOUT Y HACEMOS SCROLL
+                                layoutDatos.visibility = View.VISIBLE
+                                scrollView.post { scrollView.smoothScrollTo(0, layoutDatos.top) }
+
                                 // ✅ Si pertenece al usuario, mostramos los datos
                                 fun limpiar(valor: String?): String {
                                     return if (valor.isNullOrEmpty() || valor == "null") "" else valor
@@ -197,19 +211,51 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                                 nombres.forEach { it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE }
                             }
                             else {
+                                // ❌ Si la ruta no existe o hubo otro error del servidor
+                                layoutDatos.visibility = View.GONE // Aseguramos que quede oculto
                                 Toast.makeText(this@Seguimiento_serv_cliente, mensaje, Toast.LENGTH_LONG).show()
                             }
                         } catch (e: Exception) {
                             Toast.makeText(this@Seguimiento_serv_cliente, "Error al procesar JSON: ${e.message}", Toast.LENGTH_LONG).show()
+                            layoutDatos.visibility = View.GONE // Ocultar en caso de error de JSON
                         }
                     }
                     connection.disconnect()
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(this@Seguimiento_serv_cliente, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                        layoutDatos.visibility = View.GONE // Ocultar en caso de error de red
                     }
                 }
             }
         }
+    }
+
+    private suspend fun obtenerIdClientePorCorreo(email: String): Int = withContext(Dispatchers.IO) {
+        var idCliente = -1
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/ruta/obtener_id_cliente_por_correo.php")
+            val params = "correo=${java.net.URLEncoder.encode(email, "UTF-8")}"
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            if (json.getString("success") == "1") {
+                // El campo se llama 'id_cliente' en el JSON de respuesta
+                idCliente = json.getInt("id_cliente")
+                android.util.Log.d("Principal_cliente", "ID Cliente obtenido: $idCliente")
+            } else {
+                android.util.Log.e("Principal_cliente", "Error PHP al obtener ID: ${json.getString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Principal_cliente", "Error de red/JSON al obtener ID: ${e.message}", e)
+        }
+        return@withContext idCliente
     }
 }
