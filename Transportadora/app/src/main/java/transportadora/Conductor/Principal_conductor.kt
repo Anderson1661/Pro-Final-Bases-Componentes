@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import transportadora.Administrador.Perfil_administrador
+import transportadora.Conductor.Perfil_conductor
 import transportadora.Almacenados.Conductor.Servicios_conductor_almacenados
 import transportadora.Login.R
 
@@ -71,6 +71,11 @@ class Principal_conductor : AppCompatActivity() {
         val txtayuda = findViewById<TextView>(R.id.ayuda)
         txtayuda.setOnClickListener {
             val intent = Intent(this@Principal_conductor, transportadora.Compartido.Ayuda::class.java)
+            startActivity(intent)
+        }
+        val txthistorialpagos = findViewById<TextView>(R.id.menu3)
+        txthistorialpagos.setOnClickListener {
+            val intent = Intent(this@Principal_conductor, transportadora.Conductor.Historial_serv_conductor::class.java)
             startActivity(intent)
         }
 
