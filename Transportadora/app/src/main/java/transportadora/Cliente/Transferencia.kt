@@ -31,9 +31,11 @@ class Transferencia : AppCompatActivity() {
         val tvState: TextView = findViewById(R.id.tvState)
         val layoutResult: LinearLayout = findViewById(R.id.layoutResult)
 
-        // Recibir el total a pagar del Intent
         val totalPagar = intent.getDoubleExtra("TOTAL_PAGAR", 0.0)
         tvAmount.text = String.format("$ %,.2f", totalPagar)
+
+        // Capturar el email del Intent para pasarlo al historial
+        val userEmail = intent.getStringExtra("USER_EMAIL") // <-- ¡LÍNEA AÑADIDA!
 
         val dots = listOf(
             findViewById<TextView>(R.id.dot1),
@@ -106,6 +108,12 @@ class Transferencia : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed({
                         try {
                             val intent = Intent(this@Transferencia, Historial_serv_cliente::class.java)
+
+                            // Adjuntar el email al Intent
+                            if (userEmail != null) { // <-- ¡BLOQUE AÑADIDO!
+                                intent.putExtra("USER_EMAIL", userEmail)
+                            }
+
                             startActivity(intent)
                         } catch (e: Exception) {
                             // si no existe la Activity, ignorar
