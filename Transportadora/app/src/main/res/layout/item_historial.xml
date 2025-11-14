@@ -92,16 +92,6 @@
             android:layout_height="wrap_content"
             android:text="Detalles"
             android:textSize="12sp"
-            android:backgroundTint="@color/naranja"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="4dp" />
-
-        <Button
-            android:id="@+id/btnEditar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Editar"
-            android:textSize="12sp"
             android:backgroundTint="@color/grisoscuro"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="4dp" />
@@ -112,7 +102,7 @@
             android:layout_height="wrap_content"
             android:text="Cancelar"
             android:textSize="12sp"
-            android:backgroundTint="@color/amarillo"
+            android:backgroundTint="@color/naranja"
             android:textColor="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>

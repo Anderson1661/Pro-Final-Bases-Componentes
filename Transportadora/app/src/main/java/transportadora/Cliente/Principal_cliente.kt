@@ -519,8 +519,10 @@ class Principal_cliente : AppCompatActivity() {
                                 val metodoPagoSeleccionado = listaMetodosPago.getOrNull(posMetodoPago)?.descripcion ?: ""
                                 if (metodoPagoSeleccionado.equals("Efectivo", ignoreCase = true)) {
                                     Toast.makeText(this@Principal_cliente, "Debes entregarle el efectivo una vez que llegue el conductor", Toast.LENGTH_LONG).show()
-                                    startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
-                                } else {
+                                    val intentHistorial = Intent(this@Principal_cliente, Historial_serv_cliente::class.java)
+                                    intentHistorial.putExtra("USER_ID", id_cliente_actual)
+                                    intentHistorial.putExtra("USER_EMAIL", userEmail)
+                                    startActivity(intentHistorial)                                } else {
                                     val intent = Intent(this@Principal_cliente, Transferencia::class.java)
                                     intent.putExtra("TOTAL_PAGAR", totalPagar)
                                     startActivity(intent)
@@ -528,8 +530,10 @@ class Principal_cliente : AppCompatActivity() {
                             } else if (esPasajeros) {
                                 // Si la ruta se creó pero falló el registro de pasajeros
                                 Toast.makeText(this@Principal_cliente, "Ruta creada, pero **falló el registro de pasajeros**. Contacta a soporte.", Toast.LENGTH_LONG).show()
-                                startActivity(Intent(this@Principal_cliente, Historial_serv_cliente::class.java))
-                            }
+                                val intentHistorial = Intent(this@Principal_cliente, Historial_serv_cliente::class.java)
+                                intentHistorial.putExtra("USER_ID", id_cliente_actual)
+                                intentHistorial.putExtra("USER_EMAIL", userEmail)
+                                startActivity(intentHistorial)                            }
 
                         } else {
                             Toast.makeText(this@Principal_cliente, "Error al crear ruta: ${json.getString("mensaje")}", Toast.LENGTH_LONG).show()

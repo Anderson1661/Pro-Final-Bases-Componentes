@@ -59,8 +59,7 @@ class Act_perfil_cliente : AppCompatActivity() {
     private lateinit var txtDireccion: EditText
 
     private var id_cliente_actual: Int = -1
-    private var userEmail: String? = null
-
+    private var userEmail: String? = null // Almacena el correo original
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -256,7 +255,7 @@ class Act_perfil_cliente : AppCompatActivity() {
             builder.show()
         }
 
-        // Botón GUARDAR → Muestra toast y abre la siguiente pantalla
+        // Botón GUARDAR → CON LÓGICA DE DETECCIÓN DE CAMBIO DE CORREO
         buttonGuardar.setOnClickListener {
 
             if (id_cliente_actual == -1) {
@@ -264,11 +263,11 @@ class Act_perfil_cliente : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Usar los miembros de la clase para obtener los valores de Spinners
+            // 1. Obtener valores de los campos
             val postipoidentificacion = spinner_tipos_id.selectedItemPosition
             val id_tipo_identificacion = postipoidentificacion + 1
 
-            if (id_tipo_identificacion <= 0) { // Corregido: index + 1 debe ser > 0
+            if (id_tipo_identificacion <= 0) {
                 Toast.makeText(this, "Error: Tipo de identificacion no válida.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -276,7 +275,7 @@ class Act_perfil_cliente : AppCompatActivity() {
             // Usar los miembros de la clase para obtener los valores de EditText/TextView
             val numero_identificacion: String = txtIdentificacion.text.toString().trim()
             val nombrecompleto: String = txtNombre.text.toString().trim()
-            val correo: String = txtCorreo.text.toString().trim() // Lectura del TextView/EditText
+            val nuevoCorreo: String = txtCorreo.text.toString().trim() // Obtener el valor actual del campo de correo
             val direccion: String = txtDireccion.text.toString().trim()
             val tel1: String = txtTel1.text.toString().trim()
             val tel2: String = txtTel2.text.toString().trim()
@@ -298,9 +297,13 @@ class Act_perfil_cliente : AppCompatActivity() {
             }
 
             // Usar los miembros de la clase para obtener los valores de ubicación
-            val pais=spinner_paises.selectedItem.toString()
-            val departamento=spinner_departamentos.selectedItem.toString()
-            val ciudad=spinner_ciudades.selectedItem.toString()
+            val pais = spinner_paises.selectedItem.toString()
+            val departamento = spinner_departamentos.selectedItem.toString()
+            val ciudad = spinner_ciudades.selectedItem.toString()
+
+            // LÓGICA DE DETECCIÓN DE CAMBIO DE CORREO
+            val correoOriginal = userEmail // Correo con el que se cargó la actividad
+            val cambioCorreo: Boolean = nuevoCorreo != correoOriginal
 
             // 3. Llamada Coroutine para obtener Código Postal y luego actualizar el perfil
             CoroutineScope(Dispatchers.Main).launch {
@@ -315,7 +318,7 @@ class Act_perfil_cliente : AppCompatActivity() {
                             numero_identificacion,
                             nombrecompleto,
                             direccion,
-                            correo,
+                            nuevoCorreo, // Usar el nuevo correo
                             id_genero,
                             id_nacionalidad,
                             codigoPostal,
@@ -324,12 +327,32 @@ class Act_perfil_cliente : AppCompatActivity() {
                         )
 
                         if (actualizacionExitosa) {
-                            // Si la actualización fue exitosa:
-                            Toast.makeText(this@Act_perfil_cliente, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@Act_perfil_cliente, Perfil_cliente::class.java)
-                            intent.putExtra("USER_EMAIL", userEmail)
-                            startActivity(intent)
-                            finish() // Cerrar la actividad de edición
+                            if (cambioCorreo) {
+                                // Caso 1: Actualización exitosa Y hubo cambio de correo
+
+                                // Mostrar Toast de advertencia
+                                Toast.makeText(this@Act_perfil_cliente, "¡Correo actualizado! Por favor, vuelve a iniciar sesión.", Toast.LENGTH_LONG).show()
+
+                                // Limpiar SharedPreferences para cerrar sesión
+                                val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                                prefs.edit().clear().apply()
+
+                                // Redirigir al Main/Login
+                                val intent = Intent(this@Act_perfil_cliente, transportadora.Compartido.Main::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
+
+                            } else {
+                                // Caso 2: Actualización exitosa y NO hubo cambio de correo
+                                Toast.makeText(this@Act_perfil_cliente, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@Act_perfil_cliente, Perfil_cliente::class.java)
+                                // Se sigue usando el userEmail original, que es igual al nuevo correo, para la siguiente actividad
+                                intent.putExtra("USER_EMAIL", userEmail)
+                                startActivity(intent)
+                                finish() // Cerrar la actividad de edición
+                            }
+
                         } else {
                             // Si la actualización falló (aunque se obtuvo el CP)
                             Toast.makeText(this@Act_perfil_cliente, "Error al guardar datos. Revisa la información.", Toast.LENGTH_LONG).show()
@@ -344,8 +367,6 @@ class Act_perfil_cliente : AppCompatActivity() {
                     Toast.makeText(this@Act_perfil_cliente, "Error de red al obtener Código Postal: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
-
-            // SE ELIMINARON LAS LÍNEAS REDUNDANTES DE TOAST E INTENT, YA QUE LA LÓGICA ASÍNCRONA LAS MANEJA.
         }
 
     }
