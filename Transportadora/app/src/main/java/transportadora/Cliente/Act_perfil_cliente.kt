@@ -1,7 +1,7 @@
 package transportadora.Cliente
 
 import android.annotation.SuppressLint
-import android.widget.AdapterView // Added import
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -26,12 +26,13 @@ import transportadora.Modelos.Cliente.Ciudad
 import transportadora.Modelos.Cliente.Genero
 import transportadora.Modelos.Cliente.Pais
 import transportadora.Modelos.Cliente.Tipo_identificacion
-import transportadora.Almacenados.Cliente.Departamento_almacenados // Added import
-import transportadora.Almacenados.Cliente.Ciudad_almacenados // Added import
+import transportadora.Almacenados.Cliente.Departamento_almacenados
+import transportadora.Almacenados.Cliente.Ciudad_almacenados
 import android.os.Bundle
-import android.widget.Toast.makeText
 import android.view.View
 import android.content.Intent
+import android.widget.EditText
+import kotlinx.coroutines.delay
 
 class Act_perfil_cliente : AppCompatActivity() {
     private var listaPaisesCompleta: List<Pais> = emptyList()
@@ -40,7 +41,8 @@ class Act_perfil_cliente : AppCompatActivity() {
     private var departamentosOrigen: List<String> = emptyList()
     private var listaCiudadesOrigen: List<Ciudad> = emptyList()
     private var listaCiudadesDestino: List<Ciudad> = emptyList()
-    private lateinit var spinner_ciudades1: Spinner
+
+    // Spinners
     private lateinit var spinner_tipos_id: Spinner
     private lateinit var spinner_paises: Spinner
     private lateinit var spinner_departamentos: Spinner
@@ -48,11 +50,37 @@ class Act_perfil_cliente : AppCompatActivity() {
     private lateinit var spinner_nacionalidad: Spinner
     private lateinit var spinner_genero: Spinner
 
+    // EditText/TextView
+    private lateinit var txtIdentificacion: EditText
+    private lateinit var txtNombre: EditText
+    private lateinit var txtTel1: EditText
+    private lateinit var txtTel2: EditText
+    private lateinit var txtCorreo: TextView // Email is typically not editable
+    private lateinit var txtDireccion: EditText
+
+    private var id_cliente_actual: Int = -1
+    private var userEmail: String? = null
+
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_act_perfil_cliente)
+
+        userEmail = intent.getStringExtra("USER_EMAIL")
+
+        if (userEmail.isNullOrEmpty()) {
+            Toast.makeText(this, "No se pudo identificar el correo del usuario.", Toast.LENGTH_LONG).show()
+        } else {
+            // 1. Obtener el id_cliente por correo (nueva lógica)
+            CoroutineScope(Dispatchers.Main).launch {
+                id_cliente_actual = obtenerIdClientePorCorreo(userEmail!!)
+                if (id_cliente_actual == -1) {
+                    Toast.makeText(this@Act_perfil_cliente, "Error: No se pudo obtener el ID del cliente. Verifica tu sesión.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
         // Initialize views
         spinner_tipos_id = findViewById(R.id.txt_tipo_id)
@@ -62,14 +90,13 @@ class Act_perfil_cliente : AppCompatActivity() {
         spinner_nacionalidad = findViewById(R.id.txt_nacionalidad)
         spinner_genero = findViewById(R.id.txt_genero)
 
-        val txtIdentificacion = findViewById<TextView>(R.id.txt_id)
-        val txtNombre = findViewById<TextView>(R.id.txt_nombre)
-        val txtTel1 = findViewById<TextView>(R.id.txt_tel1)
-        val txtTel2 = findViewById<TextView>(R.id.txt_tel2)
-        val txtCorreo = findViewById<TextView>(R.id.txt_email)
-        val txtDireccion = findViewById<TextView>(R.id.txt_dir)
-
-        val userEmail = intent.getStringExtra("USER_EMAIL")
+        // Initialize EditText/TextView (using EditText for editable fields)
+        txtIdentificacion = findViewById(R.id.txt_id)
+        txtNombre = findViewById(R.id.txt_nombre)
+        txtTel1 = findViewById(R.id.txt_tel1)
+        txtTel2 = findViewById(R.id.txt_tel2)
+        txtCorreo = findViewById(R.id.txt_email)
+        txtDireccion = findViewById(R.id.txt_dir)
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -113,11 +140,13 @@ class Act_perfil_cliente : AppCompatActivity() {
                 // Now load profile data and perform pre-selection
                 if (userEmail != null) {
                     val perfil = withContext(Dispatchers.IO) {
-                        transportadora.Almacenados.Cliente.Datos_perfil_almacenados.obtener_datos_perfil(userEmail)
+                        transportadora.Almacenados.Cliente.Datos_perfil_almacenados.obtener_datos_perfil(
+                            userEmail!!
+                        )
                     }
 
                     if (perfil != null) {
-                        // Asignar cada campo del modelo a su respectivo TextView
+                        // Asignar cada campo del modelo a su respectivo EditText/TextView
                         val tipoIdSeleccionado = perfil.tipo_identificacion
                         val listaDescripcionesId = listatiposid.map { it.descripcion }
                         val indexId = listaDescripcionesId.indexOf(tipoIdSeleccionado)
@@ -125,10 +154,10 @@ class Act_perfil_cliente : AppCompatActivity() {
                         if (indexId != -1) {
                             spinner_tipos_id.setSelection(indexId)
                         }
-                        txtIdentificacion.text = perfil.identificacion
-                        txtNombre.text = perfil.nombre
-                        txtCorreo.text = perfil.correo
-                        txtDireccion.text = perfil.direccion
+                        txtIdentificacion.setText(perfil.identificacion)
+                        txtNombre.setText(perfil.nombre)
+                        txtCorreo.text = perfil.correo // TextView: show email
+                        txtDireccion.setText(perfil.direccion)
 
                         val generoSeleccionado = perfil.genero
                         val listaDescripcionesGenero = listagenero.map { it.descripcion }
@@ -164,9 +193,9 @@ class Act_perfil_cliente : AppCompatActivity() {
                             }
                         }
 
-                        // Teléfonos (muestra máximo dos)
-                        txtTel1.text = perfil.telefonos.getOrNull(0) ?: "No registrado"
-                        txtTel2.text = perfil.telefonos.getOrNull(1) ?: "No registrado"
+                        // Teléfonos (usa "" si no hay para un EditText)
+                        txtTel1.setText(perfil.telefonos.getOrNull(0) ?: "")
+                        txtTel2.setText(perfil.telefonos.getOrNull(1) ?: "")
 
                     } else {
                         Toast.makeText(this@Act_perfil_cliente, "No se pudo cargar el perfil.", Toast.LENGTH_LONG).show()
@@ -229,9 +258,94 @@ class Act_perfil_cliente : AppCompatActivity() {
 
         // Botón GUARDAR → Muestra toast y abre la siguiente pantalla
         buttonGuardar.setOnClickListener {
-            Toast.makeText(this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, Perfil_cliente::class.java)
-            startActivity(intent)
+
+            if (id_cliente_actual == -1) {
+                Toast.makeText(this, "Error: No se encontró el ID del cliente. Recarga la pantalla.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            // Usar los miembros de la clase para obtener los valores de Spinners
+            val postipoidentificacion = spinner_tipos_id.selectedItemPosition
+            val id_tipo_identificacion = postipoidentificacion + 1
+
+            if (id_tipo_identificacion <= 0) { // Corregido: index + 1 debe ser > 0
+                Toast.makeText(this, "Error: Tipo de identificacion no válida.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            // Usar los miembros de la clase para obtener los valores de EditText/TextView
+            val numero_identificacion: String = txtIdentificacion.text.toString().trim()
+            val nombrecompleto: String = txtNombre.text.toString().trim()
+            val correo: String = txtCorreo.text.toString().trim() // Lectura del TextView/EditText
+            val direccion: String = txtDireccion.text.toString().trim()
+            val tel1: String = txtTel1.text.toString().trim()
+            val tel2: String = txtTel2.text.toString().trim()
+
+            val posgenero = spinner_genero.selectedItemPosition
+            val id_genero = posgenero + 1
+
+            if (id_genero <= 0) {
+                Toast.makeText(this, "Error: genero no válida.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            val posnacionalidad = spinner_nacionalidad.selectedItemPosition
+            val id_nacionalidad = posnacionalidad + 1
+
+            if (id_nacionalidad <= 0) {
+                Toast.makeText(this, "Error: Nacionalidad no válida.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            // Usar los miembros de la clase para obtener los valores de ubicación
+            val pais=spinner_paises.selectedItem.toString()
+            val departamento=spinner_departamentos.selectedItem.toString()
+            val ciudad=spinner_ciudades.selectedItem.toString()
+
+            // 3. Llamada Coroutine para obtener Código Postal y luego actualizar el perfil
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val codigoPostal = obtenerCodigoPostal(pais, departamento, ciudad)
+
+                    if (codigoPostal != null) { //se trajo el codigo postal
+                        // Paso B: Actualizar el perfil con el Código Postal
+                        val actualizacionExitosa = actualizarPerfil(
+                            id_cliente_actual,
+                            id_tipo_identificacion,
+                            numero_identificacion,
+                            nombrecompleto,
+                            direccion,
+                            correo,
+                            id_genero,
+                            id_nacionalidad,
+                            codigoPostal,
+                            tel1,
+                            tel2
+                        )
+
+                        if (actualizacionExitosa) {
+                            // Si la actualización fue exitosa:
+                            Toast.makeText(this@Act_perfil_cliente, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@Act_perfil_cliente, Perfil_cliente::class.java)
+                            intent.putExtra("USER_EMAIL", userEmail)
+                            startActivity(intent)
+                            finish() // Cerrar la actividad de edición
+                        } else {
+                            // Si la actualización falló (aunque se obtuvo el CP)
+                            Toast.makeText(this@Act_perfil_cliente, "Error al guardar datos. Revisa la información.", Toast.LENGTH_LONG).show()
+                        }
+
+                    } else {
+                        // Manejo de error si no se encuentra el Código Postal
+                        Toast.makeText(this@Act_perfil_cliente, "Error: No se encontró el Código Postal para esa ubicación.", Toast.LENGTH_LONG).show()
+                    }
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@Act_perfil_cliente, "Error de red al obtener Código Postal: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            // SE ELIMINARON LAS LÍNEAS REDUNDANTES DE TOAST E INTENT, YA QUE LA LÓGICA ASÍNCRONA LAS MANEJA.
         }
 
     }
@@ -251,8 +365,8 @@ class Act_perfil_cliente : AppCompatActivity() {
                     val deptoIndex = listaNombres.indexOf(it)
                     if (deptoIndex != -1) {
                         spinner.setSelection(deptoIndex)
-                        // Add a small delay to allow UI to update before invoking callback
-                        kotlinx.coroutines.delay(100) // Small delay, adjust if needed
+                        // Pequeño retraso para que el UI se actualice antes de cargar ciudades
+                        delay(100)
                     }
                 }
                 onComplete?.invoke()
@@ -266,7 +380,7 @@ class Act_perfil_cliente : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val ciudades = withContext(Dispatchers.IO) { transportadora.Almacenados.Cliente.Ciudad_almacenados.obtenerCiudades(idPais, depto) }
-                listaCiudadesOrigen = ciudades // Assuming this is for the origin, consistent with Principal_cliente
+                listaCiudadesOrigen = ciudades
 
                 val listaNombres = ciudades.map { it.nombre }
                 spinner.adapter = ArrayAdapter(this@Act_perfil_cliente, android.R.layout.simple_spinner_item, listaNombres).apply {
@@ -282,6 +396,133 @@ class Act_perfil_cliente : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this@Act_perfil_cliente, "Error al cargar ciudades: ${e.message}", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private suspend fun obtenerIdClientePorCorreo(email: String): Int = withContext(Dispatchers.IO) {
+        var idCliente = -1
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/ruta/obtener_id_cliente_por_correo.php")
+            val params = "correo=${java.net.URLEncoder.encode(email, "UTF-8")}"
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            if (json.getString("success") == "1") {
+                // El campo se llama 'id_cliente' en el JSON de respuesta
+                idCliente = json.getInt("id_cliente")
+                android.util.Log.d("Act_perfil_cliente", "ID Cliente obtenido: $idCliente")
+            } else {
+                android.util.Log.e("Act_perfil_cliente", "Error PHP al obtener ID: ${json.getString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_cliente", "Error de red/JSON al obtener ID: ${e.message}", e)
+        }
+        return@withContext idCliente
+    }
+
+    private suspend fun obtenerCodigoPostal(pais: String, departamento: String, ciudad: String): String? = withContext(Dispatchers.IO) {
+        var codigoPostal: String? = null
+        try {
+            // URL a tu nuevo script PHP
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/perfil/obtener_codigo_postal.php")
+
+            // Parámetros a enviar
+            val params = "pais=${java.net.URLEncoder.encode(pais, "UTF-8")}" +
+                    "&departamento=${java.net.URLEncoder.encode(departamento, "UTF-8")}" +
+                    "&ciudad=${java.net.URLEncoder.encode(ciudad, "UTF-8")}"
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+
+            if (json.getString("success") == "1") {
+                // El campo que retorna tu PHP se llama 'codigo_postal' dentro del objeto 'datos'
+                codigoPostal = json.getJSONObject("datos").getString("codigo_postal")
+                android.util.Log.d("Act_perfil_cliente", "Código Postal obtenido: $codigoPostal")
+            } else {
+                android.util.Log.e("Act_perfil_cliente", "Error PHP al obtener Código Postal: ${json.getString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_cliente", "Error de red/JSON al obtener Código Postal: ${e.message}", e)
+        }
+        return@withContext codigoPostal
+    }
+
+    // Asegúrate de que esta función esté dentro de la clase Act_perfil_cliente
+    private suspend fun actualizarPerfil(
+        idCliente: Int,
+        idTipoIdentificacion: Int,
+        identificacion: String,
+        nombre: String,
+        direccion: String,
+        correo: String,
+        idGenero: Int,
+        idNacionalidad: Int,
+        codigoPostal: String,
+        tel1: String,
+        tel2: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            // RUTA CORREGIDA (confirmada por tu estructura de archivos)
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/perfil/actualizar_datos_perfil.php")
+
+            // Construcción de los parámetros POST
+            val params = "id_cliente=$idCliente" +
+                    "&id_tipo_identificacion=$idTipoIdentificacion" +
+                    "&identificacion=${java.net.URLEncoder.encode(identificacion, "UTF-8")}" +
+                    "&nombre=${java.net.URLEncoder.encode(nombre, "UTF-8")}" +
+                    "&direccion=${java.net.URLEncoder.encode(direccion, "UTF-8")}" +
+                    "&correo=${java.net.URLEncoder.encode(correo, "UTF-8")}" +
+                    "&id_genero=$idGenero" +
+                    "&id_nacionalidad=$idNacionalidad" +
+                    "&codigo_postal=${java.net.URLEncoder.encode(codigoPostal, "UTF-8")}" +
+                    "&tel1=${java.net.URLEncoder.encode(tel1, "UTF-8")}" +
+                    "&tel2=${java.net.URLEncoder.encode(tel2, "UTF-8")}"
+
+            android.util.Log.d("Act_perfil_cliente", "Sending params: $params")
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            // **Añadir manejo de código de respuesta para evitar FileNotFoundException**
+            val responseCode = connection.responseCode
+            android.util.Log.d("Act_perfil_cliente", "Response code: $responseCode")
+
+            if (responseCode == java.net.HttpURLConnection.HTTP_OK) { // Código 200: Éxito
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                connection.disconnect()
+
+                android.util.Log.d("Act_perfil_cliente", "Received response: $response")
+
+                // Verificar si el JSON indica éxito
+                val json = org.json.JSONObject(response)
+                return@withContext json.getString("success") == "1"
+            } else {
+                // Manejar errores (4xx o 5xx) leyendo el errorStream para diagnóstico
+                val errorResponse = connection.errorStream?.bufferedReader()?.use { it.readText() } ?: "No error message provided"
+                android.util.Log.e("Act_perfil_cliente", "HTTP Error $responseCode. Detalles: $errorResponse")
+                connection.disconnect()
+                return@withContext false
+            }
+
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_cliente", "Error al actualizar perfil (Network/Parse): ${e.message}", e)
+            return@withContext false
         }
     }
 }

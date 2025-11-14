@@ -222,18 +222,21 @@ CREATE TABLE IF NOT EXISTS respuestas_seguridad (
 );
 
 
--- ======== TRIGGERS ========
+-- ===================================
+-- TRIGGERS 
+-- ===================================
 
+-- 1. Se cambia el delimitador para permitir bloques BEGIN...END
 DELIMITER //
 
 -- Trigger insertar usuario automático para cliente
-CREATE TRIGGER trg_insert_usuario_cliente
+CREATE OR REPLACE TRIGGER trg_insert_usuario_cliente
 AFTER INSERT ON cliente
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña = Identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Cliente'
     LIMIT 1;
@@ -241,13 +244,13 @@ BEGIN
 END//
 
 -- Trigger insertar usuario automático para conductor
-CREATE TRIGGER trg_insert_usuario_conductor
+CREATE OR REPLACE TRIGGER trg_insert_usuario_conductor
 AFTER INSERT ON conductor
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña = Identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Conductor'
     LIMIT 1;
@@ -255,13 +258,13 @@ BEGIN
 END//
 
 -- Trigger insertar usuario automático para administrador
-CREATE TRIGGER trg_insert_usuario_admin
+CREATE OR REPLACE TRIGGER trg_insert_usuario_admin
 AFTER INSERT ON administrador
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.correo
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña = Identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Administrador'
     LIMIT 1;
@@ -283,11 +286,49 @@ CREATE TRIGGER trg_calcular_pago_conductor
 BEFORE INSERT ON ruta
 FOR EACH ROW
 BEGIN
-  IF NEW.total IS NOT NULL THEN
+  -- Se asume que total ya fue calculado por el trigger anterior
+  IF NEW.total IS NOT NULL THEN 
     SET NEW.pago_conductor = ROUND(NEW.total * 0.30, 2);
   END IF;
 END//
 
+-- 1. Trigger para CLIENTE (Actualización de correo)
+CREATE TRIGGER trg_update_correo_cliente
+BEFORE UPDATE ON cliente
+FOR EACH ROW
+BEGIN
+  IF OLD.correo <> NEW.correo THEN
+    UPDATE usuario
+    SET correo = NEW.correo
+    WHERE correo = OLD.correo;
+  END IF;
+END//
+
+-- 2. Trigger para CONDUCTOR (Actualización de correo)
+CREATE TRIGGER trg_update_correo_conductor
+BEFORE UPDATE ON conductor
+FOR EACH ROW
+BEGIN
+  IF OLD.correo <> NEW.correo THEN
+    UPDATE usuario
+    SET correo = NEW.correo
+    WHERE correo = OLD.correo;
+  END IF;
+END//
+
+-- 3. Trigger para ADMINISTRADOR (Actualización de correo)
+CREATE TRIGGER trg_update_correo_admin
+BEFORE UPDATE ON administrador
+FOR EACH ROW
+BEGIN
+  IF OLD.correo <> NEW.correo THEN
+    UPDATE usuario
+    SET correo = NEW.correo
+    WHERE correo = OLD.correo;
+  END IF;
+END//
+
+-- 2. Se restablece el delimitador al punto y coma
 DELIMITER ;
 
 
@@ -347,7 +388,7 @@ INSERT INTO telefono_administrador (id_administrador, telefono) VALUES
 INSERT INTO cliente (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, id_pais_nacionalidad, codigo_postal) VALUES 
 ('1023456789', 1, 'Ana Sofía Martínez Gómez', 'Calle 100 # 15-30', 'ana.martinez@email.com', 2, 1, '110111'),
 ('1034567890', 1, 'Juan Pablo Herrera Sánchez', 'Carrera 7 # 45-12', 'juan.herrera@email.com', 1, 1, '110111'),
-('1029141647', 1, 'William dog', 'Calle 100 # 15-30', '1@1.com', 1, 1, '760001'),
+('1029', 1, 'William dog', 'Calle 100 # 15-30', '1@1.com', 1, 1, '760001'),
 ('1045678901', 1, 'Laura Camila Torres Ramírez', 'Avenida 68 # 25-40', 'laura.torres@email.com', 2, 1, '110111');
 
 -- Teléfonos de clientes
@@ -365,7 +406,7 @@ INSERT INTO estado_conductor (descripcion) VALUES ('Conectado'), ('Desconectado'
 INSERT INTO conductor (id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) VALUES 
 (1, 'ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://example.com/fotos/conductor1.jpg'),
 (2, 'DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://example.com/fotos/conductor2.jpg'),
-(2, 'SEX69H', '1000000000', 1, 'Mostro', 'Carrera 30 # 50-25', '2@2.com', 3, '050001', 1, 'https://example.com/fotos/mostro.jpg'),
+(2, 'SEX69H', '100', 1, 'Mostro', 'Carrera 30 # 50-25', '2@2.com', 3, '050001', 1, 'https://example.com/fotos/mostro.jpg'),
 (2, 'GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://example.com/fotos/conductor3.jpg');
 
 -- Teléfonos de conductores
