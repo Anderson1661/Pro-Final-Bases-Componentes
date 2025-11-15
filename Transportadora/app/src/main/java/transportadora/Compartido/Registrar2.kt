@@ -234,7 +234,7 @@ class Registrar2 : AppCompatActivity() {
         val id_p3 = pospregunta3+1
         val res_p3 = txt_respuesta3.text.toString().trim()
 
-        Log.e("Registrar", id_p1.toString()+" "+id_p2+" "+id_p3)
+        Log.e("Registrar: id de preguntas", id_p1.toString()+" "+id_p2+" "+id_p3)
 
         // --- 2. Validación ---
         if (id_p1 == -1 || id_p2 == -1 || id_p3 == -1 || res_p1.isEmpty() || res_p2.isEmpty() || res_p3.isEmpty()) {
@@ -243,16 +243,8 @@ class Registrar2 : AppCompatActivity() {
         }
 
         // Validación de selección única (necesaria si el usuario no interactuó y los 3 están en la opción por defecto)
-        if (id_p1 == id_p2) {
-            Toast.makeText(this, id_p1.toString()+id_p2.toString()+"\n1. Las preguntas de seguridad deben ser únicas. Por favor, selecciona preguntas diferentes.", Toast.LENGTH_LONG).show()
-            return
-        }
-        if (id_p1 == id_p3) {
-            Toast.makeText(this, "2. Las preguntas de seguridad deben ser únicas. Por favor, selecciona preguntas diferentes.", Toast.LENGTH_LONG).show()
-            return
-        }
-        if (id_p2 == id_p3) {
-            Toast.makeText(this, "3. Las preguntas de seguridad deben ser únicas. Por favor, selecciona preguntas diferentes.", Toast.LENGTH_LONG).show()
+        if (id_p1 == id_p2 || id_p1 == id_p3 || id_p2 == id_p3) {
+            Toast.makeText(this, "Las preguntas de seguridad deben ser únicas. Por favor, selecciona preguntas diferentes.", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -268,7 +260,7 @@ class Registrar2 : AppCompatActivity() {
             if (exito) {
                 Toast.makeText(
                     this@Registrar2,
-                    "Cliente registrado exitosamente, \npor favor ahora inicie sesión",
+                    "Tu contraseña inicial sera tu numero de documento, \ninicia sesión para cambiarla",
                     Toast.LENGTH_LONG
                 ).show()
 
