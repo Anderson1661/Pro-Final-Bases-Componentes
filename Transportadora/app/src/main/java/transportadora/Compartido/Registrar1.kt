@@ -26,6 +26,7 @@ import transportadora.Modelos.Cliente.Ciudad
 import transportadora.Modelos.Cliente.Genero
 import transportadora.Modelos.Cliente.Pais
 import transportadora.Modelos.Cliente.Tipo_identificacion
+import android.content.Intent
 
 class Registrar1 : AppCompatActivity() {
 
@@ -252,8 +253,12 @@ class Registrar1 : AppCompatActivity() {
                     )
 
                     if (registroExitoso) {
-                        Toast.makeText(this@Registrar1, "¡Registro exitoso!", Toast.LENGTH_LONG).show()
-                        finish() // Cierra esta actividad y vuelve al Login
+                        val intent = Intent(this@Registrar1, Registrar2::class.java).apply {
+                            putExtra("EMAIL_CLIENTE", correo)
+                        }
+
+                        startActivity(intent)
+                        finish()
                     } else {
                         Toast.makeText(this@Registrar1, "Error al guardar el registro. Revisa la información (ej: correo duplicado).", Toast.LENGTH_LONG).show()
                     }
