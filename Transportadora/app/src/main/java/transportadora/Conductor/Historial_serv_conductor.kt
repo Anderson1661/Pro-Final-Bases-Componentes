@@ -22,7 +22,7 @@ class Historial_serv_conductor : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_historial_serv_conductor)
+        setContentView(R.layout.activity_historial_pagos_conductor)
 
         // Recycler del XML
         recyclerView = findViewById(R.id.recyclerPagos)
