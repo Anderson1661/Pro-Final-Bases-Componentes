@@ -76,6 +76,9 @@ class Perfil_cliente : AppCompatActivity() {
 
         //region Listeners de Botones
         txtVolverLogin.setOnClickListener {
+            val intent = Intent(this@Perfil_cliente, Principal_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail)
+            startActivity(intent)
             finish()
         }
 
