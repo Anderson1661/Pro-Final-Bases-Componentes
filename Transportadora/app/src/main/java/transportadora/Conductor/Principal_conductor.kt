@@ -76,7 +76,11 @@ class Principal_conductor : AppCompatActivity() {
         val txthistorialpagos = findViewById<TextView>(R.id.menu3)
         txthistorialpagos.setOnClickListener {
             val intent = Intent(this@Principal_conductor, transportadora.Conductor.Historial_serv_conductor::class.java)
+            // Pasar el correo del conductor al Activity de historial
+            intent.putExtra("USER_EMAIL", userEmail ?: "")
             startActivity(intent)
+            // Pasar el correo del conductor al Activity de historial
+            intent.putExtra("USER_EMAIL", userEmail ?: "")
         }
 
     }

@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import transportadora.Modelos.Conductor.HistorialServicio
-import transportadora.Login.R
 import transportadora.Modelos.Conductor.PagoConductor
+import transportadora.Login.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PagosAdapter(private var servicios: List<HistorialServicio>) :
+class PagosAdapter(private var servicios: List<PagoConductor>) :
     RecyclerView.Adapter<PagosAdapter.HistorialViewHolder>() {
 
     // Formateadores de fecha
@@ -20,7 +19,7 @@ class PagosAdapter(private var servicios: List<HistorialServicio>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistorialViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_historial, parent, false)
+            .inflate(R.layout.item_pagos, parent, false)
         return HistorialViewHolder(view)
     }
 
@@ -32,35 +31,38 @@ class PagosAdapter(private var servicios: List<HistorialServicio>) :
     override fun getItemCount(): Int = servicios.size
 
     fun updateData(newServicios: List<PagoConductor>) {
-        //val also = newServicios.also { servicios = it }
+        servicios = newServicios
         notifyDataSetChanged()
     }
 
     inner class HistorialViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvServicio: TextView = itemView.findViewById(R.id.tvServicio)
-        private val tvFecha: TextView = itemView.findViewById(R.id.tvFecha)
-        private val tvOrigen: TextView = itemView.findViewById(R.id.tvOrigen)
-        private val tvDestino: TextView = itemView.findViewById(R.id.tvDestino)
-        private val tvTipoServicio: TextView = itemView.findViewById(R.id.tvTipoServicio)
-        private val tvMetodoPago: TextView = itemView.findViewById(R.id.tvMetodoPago)
-        private val tvEstado: TextView = itemView.findViewById(R.id.tvEstado)
+        private val tvServicio: TextView = itemView.findViewById(R.id.txt_id_servicio)
+        private val tvFecha: TextView = itemView.findViewById(R.id.txt_fecha)
 
-        fun bind(servicio: HistorialServicio) {
-            tvServicio.text = "Servicio: Envío Paquete #${servicio.id_ruta}"
+        fun bind(servicio: PagoConductor) {
+            tvServicio.text = "Servicio #${servicio.id_ruta}"
 
-            // Formatear fecha
+            // Formatear fecha de finalización
             try {
-                val parsedDate = parser.parse(servicio.fecha_inicio)
-                tvFecha.text = "Fecha: ${formatter.format(parsedDate)}"
+                val parsedDate = parser.parse(servicio.fecha_finalizacion)
+                tvFecha.text = formatter.format(parsedDate)
             } catch (e: Exception) {
-                tvFecha.text = "Fecha: N/A"
+                tvFecha.text = servicio.fecha_finalizacion
             }
 
-            tvOrigen.text = "Origen: ${servicio.direccion_origen}, ${servicio.ciudad_origen}"
-            tvDestino.text = "Destino: ${servicio.direccion_destino}, ${servicio.ciudad_destino}"
-            tvTipoServicio.text = "Tipo: ${servicio.tipo_servicio}"
-            tvMetodoPago.text = "Pago: ${servicio.metodo_pago}"
-            tvEstado.text = "Estado: ${servicio.estado}"
+            // Mapear campos a layout item_pagos
+            val cliente = itemView.findViewById<TextView>(R.id.txt_cliente)
+            val tipo = itemView.findViewById<TextView>(R.id.txt_tipo)
+            val metodo = itemView.findViewById<TextView>(R.id.txt_metodo)
+            val total = itemView.findViewById<TextView>(R.id.txt_total)
+            val pago = itemView.findViewById<TextView>(R.id.txt_pago_conductor)
+
+            tvServicio.text = "Servicio #${servicio.id_ruta}"
+            cliente.text = servicio.nombre_cliente
+            tipo.text = "${servicio.tipo_servicio} - ${servicio.categoria_servicio}"
+            metodo.text = servicio.metodo_pago
+            total.text = "$${String.format("%,.2f", servicio.total)}"
+            pago.text = "$${String.format("%,.2f", servicio.pago_conductor)}"
         }
     }
 }

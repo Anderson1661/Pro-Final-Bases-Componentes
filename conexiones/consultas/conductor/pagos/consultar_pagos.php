@@ -5,9 +5,15 @@ header('Content-Type: application/json; charset=utf-8');
 
 $res = ["success" => "0", "mensaje" => "Parámetros incompletos"];
 
+// Aceptar correo por POST o GET para facilitar pruebas desde navegador/curl
+$correo = null;
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
+} elseif (isset($_GET['correo'])) {
+    $correo = trim($_GET['correo']);
+}
 
+if ($correo !== null && $correo !== '') {
     $sql = "SELECT 
                 r.id_ruta,
                 r.fecha_hora_destino AS fecha_finalizacion,
@@ -28,11 +34,35 @@ if (isset($_POST['correo'])) {
             ORDER BY r.fecha_hora_destino DESC";
 
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, "s", $correo);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    if ($stmt === false) {
+        $res["mensaje"] = "Error al preparar la consulta: " . mysqli_error($link);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
-    if ($result && mysqli_num_rows($result) > 0) {
+    if (!mysqli_stmt_bind_param($stmt, "s", $correo)) {
+        $res["mensaje"] = "Error al enlazar parámetros: " . mysqli_stmt_error($stmt);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        mysqli_stmt_close($stmt);
+        exit;
+    }
+
+    if (!mysqli_stmt_execute($stmt)) {
+        $res["mensaje"] = "Error al ejecutar la consulta: " . mysqli_stmt_error($stmt);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        mysqli_stmt_close($stmt);
+        exit;
+    }
+
+    $result = mysqli_stmt_get_result($stmt);
+    if ($result === false) {
+        $res["mensaje"] = "Error obteniendo resultados: " . mysqli_stmt_error($stmt);
+        echo json_encode($res, JSON_UNESCAPED_UNICODE);
+        mysqli_stmt_close($stmt);
+        exit;
+    }
+
+    if (mysqli_num_rows($result) > 0) {
         $datos = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $datos[] = $row;
@@ -43,6 +73,10 @@ if (isset($_POST['correo'])) {
     } else {
         $res["mensaje"] = "No hay pagos registrados.";
     }
+
+    mysqli_free_result($result);
+    mysqli_stmt_close($stmt);
 }
+
 echo json_encode($res, JSON_UNESCAPED_UNICODE);
 ?>
