@@ -92,6 +92,7 @@ class Perfil_cliente : AppCompatActivity() {
 
         botonpreguntas.setOnClickListener {
             val intent = Intent(this, Act_preguntas_cliente::class.java)
+            intent.putExtra("USER_EMAIL", userEmail)
             startActivity(intent)
         }
         //endregion
