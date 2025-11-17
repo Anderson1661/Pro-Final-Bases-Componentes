@@ -34,7 +34,7 @@ $fecha_hora_destino = !empty($_REQUEST['fecha_hora_destino']) ? $_REQUEST['fecha
 $id_conductor = !empty($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : NULL;
 
 // Valores fijos
-$id_estado_servicio = 1;
+$id_estado_servicio = 4;
 
 // Validar campos requeridos
 if (

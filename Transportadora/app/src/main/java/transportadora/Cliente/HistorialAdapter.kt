@@ -3,6 +3,7 @@ package transportadora.Cliente
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import transportadora.Modelos.Cliente.HistorialServicio
@@ -10,10 +11,13 @@ import transportadora.Login.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class HistorialAdapter(private var servicios: List<HistorialServicio>) :
-    RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder>() {
+class HistorialAdapter(
+    private var servicios: List<HistorialServicio>,
+    // CAMBIO 3: onCancelClick ahora espera un Int (idRuta) y un String (metodoPago)
+    private val onCancelClick: (Int, String) -> Unit,
+    private val onDetailsClick: (Int) -> Unit
+) : RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder>() {
 
-    // Formateadores de fecha
     private val parser = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     private val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -25,7 +29,8 @@ class HistorialAdapter(private var servicios: List<HistorialServicio>) :
 
     override fun onBindViewHolder(holder: HistorialViewHolder, position: Int) {
         val servicio = servicios[position]
-        holder.bind(servicio)
+        // CAMBIO 4: La función bind recibe el nuevo listener de 2 argumentos
+        holder.bind(servicio, onCancelClick, onDetailsClick)
     }
 
     override fun getItemCount(): Int = servicios.size
@@ -43,11 +48,16 @@ class HistorialAdapter(private var servicios: List<HistorialServicio>) :
         private val tvTipoServicio: TextView = itemView.findViewById(R.id.tvTipoServicio)
         private val tvMetodoPago: TextView = itemView.findViewById(R.id.tvMetodoPago)
         private val tvEstado: TextView = itemView.findViewById(R.id.tvEstado)
+        private val btnCancelar: Button = itemView.findViewById(R.id.btnCancelar)
+        private val btnDetalle: Button = itemView.findViewById(R.id.btnDetalle)
 
-        fun bind(servicio: HistorialServicio) {
+        // CAMBIO 5: La función bind usa el nuevo listener con 2 argumentos
+        fun bind(servicio: HistorialServicio, onCancelClick: (Int, String) -> Unit, onDetailsClick: (Int) -> Unit) {
+
+            val idRutaInt = try { servicio.id_ruta.toInt() } catch (e: NumberFormatException) { 0 }
+
             tvServicio.text = "Servicio: Envío Paquete #${servicio.id_ruta}"
-            
-            // Formatear fecha
+
             try {
                 val parsedDate = parser.parse(servicio.fecha_hora_reserva)
                 tvFecha.text = "Fecha: ${formatter.format(parsedDate)}"
@@ -60,6 +70,27 @@ class HistorialAdapter(private var servicios: List<HistorialServicio>) :
             tvTipoServicio.text = "Tipo: ${servicio.tipo_servicio}"
             tvMetodoPago.text = "Pago: ${servicio.metodo_pago}"
             tvEstado.text = "Estado: ${servicio.estado_servicio}"
+
+            val estadoCancelable = servicio.estado_servicio == "Pendiente"
+
+            if (idRutaInt > 0) {
+                btnDetalle.visibility = View.VISIBLE
+                btnDetalle.setOnClickListener {
+                    onDetailsClick(idRutaInt)
+                }
+            } else {
+                btnDetalle.visibility = View.GONE
+            }
+
+            if (estadoCancelable) {
+                btnCancelar.visibility = View.VISIBLE
+                btnCancelar.setOnClickListener {
+                    // CAMBIO 6: Se pasa el idRuta Y el servicio.metodo_pago
+                    onCancelClick(idRutaInt, servicio.metodo_pago)
+                }
+            } else {
+                btnCancelar.visibility = View.GONE
+            }
         }
     }
 }

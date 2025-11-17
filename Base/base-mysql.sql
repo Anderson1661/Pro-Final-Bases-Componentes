@@ -363,7 +363,11 @@ INSERT INTO categoria_servicio (descripcion, valor_km) VALUES
 ('Económico', 2500.00),
 ('Estándar', 3500.00),
 ('Premium', 5000.00);
-insert into estado_servicio (descripcion) VALUES ('Pendiente'),('En proceso'),('Finalizado');
+INSERT INTO estado_servicio (descripcion) VALUES
+('Cancelado'),
+('En proceso'),
+('Finalizado'),
+('Pendiente');
 INSERT INTO metodo_pago (descripcion) VALUES ('Efectivo'),('Tarjeta Debito'),('Tarjeta Credito'),('Transferencia');
 
 -- Vehículos (deben crearse antes de los conductores)

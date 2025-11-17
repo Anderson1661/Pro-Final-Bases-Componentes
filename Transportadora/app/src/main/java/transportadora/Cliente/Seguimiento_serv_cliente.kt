@@ -31,6 +31,9 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_seguimiento_serv_cliente)
 
+        // Capturamos el posible ID que viene del historial
+        val idServicioDetalle = intent.getStringExtra("ID_SERVICIO_DETALLE")
+
         // Seguimiento_serv_cliente.kt (Añadir al inicio de onCreate, cerca de la línea 24)
 
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
@@ -229,7 +232,21 @@ class Seguimiento_serv_cliente : AppCompatActivity() {
                 }
             }
         }
-    }
+
+        // -------------------------------------------------------------
+        // IMPLEMENTACIÓN PARA AUTO-BÚSQUEDA DESDE EL HISTORIAL (NUEVO)
+        // -------------------------------------------------------------
+        if (idServicioDetalle != null) {
+            // 1. Llenar el campo de texto con el ID del servicio
+            idRuta.setText(idServicioDetalle)
+
+            // 2. Simular el clic en el botón de búsqueda
+            // Esto dispara el listener que acabamos de definir arriba.
+            btnBuscar.performClick()
+        }
+        // FIN: LÓGICA DE AUTO-BÚSQUEDA
+
+    } // Fin de onCreate
 
     private suspend fun obtenerIdClientePorCorreo(email: String): Int = withContext(Dispatchers.IO) {
         var idCliente = -1
