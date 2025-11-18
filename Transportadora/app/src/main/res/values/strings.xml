@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Transportadora</string>
+    <string name="app_name">Transportadorapp</string>
     <string-array name="cantidad_telefonos">
         <item>1</item>
         <item>2</item>
