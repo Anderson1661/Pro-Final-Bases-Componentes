@@ -1,7 +1,6 @@
 <?php
 include('../../../config/conexion.php');
 $link = Conectar();
-$
 // Habilitar reporte de errores temporalmente para depuración
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -13,7 +12,7 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos o incorrect
 $required_params = [
     'id_conductor', 'id_tipo_identificacion', 'identificacion', 'nombre',
     'direccion', 'correo', 'id_genero', 'id_pais_nacionalidad', 'codigo_postal',
-    'tel1', 'tel2'
+    'tel1'
 ];
 
 $all_set = true;
@@ -35,7 +34,7 @@ if ($all_set) {
     $id_pais_nacionalidad = (int)$_POST['id_pais_nacionalidad'];
     $codigo_postal = trim($_POST['codigo_postal']);
     $tel1 = trim($_POST['tel1']);
-    $tel2 = trim($_POST['tel2']);
+    $tel2 = isset($_POST['tel2']) ? trim($_POST['tel2']) : "";
 
     // Iniciar transacción
     mysqli_begin_transaction($link);
