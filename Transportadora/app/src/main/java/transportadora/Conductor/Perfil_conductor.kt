@@ -23,6 +23,8 @@ class Perfil_conductor : AppCompatActivity() {
 
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_login)
         txtVolverLogin.setOnClickListener {
+            val intent = Intent(this@Perfil_conductor, Principal_conductor::class.java)
+            startActivity(intent)
             finish()
         }
 
