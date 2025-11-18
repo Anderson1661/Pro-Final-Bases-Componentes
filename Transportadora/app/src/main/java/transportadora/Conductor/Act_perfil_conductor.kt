@@ -1,4 +1,4 @@
-package transportadora.Cliente
+package transportadora.Conductor
 
 import android.annotation.SuppressLint
 import android.widget.AdapterView // Added import
@@ -18,8 +18,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import transportadora.Almacenados.Cliente.Genero_almacen
 import transportadora.Almacenados.Cliente.Pais_almacenados
-import transportadora.Almacenados.Cliente.Perfil_cliente_completo_almacenados
 import transportadora.Almacenados.Cliente.Tipo_identificacion_almacenado
+import transportadora.Almacenados.Conductor.Datos_perfil_almacenados
 import transportadora.Compartido.Registrar2
 import transportadora.Login.R
 import transportadora.Modelos.Cliente.Ciudad
@@ -113,7 +113,7 @@ class Act_perfil_conductor : AppCompatActivity() {
                 // Now load profile data and perform pre-selection
                 if (userEmail != null) {
                     val perfil = withContext(Dispatchers.IO) {
-                        transportadora.Almacenados.Cliente.Datos_perfil_almacenados.obtener_datos_perfil(userEmail)
+                        Datos_perfil_almacenados.obtener_datos_perfil(userEmail)
                     }
 
                     if (perfil != null) {
@@ -227,11 +227,83 @@ class Act_perfil_conductor : AppCompatActivity() {
             builder.show()
         }
 
-        // Botón GUARDAR → Muestra toast y abre la siguiente pantalla
+        // Botón GUARDAR → Realizar actualización de perfil del conductor
         buttonGuardar.setOnClickListener {
-            Toast.makeText(this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, Perfil_cliente::class.java)
-            startActivity(intent)
+            // Recopilar valores (similar a la versión cliente)
+            val numero_identificacion = findViewById<TextView>(R.id.txt_id).text.toString().trim()
+            val nombrecompleto = findViewById<TextView>(R.id.txt_nombre).text.toString().trim()
+            val nuevoCorreo = findViewById<TextView>(R.id.txt_email).text.toString().trim()
+            val direccion = findViewById<TextView>(R.id.txt_dir).text.toString().trim()
+            val tel1 = findViewById<TextView>(R.id.txt_tel1).text.toString().trim()
+            val tel2 = findViewById<TextView>(R.id.txt_tel2).text.toString().trim()
+
+            val id_tipo_identificacion = spinner_tipos_id.selectedItemPosition + 1
+            val id_genero = spinner_genero.selectedItemPosition + 1
+            val pais = spinner_paises.selectedItem.toString()
+            val departamento = spinner_departamentos.selectedItem.toString()
+            val ciudad = spinner_ciudades.selectedItem.toString()
+
+            // Validaciones básicas
+            if (userEmail.isNullOrEmpty()) {
+                Toast.makeText(this, "Error: correo de usuario no disponible", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    // 1) Obtener id_conductor por correo
+                    val idConductor = withContext(Dispatchers.IO) { obtenerIdConductorPorCorreo(userEmail) }
+                    if (idConductor == -1) {
+                        Toast.makeText(this@Act_perfil_conductor, "No se pudo obtener el ID del conductor.", Toast.LENGTH_LONG).show()
+                        return@launch
+                    }
+
+                    // 2) Obtener código postal
+                    val codigoPostal = withContext(Dispatchers.IO) { obtenerCodigoPostal(pais, departamento, ciudad) }
+                    if (codigoPostal == null) {
+                        Toast.makeText(this@Act_perfil_conductor, "No se encontró el Código Postal para esa ubicación.", Toast.LENGTH_LONG).show()
+                        return@launch
+                    }
+
+                    // 3) Llamar al endpoint de actualización del conductor
+                    // Mapear la selección del spinner de nacionalidad al id_pais_nacionalidad real
+                    val idPaisNacionalidad = try {
+                        val posNac = spinner_nacionalidad.selectedItemPosition
+                        listaPaisesCompleta.getOrNull(posNac)?.id_pais ?: 1
+                    } catch (e: Exception) {
+                        1
+                    }
+
+                    val actualizado = withContext(Dispatchers.IO) {
+                        actualizarPerfilConductor(
+                            idConductor,
+                            id_tipo_identificacion,
+                            numero_identificacion,
+                            nombrecompleto,
+                            direccion,
+                            nuevoCorreo,
+                            id_genero,
+                            codigoPostal,
+                            idPaisNacionalidad,
+                            tel1,
+                            tel2
+                        )
+                    }
+
+                    if (actualizado) {
+                        Toast.makeText(this@Act_perfil_conductor, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
+                        // Volver al perfil conductor
+                        val intent = Intent(this@Act_perfil_conductor, Perfil_conductor::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@Act_perfil_conductor, "Error al actualizar perfil", Toast.LENGTH_LONG).show()
+                    }
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@Act_perfil_conductor, "Error al actualizar: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
     }
@@ -282,6 +354,121 @@ class Act_perfil_conductor : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(this@Act_perfil_conductor, "Error al cargar ciudades: ${e.message}", Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private suspend fun obtenerIdConductorPorCorreo(email: String): Int = withContext(Dispatchers.IO) {
+        var idConductor = -1
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/conductor/perfil/obtener_id_conductor_por_correo.php")
+            val params = "correo=${java.net.URLEncoder.encode(email, "UTF-8")}" 
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            if (json.getString("success") == "1") {
+                idConductor = json.getInt("id_conductor")
+                android.util.Log.d("Act_perfil_conductor", "ID Conductor obtenido: $idConductor")
+            } else {
+                android.util.Log.e("Act_perfil_conductor", "Error PHP al obtener ID: ${json.optString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error de red/JSON al obtener ID: ${e.message}", e)
+        }
+        return@withContext idConductor
+    }
+
+    private suspend fun obtenerCodigoPostal(pais: String, departamento: String, ciudad: String): String? = withContext(Dispatchers.IO) {
+        var codigoPostal: String? = null
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/perfil/obtener_codigo_postal.php")
+
+            val params = "pais=${java.net.URLEncoder.encode(pais, "UTF-8")}" +
+                    "&departamento=${java.net.URLEncoder.encode(departamento, "UTF-8")}" +
+                    "&ciudad=${java.net.URLEncoder.encode(ciudad, "UTF-8")}" 
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+
+            if (json.getString("success") == "1") {
+                codigoPostal = json.getJSONObject("datos").getString("codigo_postal")
+                android.util.Log.d("Act_perfil_conductor", "Código Postal obtenido: $codigoPostal")
+            } else {
+                android.util.Log.e("Act_perfil_conductor", "Error PHP al obtener Código Postal: ${json.optString("mensaje")}")
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error de red/JSON al obtener Código Postal: ${e.message}", e)
+        }
+        return@withContext codigoPostal
+    }
+
+    private suspend fun actualizarPerfilConductor(
+        idConductor: Int,
+        idTipoIdentificacion: Int,
+        identificacion: String,
+        nombre: String,
+        direccion: String,
+        correo: String,
+        idGenero: Int,
+        codigoPostal: String,
+        idPaisNacionalidad: Int,
+        tel1: String,
+        tel2: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/conductor/perfil/actualizar_datos_perfil.php")
+
+            val params = "id_conductor=$idConductor" +
+                    "&id_tipo_identificacion=$idTipoIdentificacion" +
+                    "&identificacion=${java.net.URLEncoder.encode(identificacion, "UTF-8")}" +
+                    "&nombre=${java.net.URLEncoder.encode(nombre, "UTF-8")}" +
+                    "&direccion=${java.net.URLEncoder.encode(direccion, "UTF-8")}" +
+                    "&correo=${java.net.URLEncoder.encode(correo, "UTF-8")}" +
+                    "&id_genero=$idGenero" +
+                    "&codigo_postal=${java.net.URLEncoder.encode(codigoPostal, "UTF-8")}" +
+                    "&id_pais_nacionalidad=$idPaisNacionalidad" +
+                    "&tel1=${java.net.URLEncoder.encode(tel1, "UTF-8")}" +
+                    "&tel2=${java.net.URLEncoder.encode(tel2, "UTF-8")}" 
+
+            android.util.Log.d("Act_perfil_conductor", "Sending params: $params")
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val responseCode = connection.responseCode
+            android.util.Log.d("Act_perfil_conductor", "Response code: $responseCode")
+
+            if (responseCode == java.net.HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                connection.disconnect()
+                android.util.Log.d("Act_perfil_conductor", "Received response: $response")
+                val json = org.json.JSONObject(response)
+                return@withContext json.optString("success") == "1"
+            } else {
+                val errorResponse = connection.errorStream?.bufferedReader()?.use { it.readText() } ?: "No error message provided"
+                android.util.Log.e("Act_perfil_conductor", "HTTP Error $responseCode. Detalles: $errorResponse")
+                connection.disconnect()
+                return@withContext false
+            }
+
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error al actualizar perfil (Network/Parse): ${e.message}", e)
+            return@withContext false
         }
     }
 }

@@ -10,7 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import transportadora.Administrador.Act_perfil_administrador
 import transportadora.Administrador.Act_preguntas_administrador
-import transportadora.Cliente.Act_perfil_conductor
+import transportadora.Conductor.Act_preguntas_conductor
+import transportadora.Conductor.Act_perfil_conductor
 import transportadora.Compartido.Preg_seguridad
 import transportadora.Login.R
 
