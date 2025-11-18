@@ -1,5 +1,5 @@
 package transportadora.Configuracion
 
 object ApiConfig {
-    const val BASE_URL = "http://192.168.80.29/conexiones/"
+    const val BASE_URL = "http://10.146.25.37/conexiones/"
 }

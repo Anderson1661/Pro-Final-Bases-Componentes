@@ -41,7 +41,7 @@ class Principal_conductor : AppCompatActivity() {
                     if (servicios.isNotEmpty()) {
                         serviciosAdapter.updateData(servicios)
                     } else {
-                        Toast.makeText(this@Principal_conductor, "No tienes servicios asignados para hoy.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@Principal_conductor, "Aun no hay reservas de servicios para hoy.", Toast.LENGTH_LONG).show()
                     }
                 } catch (e: Exception) {
                     Toast.makeText(this@Principal_conductor, "Error de red: ${e.message}", Toast.LENGTH_LONG).show()
