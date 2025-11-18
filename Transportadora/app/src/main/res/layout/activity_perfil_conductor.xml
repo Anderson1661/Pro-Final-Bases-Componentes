@@ -85,8 +85,124 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Datos del vehiculo"
+                    android:textColor="@color/negro"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp" />
+
+                <!-- Campos del vehículo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Placa del vehículo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_placa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ABC123"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Marca"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_marca"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Chevrolet"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Línea del vehículo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_linea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="N300"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modelo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_modelo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2020"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Color"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Blanco"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de servicio"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_tipo_servicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Alimentos"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estado del vehículo"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_estado_vehiculo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Activo"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mis Datos"
+                    android:textColor="@color/negro"
+                    android:textStyle="bold"
+                    android:layout_marginTop="40dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Tipo de identificación"
-                    android:textColor="@color/negro" />
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
 
                 <TextView
                     android:id="@+id/txt_tipo_id"
