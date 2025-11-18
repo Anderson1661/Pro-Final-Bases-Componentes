@@ -1,6 +1,11 @@
 <?php
 include('../../../config/conexion.php');
 $link = Conectar();
+$
+// Habilitar reporte de errores temporalmente para depuración
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 header('Content-Type: application/json; charset=utf-8');
 $res = array("success" => "0", "mensaje" => "Parámetros incompletos o incorrectos.");
@@ -50,9 +55,18 @@ if ($all_set) {
             WHERE id_conductor = ?";
 
         $stmt_con = mysqli_prepare($link, $sql_conductor);
+        if ($stmt_con === false) {
+            $err = mysqli_error($link);
+            error_log("[actualizar_datos_perfil] prepare falló: $err");
+            $res["mensaje"] = "Error al preparar consulta conductor: $err";
+            mysqli_close($link);
+            echo json_encode($res, JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
         mysqli_stmt_bind_param(
             $stmt_con,
-            "issssisisi",
+            "issssiisi",
             $id_tipo_identificacion,
             $identificacion,
             $nombre,
@@ -66,7 +80,8 @@ if ($all_set) {
 
         if (!mysqli_stmt_execute($stmt_con)) {
             $success_transaction = false;
-            $res["mensaje"] = "Error al actualizar datos del conductor: " . mysqli_stmt_error($stmt_con);
+            $res["mensaje"] = "Error al ejecutar consulta conductor: " . mysqli_stmt_error($stmt_con);
+            error_log("[actualizar_datos_perfil] execute fallo: " . mysqli_stmt_error($stmt_con));
         }
         mysqli_stmt_close($stmt_con);
 
@@ -74,24 +89,40 @@ if ($all_set) {
             // Eliminar teléfonos existentes
             $sql_del_tel = "DELETE FROM telefono_conductor WHERE id_conductor = ?";
             $stmt_del = mysqli_prepare($link, $sql_del_tel);
-            mysqli_stmt_bind_param($stmt_del, "i", $id_conductor);
-            if (!mysqli_stmt_execute($stmt_del)) {
+            if ($stmt_del === false) {
+                $err = mysqli_error($link);
+                error_log("[actualizar_datos_perfil] prepare delete_tel falló: $err");
+                $res["mensaje"] = "Error al preparar eliminación de teléfonos: $err";
                 $success_transaction = false;
-                $res["mensaje"] = "Error al eliminar teléfonos existentes: " . mysqli_stmt_error($stmt_del);
+            } else {
+                mysqli_stmt_bind_param($stmt_del, "i", $id_conductor);
+                if (!mysqli_stmt_execute($stmt_del)) {
+                    $success_transaction = false;
+                    $res["mensaje"] = "Error al eliminar teléfonos existentes: " . mysqli_stmt_error($stmt_del);
+                    error_log("[actualizar_datos_perfil] execute delete_tel fallo: " . mysqli_stmt_error($stmt_del));
+                }
+                mysqli_stmt_close($stmt_del);
             }
-            mysqli_stmt_close($stmt_del);
         }
 
         if ($success_transaction) {
             if (!empty($tel1)) {
                 $sql_ins1 = "INSERT INTO telefono_conductor (id_conductor, telefono) VALUES (?, ?)";
                 $stmt_ins1 = mysqli_prepare($link, $sql_ins1);
-                mysqli_stmt_bind_param($stmt_ins1, "is", $id_conductor, $tel1);
-                if (!mysqli_stmt_execute($stmt_ins1)) {
+                if ($stmt_ins1 === false) {
+                    $err = mysqli_error($link);
+                    error_log("[actualizar_datos_perfil] prepare insert_tel1 falló: $err");
                     $success_transaction = false;
-                    $res["mensaje"] = "Error al insertar teléfono 1: " . mysqli_stmt_error($stmt_ins1);
+                    $res["mensaje"] = "Error al preparar inserción teléfono 1: $err";
+                } else {
+                    mysqli_stmt_bind_param($stmt_ins1, "is", $id_conductor, $tel1);
+                    if (!mysqli_stmt_execute($stmt_ins1)) {
+                        $success_transaction = false;
+                        $res["mensaje"] = "Error al insertar teléfono 1: " . mysqli_stmt_error($stmt_ins1);
+                        error_log("[actualizar_datos_perfil] execute insert_tel1 fallo: " . mysqli_stmt_error($stmt_ins1));
+                    }
+                    mysqli_stmt_close($stmt_ins1);
                 }
-                mysqli_stmt_close($stmt_ins1);
             }
         }
 
@@ -99,12 +130,20 @@ if ($all_set) {
             if (!empty($tel2)) {
                 $sql_ins2 = "INSERT INTO telefono_conductor (id_conductor, telefono) VALUES (?, ?)";
                 $stmt_ins2 = mysqli_prepare($link, $sql_ins2);
-                mysqli_stmt_bind_param($stmt_ins2, "is", $id_conductor, $tel2);
-                if (!mysqli_stmt_execute($stmt_ins2)) {
+                if ($stmt_ins2 === false) {
+                    $err = mysqli_error($link);
+                    error_log("[actualizar_datos_perfil] prepare insert_tel2 falló: $err");
                     $success_transaction = false;
-                    $res["mensaje"] = "Error al insertar teléfono 2: " . mysqli_stmt_error($stmt_ins2);
+                    $res["mensaje"] = "Error al preparar inserción teléfono 2: $err";
+                } else {
+                    mysqli_stmt_bind_param($stmt_ins2, "is", $id_conductor, $tel2);
+                    if (!mysqli_stmt_execute($stmt_ins2)) {
+                        $success_transaction = false;
+                        $res["mensaje"] = "Error al insertar teléfono 2: " . mysqli_stmt_error($stmt_ins2);
+                        error_log("[actualizar_datos_perfil] execute insert_tel2 fallo: " . mysqli_stmt_error($stmt_ins2));
+                    }
+                    mysqli_stmt_close($stmt_ins2);
                 }
-                mysqli_stmt_close($stmt_ins2);
             }
         }
 
@@ -126,5 +165,4 @@ if ($all_set) {
 
 echo json_encode($res, JSON_UNESCAPED_UNICODE);
 mysqli_close($link);
-?>
 ?>

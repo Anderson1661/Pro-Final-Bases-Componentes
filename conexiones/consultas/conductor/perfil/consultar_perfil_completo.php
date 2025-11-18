@@ -9,13 +9,16 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
-    // Consulta principal del conductor
+    // Consulta principal del conductor (incluye id, genero y codigo_postal)
     $sql = "SELECT 
+                cond.id_conductor,
                 ti.descripcion AS tipo_identificacion,
                 cond.identificacion,
                 cond.nombre,
                 cond.correo,
                 cond.direccion,
+                g.descripcion AS genero,
+                cond.codigo_postal,
                 p_nac.nombre AS nacionalidad,
                 cp.pais_nombre AS pais_residencia,
                 cp.departamento,
@@ -23,6 +26,7 @@ if (isset($_POST['correo'])) {
             FROM conductor cond
             JOIN tipo_identificacion ti ON cond.id_tipo_identificacion = ti.id_tipo_identificacion
             JOIN pais p_nac ON cond.id_pais_nacionalidad = p_nac.id_pais
+            JOIN genero g ON cond.id_genero = g.id_genero
             JOIN (
                 SELECT cp_inner.id_codigo_postal, cp_inner.departamento, cp_inner.ciudad, p_res.nombre as pais_nombre
                 FROM codigo_postal cp_inner
