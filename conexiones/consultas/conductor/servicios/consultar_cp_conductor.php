@@ -9,7 +9,8 @@ if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
     // 1. Obtener el id_conductor y el codigo_postal
-    $sql = "SELECT codigo_postal FROM conductor WHERE correo = ? LIMIT 1";
+    // CAMBIO CRÍTICO: Añadir 'id_conductor' al SELECT
+    $sql = "SELECT id_conductor, codigo_postal FROM conductor WHERE correo = ? LIMIT 1";
     $stmt = mysqli_prepare($link, $sql);
     
     if ($stmt) {
@@ -21,8 +22,10 @@ if (isset($_POST['correo'])) {
             $row = mysqli_fetch_assoc($result);
             
             $res["success"] = "1";
-            $res["mensaje"] = "Código postal encontrado";
-            // Retornamos el codigo postal
+            $res["mensaje"] = "Datos del conductor encontrados";
+            
+            // CAMBIO CRÍTICO: Retornar ambos campos
+            $res["id_conductor"] = (int)$row['id_conductor']; 
             $res["codigo_postal"] = $row['codigo_postal']; 
         } else {
             $res["mensaje"] = "Conductor no encontrado.";
