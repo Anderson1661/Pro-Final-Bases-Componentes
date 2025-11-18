@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="80dp"
         android:text="Volver"
         android:textStyle="bold"
         android:textColor="@color/negro"
@@ -45,7 +45,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="50dp"
                 android:text="¡Bienvenido de nuevo!"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -55,7 +55,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="20dp"
                 android:src="@drawable/logo_borde"
                 android:contentDescription="Logo" />
 
@@ -63,7 +63,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="50dp"
                 android:text="Correo"
                 android:textColor="@color/negro" />
 
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="******"
-                android:inputType="textPassword"
+                android:inputType="numberPassword"
                 android:textColor="@color/grisoscuro"
                 android:textColorHint="@color/grisclaro" />
 
@@ -110,7 +110,7 @@
                 android:id="@+id/boton_ingresar_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="70dp"
                 android:backgroundTint="@color/naranja"
                 android:text="Ingresar"
                 android:textColor="@color/blanco" />

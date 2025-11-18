@@ -53,7 +53,7 @@ class Login : AppCompatActivity() {
 
         val txtRegistrarConductor = findViewById<TextView>(R.id.txt_registrar_conductor)
         txtRegistrarConductor.setOnClickListener {
-            startActivity(Intent(this, Registrar_conductor::class.java))
+            startActivity(Intent(this@Login, Registrar_conductor::class.java))
         }
     }
 
