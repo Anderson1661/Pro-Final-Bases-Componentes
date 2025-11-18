@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="32dp"
+            android:layout_marginTop="17dp"
             android:paddingBottom="40dp">
 
             <!-- Bienvenida -->
@@ -251,6 +252,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Masculino"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono 1"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_tel1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="tel 1"
+                    android:textColor="@color/grisoscuro" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono 2"
+                    android:textColor="@color/negro"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:id="@+id/txt_tel2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="tel 2"
                     android:textColor="@color/grisoscuro" />
 
                 <TextView

@@ -30,6 +30,8 @@ class Perfil_conductor : AppCompatActivity() {
         val txtIdentificacion = findViewById<TextView>(R.id.txt_identificacion)
         val txtNombre = findViewById<TextView>(R.id.txt_nombre)
         val txtGenero = findViewById<TextView>(R.id.txt_genero)
+        val txtTel1 = findViewById<TextView>(R.id.txt_tel1)
+        val txtTel2 = findViewById<TextView>(R.id.txt_tel2)
         val txtNacionalidad = findViewById<TextView>(R.id.txt_nacionalidad)
         val txtCorreo = findViewById<TextView>(R.id.txt_correo)
         val txtDireccion = findViewById<TextView>(R.id.txt_direccion)
@@ -57,6 +59,7 @@ class Perfil_conductor : AppCompatActivity() {
                         Perfil_conductor_completo_almacenados.obtenerPerfilCompleto(userEmail)
                     }
                     if (perfil != null) {
+                        // Datos personales
                         txtTipoId.text = perfil.tipo_identificacion
                         txtIdentificacion.text = perfil.identificacion
                         txtNombre.text = perfil.nombre
@@ -67,6 +70,11 @@ class Perfil_conductor : AppCompatActivity() {
                         txtPais.text = perfil.pais_residencia
                         txtDepartamento.text = perfil.departamento
                         txtCiudad.text = perfil.ciudad
+
+                        // Teléfonos
+                        txtTel1.text = perfil.telefonos.getOrNull(0) ?: "No registrado"
+                        txtTel2.text = perfil.telefonos.getOrNull(1) ?: "No registrado"
+
                         // Datos del vehículo
                         txtPlaca.text = perfil.placa
                         txtLinea.text = perfil.linea_vehiculo
@@ -75,6 +83,7 @@ class Perfil_conductor : AppCompatActivity() {
                         txtMarca.text = perfil.marca
                         txtTipoServicio.text = perfil.tipo_servicio
                         txtEstadoVehiculo.text = perfil.estado_vehiculo
+
                         // TODO: Cargar la imagen de perfil (url_foto) usando una librería como Glide o Picasso
 
                     } else {
