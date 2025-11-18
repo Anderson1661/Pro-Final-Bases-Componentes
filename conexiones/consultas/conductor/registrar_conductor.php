@@ -43,8 +43,9 @@ mysqli_begin_transaction($link);
 
 try {
     // Paso 1: Insertar en la tabla principal 'conductor'
-    $sql_conductor = "INSERT INTO conductor (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, id_pais_nacionalidad, codigo_postal) 
-                    VALUES ('$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$id_pais_nacionalidad', '$codigo_postal')";
+    // Asignamos un estado inicial por defecto para el conductor: 'Desconectado' (id_estado_conductor = 2)
+    $sql_conductor = "INSERT INTO conductor (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, id_pais_nacionalidad, codigo_postal, id_estado_conductor) 
+                    VALUES ('$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$id_pais_nacionalidad', '$codigo_postal', '2')";
     
     if (!mysqli_query($link, $sql_conductor)) {
         throw new Exception("Error al registrar datos principales: " . mysqli_error($link));
