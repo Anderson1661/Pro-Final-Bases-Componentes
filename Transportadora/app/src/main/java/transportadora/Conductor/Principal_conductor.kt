@@ -19,31 +19,37 @@ class Principal_conductor : AppCompatActivity() {
     private lateinit var userEmail: String
     private var idConductor: Int? = null
 
-    // Función que encapsula la lógica de recarga para poder reusarla
-    // Función que encapsula la lógica de recarga para poder reusarla
     private fun loadServicios(email: String) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                // Obtener datos del conductor (ID y CP)
                 val conductorData = withContext(Dispatchers.IO) {
                     Servicios_conductor_almacenados.obtenerDatosConductor(email)
                 }
 
                 if (conductorData == null) {
-                    Toast.makeText(this@Principal_conductor, "Error: No se pudo obtener el ID/CP del conductor.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@Principal_conductor, "Error: No se pudo obtener los datos del conductor.", Toast.LENGTH_LONG).show()
                     serviciosAdapter.updateData(emptyList())
                     return@launch
                 }
-                idConductor = conductorData.idConductor
 
-                // Obtener servicios - ✅ AHORA PASAMOS EL idConductor
+                idConductor = conductorData.idConductor
+                val idTipoServicio = conductorData.idTipoServicio
+
+                // Actualizar la UI con el tipo de servicio
+                findViewById<TextView>(R.id.txt_tipo_servicio).text = when(idTipoServicio) {
+                    0 -> "Alimentos"
+                    2 -> "Pasajeros"
+                    3 -> "Pasajeros y alimentos"
+                    else -> "Desconocido"
+                }
+
+                // ✅ PASAR EL TIPO DE SERVICIO
                 val servicios = withContext(Dispatchers.IO) {
-                    Servicios_conductor_almacenados.obtenerServiciosConductor(email, idConductor) // ← AÑADIR idConductor
+                    Servicios_conductor_almacenados.obtenerServiciosConductor(email, idConductor, idTipoServicio)
                 }
 
                 if (servicios.isNotEmpty()) {
                     serviciosAdapter.updateData(servicios)
-                    // Opcional: mostrar cuántos servicios se encontraron
                     Toast.makeText(this@Principal_conductor, "Se encontraron ${servicios.size} servicios", Toast.LENGTH_SHORT).show()
                 } else {
                     serviciosAdapter.updateData(emptyList())

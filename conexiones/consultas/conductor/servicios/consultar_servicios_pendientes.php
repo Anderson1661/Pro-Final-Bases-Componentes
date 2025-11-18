@@ -6,10 +6,11 @@ header('Content-Type: application/json; charset=utf-8');
 
 $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 
-// CAMBIO CRÍTICO 1: Ahora se esperan 'codigo_postal' Y 'id_conductor'
-if (isset($_POST['codigo_postal']) && isset($_POST['id_conductor'])) {
+// CAMBIO: Ahora se espera también 'id_tipo_servicio'
+if (isset($_POST['codigo_postal']) && isset($_POST['id_conductor']) && isset($_POST['id_tipo_servicio'])) {
     $codigo_postal = trim($_POST['codigo_postal']);
-    $id_conductor = (int)trim($_POST['id_conductor']); // ID del conductor
+    $id_conductor = (int)trim($_POST['id_conductor']);
+    $id_tipo_servicio = (int)trim($_POST['id_tipo_servicio']); // NUEVO PARÁMETRO
     
     // IDs de estado de servicio
     $id_estado_pendiente = 4; // Pendiente
@@ -41,18 +42,16 @@ if (isset($_POST['codigo_postal']) && isset($_POST['id_conductor'])) {
                 OR
                 (r.id_estado_servicio = ? AND r.id_conductor = ?)           -- Condición 2: En Proceso (2) asignado a mi ID
             )
+            AND r.id_tipo_servicio = ? -- NUEVO FILTRO: Solo servicios del tipo del conductor
             AND DATE(r.fecha_hora_reserva) = CURDATE()
             ORDER BY r.fecha_hora_reserva ASC";
 
     $stmt = mysqli_prepare($link, $sql);
     
     if ($stmt) {
-        // La consulta se preparó correctamente, ahora ejecuta y obtiene resultados
+        // Cambio en los parámetros: ahora son 5 (isiii)
+        mysqli_stmt_bind_param($stmt, "isiii", $id_estado_pendiente, $codigo_postal, $id_estado_en_proceso, $id_conductor, $id_tipo_servicio);
         
-        // La cadena de tipos "isii" es correcta: (int, string, int, int)
-        mysqli_stmt_bind_param($stmt, "isii", $id_estado_pendiente, $codigo_postal, $id_estado_en_proceso, $id_conductor);
-        
-        // Verifica la ejecución antes de obtener resultados
         if (mysqli_stmt_execute($stmt)) {
             $result = mysqli_stmt_get_result($stmt);
 
@@ -84,14 +83,12 @@ if (isset($_POST['codigo_postal']) && isset($_POST['id_conductor'])) {
             }
 
         } else {
-             // Error de ejecución: (ej. si falla la conexión después de la preparación)
              $res["mensaje"] = "Error al ejecutar la consulta: " . mysqli_stmt_error($stmt);
         }
         
-        mysqli_stmt_close($stmt); // Cerrar solo si la preparación fue exitosa
+        mysqli_stmt_close($stmt);
     } 
     else {
-        // Error de preparación: (ej. si la sintaxis SQL es realmente mala)
         $res["mensaje"] = "Error al preparar la consulta: " . mysqli_error($link);
     }
 } 
@@ -101,5 +98,4 @@ else {
 
 echo json_encode($res, JSON_UNESCAPED_UNICODE);
 mysqli_close($link);
-// FIN DEL ARCHIVO
 ?>

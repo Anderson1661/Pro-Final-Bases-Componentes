@@ -130,7 +130,7 @@ object Servicios_conductor_almacenados {
         }
     }
 
-    // --- 3. NUEVA FUNCIÓN QUE REEMPLAZA obtenerCodigoPostalConductor ---
+    // En la función obtenerDatosConductor, modificar la consulta para obtener el tipo de servicio
     suspend fun obtenerDatosConductor(correo: String): ConductorData? = withContext(Dispatchers.IO) {
         val url = ApiConfig.BASE_URL + "consultas/conductor/servicios/consultar_cp_conductor.php"
         val params = mapOf("correo" to correo)
@@ -138,13 +138,79 @@ object Servicios_conductor_almacenados {
 
         val json = JSONObject(response)
         return@withContext if (json.optString("success") == "1") {
-            // Se asume que el JSON ahora contiene 'id_conductor' y 'codigo_postal'
             ConductorData(
                 idConductor = json.optInt("id_conductor"),
-                codigoPostal = json.optString("codigo_postal")
+                codigoPostal = json.optString("codigo_postal"),
+                idTipoServicio = json.optInt("id_tipo_servicio")
             )
         } else {
             null
+        }
+    }
+
+    // Modificar obtenerServiciosConductor para enviar el tipo de servicio
+    suspend fun obtenerServiciosConductor(email: String, idConductor: Int?, idTipoServicio: Int): List<HistorialServicio> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val conductorData = obtenerDatosConductor(email)
+                if (conductorData == null || idConductor == null) {
+                    return@withContext emptyList()
+                }
+
+                val codigoPostal = conductorData.codigoPostal
+
+                val url = ApiConfig.BASE_URL+"consultas/conductor/servicios/consultar_servicios_pendientes.php"
+                val client = OkHttpClient()
+                val requestBody = FormBody.Builder()
+                    .add("codigo_postal", codigoPostal)
+                    .add("id_conductor", idConductor.toString())
+                    .add("id_tipo_servicio", idTipoServicio.toString()) // NUEVO PARÁMETRO
+                    .build()
+
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .build()
+
+                val response = client.newCall(request).execute()
+
+                if (response.isSuccessful) {
+                    val jsonResponse = response.body?.string()
+                    val jsonObject = JSONObject(jsonResponse ?: "")
+
+                    if (jsonObject.getInt("success") == 1) {
+                        val serviciosArray = jsonObject.getJSONArray("datos")
+                        val serviciosList = mutableListOf<HistorialServicio>()
+
+                        for (i in 0 until serviciosArray.length()) {
+                            val servicioJson = serviciosArray.getJSONObject(i)
+                            val servicio = HistorialServicio(
+                                id_ruta = servicioJson.getInt("id_ruta"),
+                                fecha_inicio = servicioJson.getString("fecha_inicio"),
+                                direccion_origen = servicioJson.getString("direccion_origen"),
+                                ciudad_origen = servicioJson.getString("ciudad_origen"),
+                                direccion_destino = servicioJson.getString("direccion_destino"),
+                                ciudad_destino = servicioJson.getString("ciudad_destino"),
+                                tipo_servicio = servicioJson.getString("tipo_servicio"),
+                                estado = servicioJson.getString("estado"),
+                                metodo_pago = servicioJson.getString("metodo_pago"),
+                                id_cliente = servicioJson.getInt("id_cliente"),
+                                nombre_cliente = servicioJson.getString("nombre_cliente"),
+                                id_estado = servicioJson.getInt("id_estado"),
+                                pago_conductor = servicioJson.getDouble("pago_conductor").toFloat(),
+                                telefonos_cliente = emptyList(),
+                                nombres_pasajeros = emptyList()
+                            )
+                            serviciosList.add(servicio)
+                        }
+                        return@withContext serviciosList
+                    }
+                }
+                emptyList()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
+            }
         }
     }
     // -------------------------------------------------------------

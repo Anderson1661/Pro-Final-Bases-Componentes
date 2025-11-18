@@ -8,9 +8,14 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
-    // 1. Obtener el id_conductor y el codigo_postal
-    // CAMBIO CRÍTICO: Añadir 'id_conductor' al SELECT
-    $sql = "SELECT id_conductor, codigo_postal FROM conductor WHERE correo = ? LIMIT 1";
+    // MODIFICACIÓN: Obtener id_conductor, codigo_postal Y id_tipo_servicio
+    $sql = "SELECT 
+                c.id_conductor, 
+                c.codigo_postal, 
+                v.id_tipo_servicio 
+            FROM conductor c
+            JOIN vehiculo v ON c.placa_vehiculo = v.placa
+            WHERE c.correo = ? LIMIT 1";
     $stmt = mysqli_prepare($link, $sql);
     
     if ($stmt) {
@@ -24,9 +29,10 @@ if (isset($_POST['correo'])) {
             $res["success"] = "1";
             $res["mensaje"] = "Datos del conductor encontrados";
             
-            // CAMBIO CRÍTICO: Retornar ambos campos
+            // Retornar todos los campos necesarios
             $res["id_conductor"] = (int)$row['id_conductor']; 
-            $res["codigo_postal"] = $row['codigo_postal']; 
+            $res["codigo_postal"] = $row['codigo_postal'];
+            $res["id_tipo_servicio"] = (int)$row['id_tipo_servicio']; // NUEVO CAMPO
         } else {
             $res["mensaje"] = "Conductor no encontrado.";
         }
