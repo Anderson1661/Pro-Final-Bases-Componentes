@@ -17,7 +17,13 @@ object Registrar_almacenados {
         idNacionalidad: Int,
         codigoPostal: String,
         tel1: String,
-        tel2: String
+        tel2: String,
+        placa: String = "",
+        marca: String = "",
+        linea: String = "",
+        modelo: String = "",
+        color: String = "",
+        tipoServicio: String = ""
     ): Boolean = withContext(Dispatchers.IO) {
         try {
             val url = ApiConfig.BASE_URL + "consultas/conductor/registrar_conductor.php"
@@ -31,7 +37,13 @@ object Registrar_almacenados {
                 "id_pais_nacionalidad" to idNacionalidad.toString(),
                 "codigo_postal" to codigoPostal,
                 "tel1" to tel1,
-                "tel2" to tel2
+                "tel2" to tel2,
+                "placa" to placa,
+                "marca" to marca,
+                "linea" to linea,
+                "modelo" to modelo,
+                "color" to color,
+                "tipo_servicio" to tipoServicio
             )
 
             val response = ApiHelper.postRequest(url, params)

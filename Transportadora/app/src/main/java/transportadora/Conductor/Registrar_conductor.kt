@@ -25,6 +25,9 @@ import transportadora.Almacenados.Cliente.Tipo_identificacion_almacenado
 import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 import transportadora.Almacenados.Conductor.Registrar_almacenados
+import transportadora.Almacenados.Cliente.Preguntas_almacenados
+import transportadora.Modelos.Cliente.Pregunta
+import androidx.lifecycle.lifecycleScope
 
 class Registrar_conductor : AppCompatActivity() {
 
@@ -44,6 +47,18 @@ class Registrar_conductor : AppCompatActivity() {
     private lateinit var txtTel2: EditText
     private lateinit var txtCorreo: EditText
     private lateinit var txtDireccion: EditText
+
+    // --- Preguntas de seguridad ---
+    private var listapreguntasCompleta: List<Pregunta> = emptyList()
+    private lateinit var spinner_pregunta1: Spinner
+    private lateinit var spinner_pregunta2: Spinner
+    private lateinit var spinner_pregunta3: Spinner
+    private lateinit var txt_respuesta1: EditText
+    private lateinit var txt_respuesta2: EditText
+    private lateinit var txt_respuesta3: EditText
+    private var idPregunta1: Int? = null
+    private var idPregunta2: Int? = null
+    private var idPregunta3: Int? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,6 +166,23 @@ class Registrar_conductor : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Inicializar vistas de preguntas (si existen en el layout)
+        try {
+            spinner_pregunta1 = findViewById(R.id.txt_pregunta1)
+            spinner_pregunta2 = findViewById(R.id.txt_pregunta2)
+            spinner_pregunta3 = findViewById(R.id.txt_pregunta3)
+            txt_respuesta1 = findViewById(R.id.txt_respuesta1)
+            txt_respuesta2 = findViewById(R.id.txt_respuesta2)
+            txt_respuesta3 = findViewById(R.id.txt_respuesta3)
+
+            // Cargar preguntas y configurar listeners
+            cargarPreguntas()
+            configurarListenersSpinners()
+        } catch (e: Exception) {
+            // Si el layout no tiene las vistas de preguntas, ignorar (no fatal)
+            e.printStackTrace()
+        }
+
         val txtVolver = findViewById<TextView>(R.id.txt_volver_reg2)
         txtVolver.setOnClickListener { finish() }
 
@@ -187,6 +219,14 @@ class Registrar_conductor : AppCompatActivity() {
             try {
                 val codigoPostal = obtenerCodigoPostal(pais, departamento, ciudad)
                 if (codigoPostal != null) {
+                    // Generar valores básicos de vehículo para enviar junto al registro
+                    val placa = "TMP${numero_identificacion.takeLast(4)}${System.currentTimeMillis() % 10000}"
+                    val marca = "Chevrolet"
+                    val linea = "Spark"
+                    val modeloVeh = "2022"
+                    val colorVeh = "Blanco"
+                    val tipoServicio = "Pasajeros"
+
                     val registrado = registrarConductor(
                         id_tipo_identificacion,
                         numero_identificacion,
@@ -197,14 +237,25 @@ class Registrar_conductor : AppCompatActivity() {
                         id_pais_nacionalidad,
                         codigoPostal,
                         tel1,
-                        tel2
+                        tel2,
+                        placa,
+                        marca,
+                        linea,
+                        modeloVeh,
+                        colorVeh,
+                        tipoServicio
                     )
 
                     if (registrado) {
-                        val intent = Intent(this@Registrar_conductor, transportadora.Conductor.Registrar_conductor::class.java)
-                        intent.putExtra("EMAIL_CONDUCTOR", correo)
-                        startActivity(intent)
-                        finish()
+                        // Si el registro del conductor fue exitoso, intentar guardar las respuestas de seguridad
+                        val exitoPreguntas = registrarRespuestasSeguridad(correo)
+                        if (exitoPreguntas) {
+                            Toast.makeText(this@Registrar_conductor, "Registro completado. Inicia sesión para cambiar tu contraseña.", Toast.LENGTH_LONG).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@Registrar_conductor, "Conductor registrado, pero falló el registro de preguntas de seguridad.", Toast.LENGTH_LONG).show()
+                            finish()
+                        }
                     } else {
                         Toast.makeText(this@Registrar_conductor, "Error al guardar el registro. Revisa la información.", Toast.LENGTH_LONG).show()
                     }
@@ -245,6 +296,166 @@ class Registrar_conductor : AppCompatActivity() {
         }
     }
 
+    // --- Copiado de Registrar2: manejo de preguntas de seguridad ---
+    private fun cargarPreguntas() {
+        lifecycleScope.launch {
+            try {
+                val preguntas = withContext(Dispatchers.IO) { Preguntas_almacenados.obtener_preguntas() }
+
+                if (preguntas.isNotEmpty()) {
+                    listapreguntasCompleta = preguntas
+                    actualizarSpinners(null, null, null)
+
+                    idPregunta1 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
+                    idPregunta2 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
+                    idPregunta3 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun configurarListenersSpinners() {
+        spinner_pregunta1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val descripcionSeleccionada = parent.getItemAtPosition(position).toString()
+                val preguntaSeleccionada = listapreguntasCompleta.find { it.descripcion == descripcionSeleccionada }
+
+                if (preguntaSeleccionada?.id_pregunta != idPregunta1) {
+                    idPregunta1 = preguntaSeleccionada?.id_pregunta
+                    actualizarSpinners(idPregunta1, idPregunta2, idPregunta3)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        spinner_pregunta2.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val descripcionSeleccionada = parent.getItemAtPosition(position).toString()
+                val preguntaSeleccionada = listapreguntasCompleta.find { it.descripcion == descripcionSeleccionada }
+
+                if (preguntaSeleccionada?.id_pregunta != idPregunta2) {
+                    idPregunta2 = preguntaSeleccionada?.id_pregunta
+                    actualizarSpinners(idPregunta1, idPregunta2, idPregunta3)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        spinner_pregunta3.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val descripcionSeleccionada = parent.getItemAtPosition(position).toString()
+                val preguntaSeleccionada = listapreguntasCompleta.find { it.descripcion == descripcionSeleccionada }
+
+                if (preguntaSeleccionada?.id_pregunta != idPregunta3) {
+                    idPregunta3 = preguntaSeleccionada?.id_pregunta
+                    actualizarSpinners(idPregunta1, idPregunta2, idPregunta3)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+    }
+
+    private fun actualizarSpinners(p1: Int?, p2: Int?, p3: Int?) {
+        val listaCompletaDescripciones = listapreguntasCompleta.map { it.descripcion }
+
+        val descripcionActual1 = spinner_pregunta1.selectedItem?.toString()
+        val descripcionActual2 = spinner_pregunta2.selectedItem?.toString()
+        val descripcionActual3 = spinner_pregunta3.selectedItem?.toString()
+
+        val opciones1 = listaCompletaDescripciones.filter {
+            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p2 &&
+                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p3
+        }
+        setSpinnerAdapter(spinner_pregunta1, opciones1, descripcionActual1)
+
+        val opciones2 = listaCompletaDescripciones.filter {
+            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p1 &&
+                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p3
+        }
+        setSpinnerAdapter(spinner_pregunta2, opciones2, descripcionActual2)
+
+        val opciones3 = listaCompletaDescripciones.filter {
+            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p1 &&
+                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != p2
+        }
+        setSpinnerAdapter(spinner_pregunta3, opciones3, descripcionActual3)
+    }
+
+    private fun setSpinnerAdapter(spinner: Spinner, opciones: List<String>, seleccionPrevia: String?) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        spinner.adapter = adapter
+
+        if (seleccionPrevia != null) {
+            val posicion = opciones.indexOf(seleccionPrevia)
+            if (posicion >= 0) {
+                spinner.setSelection(posicion, false)
+            } else {
+                spinner.setSelection(0, false)
+            }
+        }
+    }
+
+    private suspend fun registrarRespuestasSeguridad(email: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            // Obtener descripciones seleccionadas
+            val desc1 = spinner_pregunta1.selectedItem?.toString() ?: ""
+            val desc2 = spinner_pregunta2.selectedItem?.toString() ?: ""
+            val desc3 = spinner_pregunta3.selectedItem?.toString() ?: ""
+
+            // Mapear descripciones a IDs reales usando la lista cargada
+            val id_p1 = listapreguntasCompleta.find { it.descripcion == desc1 }?.id_pregunta ?: -1
+            val id_p2 = listapreguntasCompleta.find { it.descripcion == desc2 }?.id_pregunta ?: -1
+            val id_p3 = listapreguntasCompleta.find { it.descripcion == desc3 }?.id_pregunta ?: -1
+
+            val res_p1 = txt_respuesta1.text.toString().trim()
+            val res_p2 = txt_respuesta2.text.toString().trim()
+            val res_p3 = txt_respuesta3.text.toString().trim()
+
+            // Validaciones
+            if (res_p1.isEmpty() || res_p2.isEmpty() || res_p3.isEmpty()) return@withContext false
+            if (id_p1 <= 0 || id_p2 <= 0 || id_p3 <= 0) return@withContext false
+            if (id_p1 == id_p2 || id_p1 == id_p3 || id_p2 == id_p3) return@withContext false
+
+            val url = java.net.URL(ApiConfig.BASE_URL + "consultas/cliente/preguntas/registrar_respuestas_seguridad.php")
+
+            val jsonParams = org.json.JSONObject().apply {
+                put("correo", email)
+                put("preguntas", org.json.JSONArray().apply {
+                    put(org.json.JSONObject().apply { put("id_pregunta", id_p1); put("respuesta", res_p1) })
+                    put(org.json.JSONObject().apply { put("id_pregunta", id_p2); put("respuesta", res_p2) })
+                    put(org.json.JSONObject().apply { put("id_pregunta", id_p3); put("respuesta", res_p3) })
+                })
+            }
+
+            val params = jsonParams.toString()
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(java.nio.charset.StandardCharsets.UTF_8))
+            val responseCode = connection.responseCode
+
+            if (responseCode == java.net.HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                connection.disconnect()
+                val json = org.json.JSONObject(response)
+                return@withContext json.getString("success") == "1"
+            } else {
+                connection.disconnect()
+                return@withContext false
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return@withContext false
+        }
+    }
+
     private suspend fun obtenerCodigoPostal(pais: String, departamento: String, ciudad: String): String? = withContext(Dispatchers.IO) {
         var codigoPostal: String? = null
         try {
@@ -282,7 +493,13 @@ class Registrar_conductor : AppCompatActivity() {
         idNacionalidad: Int,
         codigoPostal: String,
         tel1: String,
-        tel2: String
+        tel2: String,
+        placa: String = "",
+        marca: String = "",
+        linea: String = "",
+        modelo: String = "",
+        color: String = "",
+        tipoServicio: String = ""
     ): Boolean = withContext(Dispatchers.IO) {
         return@withContext Registrar_almacenados.registrarConductor(
             idTipoIdentificacion,
@@ -294,7 +511,13 @@ class Registrar_conductor : AppCompatActivity() {
             idNacionalidad,
             codigoPostal,
             tel1,
-            tel2
+            tel2,
+            placa,
+            marca,
+            linea,
+            modelo,
+            color,
+            tipoServicio
         )
     }
 }
