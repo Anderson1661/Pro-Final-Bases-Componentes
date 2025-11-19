@@ -699,9 +699,12 @@ SELECT 1, id_usuario, 'Pelusa' FROM usuario WHERE correo = 'ana.martinez@email.c
 UNION ALL
 SELECT 2, id_usuario, 'Bogotá' FROM usuario WHERE correo = 'juan.herrera@email.com'
 UNION ALL
-SELECT 1, id_usuario, 'Max' FROM usuario WHERE correo = 'conductor1@empresa.com'
-UNION ALL
 SELECT 3, id_usuario, 'San José' FROM usuario WHERE correo = 'admin@empresa.com';
+
+insert into respuestas_seguridad (id_pregunta, id_usuario, respuesta_pregunta) VALUES
+(1, 7,'mascota'),
+(2, 7,'ciudad'),
+(3, 7,'colegio');
 
 -- ======== VISTAS ========
 
