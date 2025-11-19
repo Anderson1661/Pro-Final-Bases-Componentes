@@ -127,23 +127,38 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="0dp"
-                        android:text="Vehiculo de placa:"
+                        android:text="Mi estado:"
                         android:textAlignment="center"
                         android:textColor="@color/negro"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/txt_placa"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
                         android:layout_marginTop="0dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="GHO908"
-                        android:textAlignment="center"
-                        android:textColor="@color/negro"
-                        android:textSize="15dp" />
+                        android:layout_marginBottom="10dp">
 
+                        <TextView
+                            android:id="@+id/txt_estado_actual"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Desconectado"
+                            android:textColor="@color/negro"
+                            android:textSize="15dp"
+                            android:layout_marginEnd="8dp" />
+
+                        <Switch
+                            android:id="@+id/switch_estado_conductor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false" />
+
+                    </LinearLayout>
+
+                    <!-- Mantener el tipo de servicio -->
                     <TextView
                         android:id="@+id/textViewTitulo3"
                         android:layout_width="match_parent"
