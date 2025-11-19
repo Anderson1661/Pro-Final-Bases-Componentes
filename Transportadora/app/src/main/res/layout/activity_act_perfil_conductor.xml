@@ -170,6 +170,55 @@
                 android:inputType="number"
                 android:textColor="@color/grisoscuro" />
 
+            <!-- País de residencia -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="País de residencia"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/txt_pais"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/paises" />
+
+            <!-- Departamento -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Departamento"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/txt_departamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/departamentos" />
+
+            <!-- Ciudad -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ciudad"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/txt_ciudad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/ciudades" />
+
             <!-- Nacionalidad -->
             <TextView
                 android:layout_width="wrap_content"
@@ -199,6 +248,60 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="32dp"
                 android:entries="@array/genero" />
+
+            <!-- Preguntas de seguridad (3 preguntas + respuestas) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preguntas de seguridad"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/spinner_pregunta1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/txt_respuesta1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Respuesta 1"
+                android:layout_marginBottom="12dp"
+                android:inputType="text" />
+
+            <Spinner
+                android:id="@+id/spinner_pregunta2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/txt_respuesta2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Respuesta 2"
+                android:layout_marginBottom="12dp"
+                android:inputType="text" />
+
+            <Spinner
+                android:id="@+id/spinner_pregunta3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/txt_respuesta3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Respuesta 3"
+                android:layout_marginBottom="24dp"
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/btn_actualizar"

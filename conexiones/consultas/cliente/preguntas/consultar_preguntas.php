@@ -21,8 +21,9 @@ if ($res1) {
     if (mysqli_num_rows($res1) > 0) {
         // Hay registros para mostrar
         while ($row = mysqli_fetch_assoc($res1)) {
-            // Prepara el ítem con solo la descripción (siguiendo tu ejemplo original)
+            // Incluir id_pregunta y descripcion para uso en el cliente
             $item = array(
+                "id_pregunta" => (int)$row['id_pregunta'],
                 "descripcion"  => $row['descripcion']
             );
             array_push($res['datos'], $item);

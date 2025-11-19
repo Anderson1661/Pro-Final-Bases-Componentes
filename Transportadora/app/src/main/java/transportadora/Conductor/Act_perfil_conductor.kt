@@ -42,11 +42,20 @@ class Act_perfil_conductor : AppCompatActivity() {
     private var listaCiudadesDestino: List<Ciudad> = emptyList()
     private lateinit var spinner_ciudades1: Spinner
     private lateinit var spinner_tipos_id: Spinner
-    private lateinit var spinner_paises: Spinner
-    private lateinit var spinner_departamentos: Spinner
-    private lateinit var spinner_ciudades: Spinner
+    private var spinner_paises: Spinner? = null
+    private var spinner_departamentos: Spinner? = null
+    private var spinner_ciudades: Spinner? = null
     private lateinit var spinner_nacionalidad: Spinner
     private lateinit var spinner_genero: Spinner
+    // Security questions UI
+    private lateinit var spinner_pregunta1: Spinner
+    private lateinit var spinner_pregunta2: Spinner
+    private lateinit var spinner_pregunta3: Spinner
+    private lateinit var txt_respuesta1: android.widget.EditText
+    private lateinit var txt_respuesta2: android.widget.EditText
+    private lateinit var txt_respuesta3: android.widget.EditText
+    private var preguntasIdsOriginales: MutableList<Int> = mutableListOf()
+    private var idUsuarioPreguntas: Int = -1
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,11 +65,23 @@ class Act_perfil_conductor : AppCompatActivity() {
 
         // Initialize views
         spinner_tipos_id = findViewById(R.id.txt_tipo_id)
-        spinner_paises = findViewById(R.id.txt_pais)
-        spinner_departamentos = findViewById(R.id.txt_departamento)
-        spinner_ciudades = findViewById(R.id.txt_ciudad)
+        // Some layouts use different ids for the country spinner; try common ids and fall back to nacionalidad
+        spinner_paises = try { findViewById(R.id.txt_pais) } catch (e: Exception) { null }
+            ?: try { findViewById(R.id.spinner_pais) } catch (e: Exception) { null }
+            ?: try { findViewById(R.id.txt_nacionalidad) } catch (e: Exception) { null }
+        spinner_departamentos = try { findViewById(R.id.txt_departamento) } catch (e: Exception) { null }
+        spinner_ciudades = try { findViewById(R.id.txt_ciudad) } catch (e: Exception) { null }
         spinner_nacionalidad = findViewById(R.id.txt_nacionalidad)
-        spinner_genero = findViewById(R.id.txt_genero)
+        // Correct genero id (some layouts use spinner_genero)
+        spinner_genero = try { findViewById(R.id.txt_genero) } catch (e: Exception) { findViewById(R.id.spinner_genero) }
+
+        // Security questions views
+        spinner_pregunta1 = findViewById(R.id.spinner_pregunta1)
+        spinner_pregunta2 = findViewById(R.id.spinner_pregunta2)
+        spinner_pregunta3 = findViewById(R.id.spinner_pregunta3)
+        txt_respuesta1 = findViewById(R.id.txt_respuesta1)
+        txt_respuesta2 = findViewById(R.id.txt_respuesta2)
+        txt_respuesta3 = findViewById(R.id.txt_respuesta3)
 
         val txtIdentificacion = findViewById<TextView>(R.id.txt_id)
         val txtNombre = findViewById<TextView>(R.id.txt_nombre)
@@ -78,7 +99,7 @@ class Act_perfil_conductor : AppCompatActivity() {
                 if (paises.isNotEmpty()) {
                     listaPaisesCompleta = paises
                     val listapaisesNombres = paises.map { it.nombre }
-                    spinner_paises.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listapaisesNombres).apply {
+                    spinner_paises?.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listapaisesNombres).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
                     spinner_nacionalidad.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listapaisesNombres).apply {
@@ -116,6 +137,13 @@ class Act_perfil_conductor : AppCompatActivity() {
                         Datos_perfil_almacenados.obtener_datos_perfil(userEmail)
                     }
 
+                    // Load available security questions and populate spinners
+                    val preguntasDisponibles = withContext(Dispatchers.IO) { transportadora.Almacenados.Cliente.Preguntas_almacenados.obtener_preguntas() }
+                    val listaPreguntasDesc = preguntasDisponibles.map { it.descripcion }
+                    spinner_pregunta1.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listaPreguntasDesc).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+                    spinner_pregunta2.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listaPreguntasDesc).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+                    spinner_pregunta3.adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listaPreguntasDesc).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+
                     if (perfil != null) {
                         // Asignar cada campo del modelo a su respectivo TextView
                         val tipoIdSeleccionado = perfil.tipo_identificacion
@@ -132,7 +160,19 @@ class Act_perfil_conductor : AppCompatActivity() {
 
                         val generoSeleccionado = perfil.genero
                         val listaDescripcionesGenero = listagenero.map { it.descripcion }
-                        val indexGenero = listaDescripcionesGenero.indexOf(generoSeleccionado)
+                        var indexGenero = listaDescripcionesGenero.indexOf(generoSeleccionado)
+
+                        // If the server returned an ID instead of description, try to match by id
+                        if (indexGenero == -1) {
+                            try {
+                                val generoId = generoSeleccionado?.toIntOrNull()
+                                if (generoId != null) {
+                                    indexGenero = listagenero.indexOfFirst { it.id_genero == generoId }
+                                }
+                            } catch (e: Exception) {
+                                // ignore and leave indexGenero as -1
+                            }
+                        }
 
                         if (indexGenero != -1) {
                             spinner_genero.setSelection(indexGenero)
@@ -149,17 +189,22 @@ class Act_perfil_conductor : AppCompatActivity() {
                         val paisResidenciaSeleccionado = perfil.pais_residencia
                         val indexPaisResidencia = listaNombresPaises.indexOf(paisResidenciaSeleccionado)
                         if (indexPaisResidencia != -1) {
-                            spinner_paises.setSelection(indexPaisResidencia)
+                            spinner_paises?.setSelection(indexPaisResidencia)
                         }
 
                         // Load departments for the selected country and pre-select the user's department
-                        val selectedPais = listaPaisesCompleta.getOrNull(spinner_paises.selectedItemPosition)
+                        val selectedPaisIndex = spinner_paises?.selectedItemPosition ?: -1
+                        val selectedPais = listaPaisesCompleta.getOrNull(selectedPaisIndex)
                         selectedPais?.let { pais ->
-                            cargarDepartamentos(pais.id_pais, spinner_departamentos, perfil.departamento) {
-                                // Callback after departments are loaded and selected
-                                val selectedDepto = departamentosOrigen.getOrNull(spinner_departamentos.selectedItemPosition)
-                                selectedDepto?.let { depto ->
-                                    cargarCiudades(pais.id_pais, depto, spinner_ciudades, perfil.ciudad)
+                            spinner_departamentos?.let { depSpinner ->
+                                cargarDepartamentos(pais.id_pais, depSpinner, perfil.departamento) {
+                                    // Callback after departments are loaded and selected
+                                    val selectedDepto = departamentosOrigen.getOrNull(depSpinner.selectedItemPosition)
+                                    selectedDepto?.let { depto ->
+                                        spinner_ciudades?.let { citySpinner ->
+                                            cargarCiudades(pais.id_pais, depto, citySpinner, perfil.ciudad)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -167,6 +212,45 @@ class Act_perfil_conductor : AppCompatActivity() {
                         // Teléfonos (muestra máximo dos)
                         txtTel1.text = perfil.telefonos.getOrNull(0) ?: "No registrado"
                         txtTel2.text = perfil.telefonos.getOrNull(1) ?: "No registrado"
+
+                        // Cargar preguntas y respuestas ya registradas (si existen)
+                        try {
+                            val respuestasJson = withContext(Dispatchers.IO) { obtenerRespuestasSeguridad(userEmail) }
+                            if (respuestasJson != null && respuestasJson.first) {
+                                // respuestasJson.second = JSONObject with id_usuario and preguntas array
+                                val dataObj = respuestasJson.second
+                                idUsuarioPreguntas = dataObj.optInt("id_usuario", -1)
+                                val preguntasArr = dataObj.optJSONArray("preguntas")
+                                preguntasIdsOriginales.clear()
+                                if (preguntasArr != null) {
+                                    for (i in 0 until preguntasArr.length()) {
+                                        val obj = preguntasArr.getJSONObject(i)
+                                        val idPreg = obj.optInt("id_pregunta")
+                                        val desc = obj.optString("descripcion")
+                                        val resp = obj.optString("respuesta_pregunta")
+                                        preguntasIdsOriginales.add(idPreg)
+                                        // preseleccionar el spinner correspondiente
+                                        val index = listaPreguntasDesc.indexOf(desc)
+                                        when (i) {
+                                            0 -> {
+                                                if (index != -1) spinner_pregunta1.setSelection(index)
+                                                txt_respuesta1.setText(resp)
+                                            }
+                                            1 -> {
+                                                if (index != -1) spinner_pregunta2.setSelection(index)
+                                                txt_respuesta2.setText(resp)
+                                            }
+                                            2 -> {
+                                                if (index != -1) spinner_pregunta3.setSelection(index)
+                                                txt_respuesta3.setText(resp)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e: Exception) {
+                            // No hay preguntas registradas o error; dejar campos vacíos
+                        }
 
                     } else {
                         Toast.makeText(this@Act_perfil_conductor, "No se pudo cargar el perfil.", Toast.LENGTH_LONG).show()
@@ -183,21 +267,21 @@ class Act_perfil_conductor : AppCompatActivity() {
         }
 
         // Set up listeners for cascading spinners
-        spinner_paises.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner_paises?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 listaPaisesCompleta.getOrNull(position)?.let {
-                    cargarDepartamentos(it.id_pais, spinner_departamentos)
+                    spinner_departamentos?.let { dep -> cargarDepartamentos(it.id_pais, dep) }
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        spinner_departamentos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner_departamentos?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val deptoSeleccionado = parent.getItemAtPosition(position).toString()
-                val posPais = spinner_paises.selectedItemPosition
+                val posPais = spinner_paises?.selectedItemPosition ?: -1
                 listaPaisesCompleta.getOrNull(posPais)?.let {
-                    cargarCiudades(it.id_pais, deptoSeleccionado, spinner_ciudades)
+                    spinner_ciudades?.let { city -> cargarCiudades(it.id_pais, deptoSeleccionado, city) }
                 }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -205,15 +289,14 @@ class Act_perfil_conductor : AppCompatActivity() {
 
         // escuchar botones y volver
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_reg2)
-        txtVolverLogin.setOnClickListener {
-            finish()
-        }
+        txtVolverLogin.setOnClickListener { finish() }
 
-        val buttonDescartar = findViewById<Button>(R.id.buttonDescartar)
-        val buttonGuardar = findViewById<Button>(R.id.buttonGuardar)
+        // Buscar botones: layout tiene `btn_actualizar`; `buttonGuardar`/`buttonDescartar` pueden faltar
+        val buttonDescartar: Button? = findViewById(R.id.buttonDescartar)
+        val buttonGuardar: Button? = findViewById(R.id.buttonGuardar) ?: findViewById(R.id.btn_actualizar)
 
-        // Botón DESCARTAR → Confirmación antes de salir
-        buttonDescartar.setOnClickListener {
+        // Botón DESCARTAR → Confirmación antes de salir (si existe)
+        buttonDescartar?.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Descartar cambios")
             builder.setMessage("¿Deseas descartar los cambios realizados?")
@@ -228,7 +311,7 @@ class Act_perfil_conductor : AppCompatActivity() {
         }
 
         // Botón GUARDAR → Realizar actualización de perfil del conductor
-        buttonGuardar.setOnClickListener {
+        buttonGuardar?.setOnClickListener {
             // Recopilar valores (similar a la versión cliente)
             val numero_identificacion = findViewById<TextView>(R.id.txt_id).text.toString().trim()
             val nombrecompleto = findViewById<TextView>(R.id.txt_nombre).text.toString().trim()
@@ -237,11 +320,13 @@ class Act_perfil_conductor : AppCompatActivity() {
             val tel1 = findViewById<TextView>(R.id.txt_tel1).text.toString().trim()
             val tel2 = findViewById<TextView>(R.id.txt_tel2).text.toString().trim()
 
-            val id_tipo_identificacion = spinner_tipos_id.selectedItemPosition + 1
-            val id_genero = spinner_genero.selectedItemPosition + 1
-            val pais = spinner_paises.selectedItem.toString()
-            val departamento = spinner_departamentos.selectedItem.toString()
-            val ciudad = spinner_ciudades.selectedItem.toString()
+            val id_tipo_identificacion = listatiposid.getOrNull(spinner_tipos_id.selectedItemPosition)?.id_tipo_identificacion
+                ?: (spinner_tipos_id.selectedItemPosition + 1)
+            val id_genero = listagenero.getOrNull(spinner_genero.selectedItemPosition)?.id_genero
+                ?: (spinner_genero.selectedItemPosition + 1)
+            val pais = spinner_paises?.selectedItem?.toString() ?: spinner_nacionalidad.selectedItem?.toString() ?: ""
+            val departamento = spinner_departamentos?.selectedItem?.toString() ?: ""
+            val ciudad = spinner_ciudades?.selectedItem?.toString() ?: ""
 
             // Validaciones básicas
             if (userEmail.isNullOrEmpty()) {
@@ -293,9 +378,37 @@ class Act_perfil_conductor : AppCompatActivity() {
                     if (actualizado) {
                         Toast.makeText(this@Act_perfil_conductor, "Perfil actualizado correctamente", Toast.LENGTH_SHORT).show()
                         // Volver al perfil conductor
-                        val intent = Intent(this@Act_perfil_conductor, Perfil_conductor::class.java)
-                        startActivity(intent)
-                        finish()
+                            // Después de actualizar perfil, también actualizar/registrar las respuestas de seguridad
+                            try {
+                                val nuevosIds = listOf(
+                                    // map spinner selection to pregunta id via Preguntas_almacenados mapping
+                                    transportadora.Almacenados.Cliente.Preguntas_almacenados.obtener_preguntas().getOrNull(spinner_pregunta1.selectedItemPosition)?.id_pregunta ?: -1,
+                                    transportadora.Almacenados.Cliente.Preguntas_almacenados.obtener_preguntas().getOrNull(spinner_pregunta2.selectedItemPosition)?.id_pregunta ?: -1,
+                                    transportadora.Almacenados.Cliente.Preguntas_almacenados.obtener_preguntas().getOrNull(spinner_pregunta3.selectedItemPosition)?.id_pregunta ?: -1
+                                )
+                                val respuestas = listOf(txt_respuesta1.text.toString(), txt_respuesta2.text.toString(), txt_respuesta3.text.toString())
+
+                                val enviado = withContext(Dispatchers.IO) {
+                                    if (preguntasIdsOriginales.size == 3 && idUsuarioPreguntas != -1) {
+                                        actualizarRespuestasCliente(idUsuarioPreguntas, preguntasIdsOriginales, nuevosIds, respuestas)
+                                    } else {
+                                        // Registrar nuevas respuestas
+                                        val lista = listOf(Pair(nuevosIds[0], respuestas[0]), Pair(nuevosIds[1], respuestas[1]), Pair(nuevosIds[2], respuestas[2]))
+                                        registrarRespuestasSeguridad(nuevoCorreo, lista)
+                                    }
+                                }
+
+                                if (!enviado) {
+                                    Toast.makeText(this@Act_perfil_conductor, "Perfil actualizado, pero falló actualizar preguntas de seguridad.", Toast.LENGTH_LONG).show()
+                                }
+                            } catch (e: Exception) {
+                                // Si ocurre error al enviar preguntas, no impedir la navegación pero notificar
+                                Toast.makeText(this@Act_perfil_conductor, "Perfil actualizado. Error al gestionar preguntas: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+
+                            val intent = Intent(this@Act_perfil_conductor, Perfil_conductor::class.java)
+                            startActivity(intent)
+                            finish()
                     } else {
                         Toast.makeText(this@Act_perfil_conductor, "Error al actualizar perfil", Toast.LENGTH_LONG).show()
                     }
@@ -468,6 +581,91 @@ class Act_perfil_conductor : AppCompatActivity() {
 
         } catch (e: Exception) {
             android.util.Log.e("Act_perfil_conductor", "Error al actualizar perfil (Network/Parse): ${e.message}", e)
+            return@withContext false
+        }
+    }
+
+    private suspend fun obtenerRespuestasSeguridad(correo: String): Pair<Boolean, org.json.JSONObject?> = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/perfil/consultar_respuestas_cliente.php")
+            val params = "correo=${java.net.URLEncoder.encode(correo, "UTF-8")}" 
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(params.toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            return@withContext Pair(json.optString("success") == "1", json)
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error al obtener respuestas seguridad: ${e.message}", e)
+            return@withContext Pair(false, null)
+        }
+    }
+
+    private suspend fun actualizarRespuestasCliente(
+        idUsuario: Int,
+        originales: List<Int>,
+        nuevos: List<Int>,
+        respuestas: List<String>
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/perfil/actualizar_respuestas_cliente.php")
+            val paramsBuilder = StringBuilder()
+            paramsBuilder.append("id_usuario=${idUsuario}")
+            for (i in 0 until 3) {
+                paramsBuilder.append("&original_id_pregunta${i+1}=${originales.getOrNull(i) ?: 0}")
+                paramsBuilder.append("&nuevo_id_pregunta${i+1}=${nuevos.getOrNull(i) ?: 0}")
+                paramsBuilder.append("&respuesta${i+1}=${java.net.URLEncoder.encode(respuestas.getOrNull(i) ?: "", "UTF-8")}")
+            }
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.outputStream.write(paramsBuilder.toString().toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            return@withContext json.optString("success") == "1"
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error al actualizar respuestas (Network): ${e.message}", e)
+            return@withContext false
+        }
+    }
+
+    private suspend fun registrarRespuestasSeguridad(correo: String, preguntas: List<Pair<Int, String>>): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/cliente/preguntas/registrar_respuestas_seguridad.php")
+
+            val jsonObj = org.json.JSONObject()
+            jsonObj.put("correo", correo)
+            val arr = org.json.JSONArray()
+            for (p in preguntas) {
+                val o = org.json.JSONObject()
+                o.put("id_pregunta", p.first)
+                o.put("respuesta", p.second)
+                arr.put(o)
+            }
+            jsonObj.put("preguntas", arr)
+
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+            connection.outputStream.write(jsonObj.toString().toByteArray(Charsets.UTF_8))
+
+            val response = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+
+            val json = org.json.JSONObject(response)
+            return@withContext json.optString("success") == "1"
+        } catch (e: Exception) {
+            android.util.Log.e("Act_perfil_conductor", "Error al registrar respuestas seguridad: ${e.message}", e)
             return@withContext false
         }
     }
