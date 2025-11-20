@@ -6,7 +6,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 $res = array("success" => "0", "mensaje" => "Error al obtener preguntas");
 
-$sql = "SELECT id_pregunta, descripcion FROM preguntas_seguridad ORDER BY id_pregunta ASC";
+$sql = "SELECT id_pregunta, descripcion FROM preguntas_seguridad";
 $result = mysqli_query($link, $sql);
 
 if ($result) {

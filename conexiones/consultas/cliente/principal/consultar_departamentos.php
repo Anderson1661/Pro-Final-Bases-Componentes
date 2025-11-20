@@ -15,8 +15,7 @@ if ($id_pais > 0) {
     // Usamos DISTINCT para no repetir departamentos
     $sql = "SELECT DISTINCT departamento 
             FROM codigo_postal 
-            WHERE id_pais = ? 
-            ORDER BY departamento";
+            WHERE id_pais = ?";
     
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id_pais);

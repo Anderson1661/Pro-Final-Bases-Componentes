@@ -39,6 +39,7 @@ import transportadora.Modelos.Conductor.Tipo_servicio
 import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 import transportadora.Compartido.Main
+
 class Registrar_conductor : AppCompatActivity() {
 
     // Listas para datos personales
@@ -327,16 +328,17 @@ class Registrar_conductor : AppCompatActivity() {
     private fun configurarPreguntasSeguridad() {
         val listaDescripciones = listapreguntasCompleta.map { it.descripcion }
 
+        // Configurar spinners con todas las preguntas disponibles
         setupSpinner(spinner_pregunta1, listaDescripciones)
         setupSpinner(spinner_pregunta2, listaDescripciones)
         setupSpinner(spinner_pregunta3, listaDescripciones)
 
-        // Inicializar IDs con primera pregunta
+        // Inicializar IDs con las primeras tres preguntas por defecto
         idPregunta1 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
-        idPregunta2 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
-        idPregunta3 = listapreguntasCompleta.getOrNull(0)?.id_pregunta
+        idPregunta2 = listapreguntasCompleta.getOrNull(1)?.id_pregunta
+        idPregunta3 = listapreguntasCompleta.getOrNull(2)?.id_pregunta
 
-        // Configurar listeners para evitar duplicados
+        // Configurar listeners simples que solo actualicen los IDs
         configurarListenersPreguntas()
     }
 
@@ -345,7 +347,6 @@ class Registrar_conductor : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val descripcion = parent.getItemAtPosition(position).toString()
                 idPregunta1 = listapreguntasCompleta.find { it.descripcion == descripcion }?.id_pregunta
-                actualizarOpcionesPreguntas()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -354,7 +355,6 @@ class Registrar_conductor : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val descripcion = parent.getItemAtPosition(position).toString()
                 idPregunta2 = listapreguntasCompleta.find { it.descripcion == descripcion }?.id_pregunta
-                actualizarOpcionesPreguntas()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
@@ -363,45 +363,8 @@ class Registrar_conductor : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val descripcion = parent.getItemAtPosition(position).toString()
                 idPregunta3 = listapreguntasCompleta.find { it.descripcion == descripcion }?.id_pregunta
-                actualizarOpcionesPreguntas()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-    }
-
-    private fun actualizarOpcionesPreguntas() {
-        val todasDescripciones = listapreguntasCompleta.map { it.descripcion }
-
-        val opciones1 = todasDescripciones.filter {
-            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta2 &&
-                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta3
-        }
-
-        val opciones2 = todasDescripciones.filter {
-            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta1 &&
-                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta3
-        }
-
-        val opciones3 = todasDescripciones.filter {
-            listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta1 &&
-                    listapreguntasCompleta.find { preg -> preg.descripcion == it }?.id_pregunta != idPregunta2
-        }
-
-        actualizarSpinner(spinner_pregunta1, opciones1)
-        actualizarSpinner(spinner_pregunta2, opciones2)
-        actualizarSpinner(spinner_pregunta3, opciones3)
-    }
-
-    private fun actualizarSpinner(spinner: Spinner, opciones: List<String>) {
-        val seleccionActual = spinner.selectedItem?.toString()
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, opciones).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-        spinner.adapter = adapter
-
-        if (seleccionActual != null && opciones.contains(seleccionActual)) {
-            val nuevaPosicion = opciones.indexOf(seleccionActual)
-            spinner.setSelection(nuevaPosicion, false)
         }
     }
 
@@ -575,8 +538,8 @@ class Registrar_conductor : AppCompatActivity() {
             val res2 = txt_respuesta2.text.toString()
             val res3 = txt_respuesta3.text.toString()
 
-            // URL para foto por defecto
-            val urlFoto = "https://example.com/fotos/conductor_default.jpg"
+            // URL para foto por defecto (mantenida como solicitaste)
+            val urlFoto = "https://guillermogonzalezpimiento.com/wp-content/uploads/2022/06/Sin-foto-de-perfil-1024x1024.png"
 
             // Llamar al PHP de registro
             val url = java.net.URL(ApiConfig.BASE_URL + "consultas/conductor/registrar_conductor.php")

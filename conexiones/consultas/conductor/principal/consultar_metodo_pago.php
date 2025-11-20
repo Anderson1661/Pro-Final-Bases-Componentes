@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 $res = array();
 $res['datos'] = array();
 
-$sql = "SELECT descripcion FROM metodo_pago ORDER BY descripcion";
+$sql = "SELECT descripcion FROM metodo_pago";
 $res1 = mysqli_query($link, $sql);
 
 if ($res1) {

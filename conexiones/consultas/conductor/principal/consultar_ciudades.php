@@ -14,8 +14,7 @@ $departamento = isset($_POST['departamento']) ? trim($_POST['departamento']) : '
 if ($id_pais > 0 && !empty($departamento)) {
     $sql = "SELECT ciudad 
             FROM codigo_postal 
-            WHERE id_pais = ? AND departamento = ?
-            ORDER BY ciudad";
+            WHERE id_pais = ? AND departamento = ?";
             
     $stmt = mysqli_prepare($link, $sql);
     mysqli_stmt_bind_param($stmt, "is", $id_pais, $departamento);

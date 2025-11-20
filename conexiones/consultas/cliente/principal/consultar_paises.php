@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 $res = array();
 $res['datos'] = array();
 
-$sql = "SELECT id_pais, nombre FROM pais ORDER BY nombre";
+$sql = "SELECT id_pais, nombre FROM pais";
 $res1 = mysqli_query($link, $sql);
 
 if ($res1) {

@@ -22,6 +22,8 @@ class Perfil_conductor : AppCompatActivity() {
 
         //region Inicialización de Vistas
         val txtVolverLogin = findViewById<TextView>(R.id.txt_volver_login)
+        val botonactualizarfoto = findViewById<Button>(R.id.boton_act_foto)
+
         val botonactualizar = findViewById<Button>(R.id.boton_act_datos)
         val botoncontra = findViewById<Button>(R.id.boton_cambiar_contra)
         val botonpreguntas = findViewById<Button>(R.id.boton_preguntas_seg)
@@ -107,6 +109,11 @@ class Perfil_conductor : AppCompatActivity() {
 
         botonactualizar.setOnClickListener {
             val intent = Intent(this, Act_perfil_conductor::class.java)
+            startActivity(intent)
+        }
+
+        botonactualizarfoto.setOnClickListener {
+            val intent = Intent(this, Act_foto_conductor::class.java)
             startActivity(intent)
         }
 

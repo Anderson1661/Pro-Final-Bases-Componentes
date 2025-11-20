@@ -378,6 +378,16 @@
                     android:layout_gravity="center_horizontal" />
 
                 <Button
+                    android:id="@+id/boton_act_foto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:backgroundTint="@color/naranja"
+                    android:text="Modificar Foto"
+                    android:textColor="@color/blanco"
+                    android:layout_gravity="center_horizontal" />
+
+                <Button
                     android:id="@+id/boton_cambiar_contra"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -7,7 +7,7 @@ header('Content-Type: application/json; charset=utf-8');
 $res = array();
 $res['datos'] = array();
 
-$sql = "SELECT id_genero, descripcion FROM genero ORDER BY descripcion";
+$sql = "SELECT id_genero, descripcion FROM genero";
 $res1 = mysqli_query($link, $sql);
 
 if ($res1) {
