@@ -70,7 +70,7 @@
                 android:id="@+id/imgPerfil"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/fondo_main"
+                android:src="@drawable/logo_borde"
                 android:layout_marginBottom="8dp"
                 android:focusable="true"
                 android:layout_gravity="center_horizontal" />
