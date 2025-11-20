@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS conductor (
   id_genero INT NOT NULL,
   codigo_postal VARCHAR(10) NOT NULL,
   id_pais_nacionalidad INT NOT NULL,
-  url_foto VARCHAR(255) NOT NULL UNIQUE,
+  url_foto VARCHAR(255) NOT NULL,
   FOREIGN KEY (id_estado_conductor) REFERENCES estado_conductor (id_estado_conductor),
   FOREIGN KEY (placa_vehiculo) REFERENCES vehiculo (placa),
   FOREIGN KEY (id_tipo_identificacion) REFERENCES tipo_identificacion (id_tipo_identificacion),
