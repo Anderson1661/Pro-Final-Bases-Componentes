@@ -219,8 +219,10 @@ class Act_perfil_conductor : AppCompatActivity() {
                             if (respuestasJson != null && respuestasJson.first) {
                                 // respuestasJson.second = JSONObject with id_usuario and preguntas array
                                 val dataObj = respuestasJson.second
-                                idUsuarioPreguntas = dataObj.optInt("id_usuario", -1)
-                                val preguntasArr = dataObj.optJSONArray("preguntas")
+                                if (dataObj != null) {
+                                    idUsuarioPreguntas = dataObj.optInt("id_usuario", -1)
+                                }
+                                val preguntasArr = dataObj!!.optJSONArray("preguntas")
                                 preguntasIdsOriginales.clear()
                                 if (preguntasArr != null) {
                                     for (i in 0 until preguntasArr.length()) {

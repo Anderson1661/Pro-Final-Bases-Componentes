@@ -50,18 +50,16 @@
             android:orientation="vertical"
             android:padding="40dp">
 
+            <!-- Sección: Datos Personales -->
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:text="¡Forma parte de nuestros servicios!"
+                android:text="¡Forma parte de nuestros servicios como conductor!"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                android:textColor="@color/negro" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -70,10 +68,7 @@
                 android:layout_marginTop="60dp"
                 android:text="Tipo de identificación"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/txt_tipo_id_reg1"
@@ -81,10 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/tipos_id"
-                app:layout_constraintTop_toBottomOf="@+id/textView10"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/tipos_id" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -93,10 +85,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Número de identificación"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_tipo_id_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_id_reg1"
@@ -105,10 +94,7 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="number"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView11"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -117,10 +103,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Nombre completo"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_id_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_nombre_reg1"
@@ -129,12 +112,9 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView12"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
-            <!-- Cantidad de Teléfonos -->
+            <!-- Teléfonos -->
             <TextView
                 android:id="@+id/textViewCantidadTel"
                 android:layout_width="wrap_content"
@@ -142,22 +122,15 @@
                 android:layout_marginTop="30dp"
                 android:text="Cantidad de Teléfonos"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_tipo_id_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/spinner_cantidad_tel"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:entries="@array/cantidad_telefonos"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCantidadTel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/cantidad_telefonos" />
 
-            <!-- Primer número de teléfono -->
             <TextView
                 android:id="@+id/textViewNum1"
                 android:layout_width="wrap_content"
@@ -165,10 +138,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Número de Teléfono 1"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/spinner_cantidad_tel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_tel1"
@@ -177,12 +147,8 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="number"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNum1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
-            <!-- Segundo número de teléfono -->
             <TextView
                 android:id="@+id/textViewNum2"
                 android:layout_width="wrap_content"
@@ -190,10 +156,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Número de Teléfono 2"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_tel1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_tel2"
@@ -202,10 +165,7 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="number"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNum2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
             <TextView
                 android:id="@+id/textView20"
@@ -214,10 +174,7 @@
                 android:layout_marginTop="40dp"
                 android:text="Nacionalidad"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_contra2_reg1" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/txt_nacionalidad"
@@ -225,22 +182,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/paises"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/paises" />
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="Genero"
+                android:text="Género"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_contra2_reg1" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/txt_genero"
@@ -248,10 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/genero"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/genero" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -260,10 +208,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Correo electrónico"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_dir_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_email_reg1"
@@ -272,10 +217,7 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView14"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -284,10 +226,7 @@
                 android:layout_marginTop="30dp"
                 android:text="Dirección de residencia"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_nombre_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/negro" />
 
             <EditText
                 android:id="@+id/txt_dir_reg1"
@@ -296,22 +235,17 @@
                 android:layout_marginTop="5dp"
                 android:ems="10"
                 android:inputType="text"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView13"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textColor="@color/grisoscuro" />
 
+            <!-- Ubicación -->
             <TextView
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="País"
+                android:text="País de residencia"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_contra2_reg1" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/spinner_pais"
@@ -319,10 +253,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/paises"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/paises" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -331,10 +262,7 @@
                 android:layout_marginTop="40dp"
                 android:text="Departamento"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_pregunta1" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/spinner_departamento"
@@ -342,10 +270,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/departamentos"
-                app:layout_constraintTop_toBottomOf="@+id/textView18"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/departamentos" />
 
             <TextView
                 android:id="@+id/textView19"
@@ -354,10 +279,7 @@
                 android:layout_marginTop="40dp"
                 android:text="Ciudad"
                 android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_pregunta2" />
+                android:textColor="@color/negro" />
 
             <Spinner
                 android:id="@+id/spinner_ciudad"
@@ -365,18 +287,138 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                android:entries="@array/ciudades"
-                app:layout_constraintTop_toBottomOf="@+id/textView19"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:entries="@array/ciudades" />
 
+            <!-- Sección: Datos del Vehículo -->
+            <TextView
+                android:id="@+id/textViewVehiculo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Datos del Vehículo"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
 
-            <!-- Pregunta 1 -->
+            <TextView
+                android:id="@+id/textViewPlaca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Placa del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <EditText
+                android:id="@+id/txt_placa"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/grisoscuro" />
+
+            <TextView
+                android:id="@+id/textViewMarca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Marca del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/spinner_marca"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/grisoscuro"
+                android:entries="@array/marcas_vehiculo" />
+
+            <TextView
+                android:id="@+id/textViewLinea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Línea del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/spinner_linea"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/grisoscuro" />
+
+            <TextView
+                android:id="@+id/textViewModelo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Modelo del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <EditText
+                android:id="@+id/txt_modelo"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:inputType="number"
+                android:textColor="@color/grisoscuro" />
+
+            <TextView
+                android:id="@+id/textViewColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Color del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/spinner_color"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/grisoscuro"
+                android:entries="@array/colores_vehiculo" />
+
+            <TextView
+                android:id="@+id/textViewServicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Tipo de servicio"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
+            <Spinner
+                android:id="@+id/spinner_servicio"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/grisoscuro"
+                android:entries="@array/tipos_servicio" />
+
+            <!-- Sección: Preguntas de Seguridad -->
+            <TextView
+                android:id="@+id/textViewSeguridad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Preguntas de Seguridad"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+
             <TextView
                 android:id="@+id/textView27"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="30dp"
                 android:text="Pregunta de seguridad 1"
                 android:textStyle="bold"
                 android:textColor="@color/negro" />
@@ -392,19 +434,18 @@
                 android:id="@+id/txt_respuesta1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="Respuesta 1"
                 android:textColor="@color/grisoscuro"
                 android:textColorHint="@color/grisclaro"
                 android:inputType="textPersonName"
                 android:padding="10dp"/>
 
-            <!-- Pregunta 2 -->
             <TextView
                 android:id="@+id/textView28"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:text="Pregunta de seguridad 2"
                 android:textStyle="bold"
                 android:textColor="@color/negro" />
@@ -420,19 +461,18 @@
                 android:id="@+id/txt_respuesta2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="Respuesta 2"
                 android:textColor="@color/grisoscuro"
                 android:textColorHint="@color/grisclaro"
                 android:inputType="textPersonName"
                 android:padding="10dp"/>
 
-            <!-- Pregunta 3 -->
             <TextView
                 android:id="@+id/textView29"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:text="Pregunta de seguridad 3"
                 android:textStyle="bold"
                 android:textColor="@color/negro" />
@@ -448,20 +488,23 @@
                 android:id="@+id/txt_respuesta3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:hint="Respuesta 3"
                 android:textColor="@color/grisoscuro"
                 android:textColorHint="@color/grisclaro"
                 android:inputType="textPersonName"
                 android:padding="10dp"/>
+
+            <!-- Foto de perfil -->
             <TextView
                 android:id="@+id/textView39"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Danos una foto tuya para terminar el registro"
+                android:layout_marginTop="30dp"
+                android:text="Foto de perfil"
                 android:textStyle="bold"
                 android:textColor="@color/negro" />
+
             <ImageView
                 android:id="@+id/img_foto_perfil"
                 android:layout_width="120dp"
@@ -469,18 +512,19 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@android:drawable/ic_menu_camera"
                 android:contentDescription="Foto de perfil"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="24dp"/>
-            <!-- Botón -->
+
+            <!-- Botón Registrar -->
             <Button
                 android:id="@+id/buttonRegistrar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registrar"
+                android:text="Registrar Conductor"
                 android:textColor="@color/blanco"
                 android:backgroundTint="@color/naranja"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="40dp"
                 android:layout_gravity="center_horizontal" />
-
 
         </LinearLayout>
     </ScrollView>
