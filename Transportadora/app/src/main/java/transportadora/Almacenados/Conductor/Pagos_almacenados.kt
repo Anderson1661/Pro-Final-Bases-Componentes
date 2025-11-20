@@ -29,7 +29,7 @@ object Pagos_almacenados {
                             categoria_servicio = obj.optString("categoria_servicio"),
                             metodo_pago = obj.optString("metodo_pago"),
                             total = obj.optDouble("total"),
-                            pago_conductor = obj.optDouble("pago_conductor")
+                            pago_conductor = obj.optDouble("total") * 0.30
                         )
                     )
                 }

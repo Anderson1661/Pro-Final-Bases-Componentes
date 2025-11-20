@@ -62,7 +62,7 @@ class PagosAdapter(private var servicios: List<PagoConductor>) :
             tipo.text = "${servicio.tipo_servicio} - ${servicio.categoria_servicio}"
             metodo.text = servicio.metodo_pago
             total.text = "$${String.format("%,.2f", servicio.total)}"
-            pago.text = "$${String.format("%,.2f", servicio.pago_conductor)}"
+            pago.text = "$${String.format("%,.2f", servicio.total*0.3)}"
         }
     }
 }
