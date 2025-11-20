@@ -198,7 +198,30 @@ class Perfil_conductor : AppCompatActivity() {
 
         botonactualizarfoto.setOnClickListener {
             val intent = Intent(this, Act_foto_conductor::class.java)
-            startActivity(intent)
+
+            // Obtener la URL actual de la imagen del perfil
+            val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+            val userEmail = sharedPreferences.getString("user_email", null)
+
+            if (userEmail != null) {
+                // Buscar la URL actual en el perfil cargado
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val perfil = withContext(Dispatchers.IO) {
+                            Perfil_conductor_completo_almacenados.obtenerPerfilCompleto(userEmail)
+                        }
+                        if (perfil != null && !perfil.url_foto.isNullOrEmpty() && perfil.url_foto != "null") {
+                            // Enviar la URL actual como extra
+                            intent.putExtra("CURRENT_PHOTO_URL", perfil.url_foto)
+                        }
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        startActivity(intent) // Iniciar actividad incluso si hay error
+                    }
+                }
+            } else {
+                startActivity(intent)
+            }
         }
 
         botoncontra.setOnClickListener {

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/blanco"
     tools:context="transportadora.Conductor.Act_foto_conductor">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -27,40 +28,31 @@
         android:text="Seleccionar Foto de Perfil"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/grisoscuro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgFotoPerfil" />
 
     <Button
-        android:id="@+id/btnTomarFoto"
+        android:id="@+id/btnSeleccionarGaleria"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Tomar Foto con Cámara"
+        android:layout_marginTop="60dp"
+        android:text="Seleccionar de Galería"
         android:backgroundTint="@color/grisoscuro"
+        android:textColor="@color/blanco"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSeleccionarFoto" />
 
     <Button
-        android:id="@+id/btnSeleccionarGaleria"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Seleccionar de Galería"
-        android:backgroundTint="@color/grisoscuro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTomarFoto" />
-
-    <Button
         android:id="@+id/btnActualizarFoto"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/naranja"
+        android:textColor="@color/blanco"
         android:text="Actualizar Foto"
-        android:textColor="@android:color/white"
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

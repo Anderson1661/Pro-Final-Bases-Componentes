@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,10 +43,16 @@ class Act_foto_conductor : AppCompatActivity() {
 
     private var currentPhotoPath: String? = null
     private var selectedImageUri: Uri? = null
+    private var currentPhotoUrl: String? = null
+
 
     // Permisos
     private val cameraPermission = Manifest.permission.CAMERA
-    private val storagePermission = Manifest.permission.READ_EXTERNAL_STORAGE
+    private val storagePermission = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
 
     // Contracts para resultados de actividad
     private val takePictureResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -73,12 +81,7 @@ class Act_foto_conductor : AppCompatActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        val allGranted = permissions.all { it.value }
-        if (allGranted) {
-            // Permisos concedidos
-        } else {
-            Toast.makeText(this, "Se necesitan los permisos para continuar", Toast.LENGTH_LONG).show()
-        }
+        val cameraGranted = permissions[cameraPermission] ?: false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,21 +92,17 @@ class Act_foto_conductor : AppCompatActivity() {
         initViews()
         setupClickListeners()
         checkPermissions()
+        receiveAndDisplayCurrentPhoto()
     }
 
     private fun initViews() {
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil)
-        btnTomarFoto = findViewById(R.id.btnTomarFoto)
         btnSeleccionarGaleria = findViewById(R.id.btnSeleccionarGaleria)
         btnActualizarFoto = findViewById(R.id.btnActualizarFoto)
         progressBar = findViewById(R.id.progressBar)
     }
 
     private fun setupClickListeners() {
-        btnTomarFoto.setOnClickListener {
-            takePhoto()
-        }
-
         btnSeleccionarGaleria.setOnClickListener {
             selectFromGallery()
         }
@@ -118,25 +117,15 @@ class Act_foto_conductor : AppCompatActivity() {
     }
 
     private fun checkPermissions() {
-        val permissions = arrayOf(cameraPermission, storagePermission)
-        val shouldRequest = permissions.any {
-            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        val permissionsToRequest = mutableListOf<String>()
+
+        // Verificar permiso de almacenamiento/galería
+        if (ContextCompat.checkSelfPermission(this, storagePermission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequest.add(storagePermission)
         }
 
-        if (shouldRequest) {
-            permissionLauncher.launch(permissions)
-        }
-    }
-
-    private fun takePhoto() {
-        val photoFile = createImageFile()
-        photoFile?.let { file ->
-            val photoURI = FileProvider.getUriForFile(
-                this,
-                "${packageName}.provider",
-                file
-            )
-            takePictureResult.launch(photoURI)
+        if (permissionsToRequest.isNotEmpty()) {
+            permissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
     }
 
@@ -284,6 +273,31 @@ class Act_foto_conductor : AppCompatActivity() {
                     Toast.makeText(this@Act_foto_conductor, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+    private fun receiveAndDisplayCurrentPhoto() {
+        currentPhotoUrl = intent.getStringExtra("CURRENT_PHOTO_URL")
+
+        if (!currentPhotoUrl.isNullOrEmpty() && currentPhotoUrl != "null") {
+            // Cargar la imagen actual usando Picasso con transformación de tamaño
+            Picasso.get()
+                .load(currentPhotoUrl)
+                .placeholder(R.drawable.fondo_main)
+                .error(R.drawable.fondo_main)
+                .resize(400, 400) // Tamaño específico en píxeles
+                .centerCrop() // Recortar para que encaje perfectamente
+                .into(imgFotoPerfil, object : com.squareup.picasso.Callback {
+                    override fun onSuccess() {
+                        Log.d("Act_foto_conductor", "✅ Foto actual cargada y redimensionada exitosamente")
+                    }
+
+                    override fun onError(e: Exception?) {
+                        Log.e("Act_foto_conductor", "❌ Error cargando foto actual: ${e?.message}")
+                        imgFotoPerfil.setImageResource(R.drawable.fondo_main)
+                    }
+                })
+        } else {
+            imgFotoPerfil.setImageResource(R.drawable.fondo_main)
         }
     }
 }
