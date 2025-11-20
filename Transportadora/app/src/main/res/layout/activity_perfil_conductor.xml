@@ -66,7 +66,7 @@
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/imgPerfil"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="8dp"
                 android:focusable="true"
                 android:layout_gravity="center_horizontal" />
-            />
+
             <!-- Campos consultados de BD -->
             <LinearLayout
                 android:id="@+id/layoutCampos"
@@ -381,7 +381,7 @@
                     android:id="@+id/boton_act_foto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="10dp"
                     android:backgroundTint="@color/naranja"
                     android:text="Modificar Foto"
                     android:textColor="@color/blanco"

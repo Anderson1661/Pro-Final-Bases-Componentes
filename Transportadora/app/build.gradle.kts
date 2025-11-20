@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("kotlin-kapt") // Agrega esta línea para kapt
 }
 
 android {
@@ -9,11 +10,10 @@ android {
     compileSdk {
         version = release(36)
     }
-
     defaultConfig {
         applicationId = "transportadora.Login"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 36 //coincidir con compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -35,6 +35,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    // Agrega esto para ViewBinding si lo necesitas
+    buildFeatures {
+        buildConfig = true
     }
 }
 
@@ -60,6 +65,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    //dependencias para la foto del condu
+
+    //dependencias para la foto del conductor
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.squareup.picasso:picasso:2.8")
 }

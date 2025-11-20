@@ -1,8 +1,10 @@
 package transportadora.Conductor
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -12,6 +14,15 @@ import kotlinx.coroutines.*
 import transportadora.Almacenados.Conductor.Perfil_conductor_completo_almacenados
 import transportadora.Compartido.Preg_seguridad
 import transportadora.Login.R
+import com.bumptech.glide.Glide
+import android.widget.ImageView
+import com.squareup.picasso.Picasso
+import com.bumptech.glide.request.RequestListener
+import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.request.target.Target
 
 class Perfil_conductor : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -50,6 +61,8 @@ class Perfil_conductor : AppCompatActivity() {
         val txtEstadoVehiculo = findViewById<TextView>(R.id.txt_estado_vehiculo)
         //endregion
 
+        val imgPerfil = findViewById<ImageView>(R.id.imgPerfil) // En lugar de CircleImageView
+
         // Obtener el correo de SharedPreferences
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val userEmail = sharedPreferences.getString("user_email", null)
@@ -61,6 +74,15 @@ class Perfil_conductor : AppCompatActivity() {
                         Perfil_conductor_completo_almacenados.obtenerPerfilCompleto(userEmail)
                     }
                     if (perfil != null) {
+                        // Justo después de obtener el perfil
+                        Log.d("Perfil_conductor", "=== DEBUG PERFIL ===")
+                        Log.d("Perfil_conductor", "Nombre: ${perfil.nombre}")
+                        Log.d("Perfil_conductor", "Correo: ${perfil.correo}")
+                        Log.d("Perfil_conductor", "URL Foto: ${perfil.url_foto}")
+                        Log.d("Perfil_conductor", "¿URL vacía?: ${perfil.url_foto.isNullOrEmpty()}")
+                        Log.d("Perfil_conductor", "¿URL null?: ${perfil.url_foto == null}")
+                        Log.d("Perfil_conductor", "=== FIN DEBUG ===")
+
                         // Datos personales
                         txtTipoId.text = perfil.tipo_identificacion
                         txtIdentificacion.text = perfil.identificacion
@@ -86,7 +108,69 @@ class Perfil_conductor : AppCompatActivity() {
                         txtTipoServicio.text = perfil.tipo_servicio
                         txtEstadoVehiculo.text = perfil.estado_vehiculo
 
-                        // TODO: Cargar la imagen de perfil (url_foto) usando una librería como Glide o Picasso
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val esUrlValida = verificarUrlImagen(perfil.url_foto)
+                            Log.d("Perfil_conductor", "URL accesible: $esUrlValida")
+
+                            if (esUrlValida) {
+                                // Cargar con Glide...
+                            } else {
+                                imgPerfil.setImageResource(R.drawable.fondo_main)
+                            }
+                        }
+
+                        if (tieneConexionInternet()) {
+                            // Cargar imagen de perfil
+                            if (!perfil.url_foto.isNullOrEmpty() && perfil.url_foto != "null") {
+                                Log.d(
+                                    "Perfil_conductor",
+                                    "Intentando cargar con Picasso: ${perfil.url_foto}"
+                                )
+
+                                try {
+                                    Picasso.get()
+                                        .load(perfil.url_foto)
+                                        .placeholder(R.drawable.fondo_main)
+                                        .error(R.drawable.fondo_main)
+                                        .networkPolicy(com.squareup.picasso.NetworkPolicy.NO_CACHE) // Forzar red
+                                        .memoryPolicy(com.squareup.picasso.MemoryPolicy.NO_CACHE)   // Forzar red
+                                        .into(imgPerfil, object : com.squareup.picasso.Callback {
+                                            override fun onSuccess() {
+                                                Log.d(
+                                                    "Perfil_conductor",
+                                                    "✅ Picasso cargó la imagen exitosamente"
+                                                )
+                                            }
+
+                                            override fun onError(e: Exception?) {
+                                                Log.e(
+                                                    "Perfil_conductor",
+                                                    "❌ Picasso error: ${e?.message}"
+                                                )
+                                                // Intentar cargar desde caché como fallback
+                                                Picasso.get()
+                                                    .load(perfil.url_foto)
+                                                    .into(imgPerfil)
+                                            }
+                                        })
+                                } catch (e: Exception) {
+                                    Log.e(
+                                        "Perfil_conductor",
+                                        "❌ Excepción en Picasso: ${e.message}"
+                                    )
+                                    imgPerfil.setImageResource(R.drawable.fondo_main)
+                                }
+                            } else {
+                                Log.w("Perfil_conductor", "URL de foto no válida")
+                                imgPerfil.setImageResource(R.drawable.fondo_main)
+                            }
+                        }
+                     else {
+                        Log.e("Perfil_conductor", "❌ No hay conexión a internet")
+                        imgPerfil.setImageResource(R.drawable.fondo_main)
+                        Toast.makeText(this@Perfil_conductor, "Sin conexión a internet", Toast.LENGTH_SHORT).show()
+                    }
+
 
                     } else {
                         Toast.makeText(this@Perfil_conductor, "No se pudo cargar el perfil", Toast.LENGTH_LONG).show()
@@ -127,5 +211,29 @@ class Perfil_conductor : AppCompatActivity() {
             startActivity(intent)
         }
         //endregion
+    }
+
+    private suspend fun verificarUrlImagen(url: String): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val connection = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = "HEAD"
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+            val responseCode = connection.responseCode
+            connection.disconnect()
+            responseCode == 200
+        } catch (e: Exception) {
+            Log.e("Perfil_conductor", "Error verificando URL: ${e.message}")
+            false
+        }
+    }
+    private fun tieneConexionInternet(): Boolean {
+        return try {
+            val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        } catch (e: Exception) {
+            false
+        }
     }
 }
