@@ -199,7 +199,7 @@ class Perfil_conductor : AppCompatActivity() {
         botonactualizarfoto.setOnClickListener {
             val intent = Intent(this, Act_foto_conductor::class.java)
 
-            // Obtener la URL actual de la imagen del perfil
+            // Obtener el correo de SharedPreferences
             val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
             val userEmail = sharedPreferences.getString("user_email", null)
 
@@ -210,13 +210,16 @@ class Perfil_conductor : AppCompatActivity() {
                         val perfil = withContext(Dispatchers.IO) {
                             Perfil_conductor_completo_almacenados.obtenerPerfilCompleto(userEmail)
                         }
-                        if (perfil != null && !perfil.url_foto.isNullOrEmpty() && perfil.url_foto != "null") {
-                            // Enviar la URL actual como extra
+                        if (perfil != null) {
+                            // Enviar tanto la URL actual como el correo
                             intent.putExtra("CURRENT_PHOTO_URL", perfil.url_foto)
+                            intent.putExtra("USER_EMAIL", userEmail) // ← AÑADIR ESTA LÍNEA
                         }
                         startActivity(intent)
                     } catch (e: Exception) {
-                        startActivity(intent) // Iniciar actividad incluso si hay error
+                        // Enviar al menos el correo incluso si hay error
+                        intent.putExtra("USER_EMAIL", userEmail)
+                        startActivity(intent)
                     }
                 }
             } else {

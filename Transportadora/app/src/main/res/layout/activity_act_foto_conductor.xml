@@ -15,7 +15,7 @@
         android:layout_height="120dp"
         android:src="@drawable/logo_borde"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="150dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -39,24 +39,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="Seleccionar de Galería"
-        android:backgroundTint="@color/grisoscuro"
+        android:backgroundTint="@color/naranja"
         android:textColor="@color/blanco"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSeleccionarFoto" />
-
-    <Button
-        android:id="@+id/btnActualizarFoto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/naranja"
-        android:textColor="@color/blanco"
-        android:text="Actualizar Foto"
-        android:enabled="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSeleccionarGaleria" />
 
     <ProgressBar
         android:id="@+id/progressBar"
