@@ -166,6 +166,39 @@
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
 
+                    <Button
+                        android:id="@+id/btn_reporte5"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/naranja"
+                        android:text="Reporte de Servicios por Categoría y Método de Pago"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_reporte6"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Resumen Mensual de Ingresos"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_reporte7"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisoscuro"
+                        android:text="Estadísticas de Conductores por Ciudad"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
                     <!-- Botones crud de tablas-->
                     <Button
                         android:id="@+id/btn_administradores"
@@ -173,7 +206,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Administradores"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -184,7 +217,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Categorias de servicios"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -195,7 +228,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Clientes"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -206,7 +239,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Codigos Postales"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -217,7 +250,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Colores de vehiculos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -228,8 +261,19 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Conductores"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_est_conductor"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/grisclaro"
+                        android:text="Administrar Estados de Conductor"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
 
@@ -239,7 +283,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Estados de Servicios"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -250,7 +294,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Estados de Vehiculos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -261,7 +305,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Generos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -272,7 +316,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Lineas de Vehiculos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -283,7 +327,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Marcas de vehiculos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -294,7 +338,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Metodos de Pago"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -305,7 +349,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Paises"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -316,7 +360,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Pasajeros de Servicios"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -327,7 +371,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Preguntas de Seguridad"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -338,7 +382,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Respuestas de Seguridad"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -349,7 +393,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Servicios"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -360,7 +404,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Telefonos de Administradores"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -371,7 +415,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Telefonos de Clientes"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -382,7 +426,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Telefonos de Conductores"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -393,7 +437,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Tipos de Identificacion"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -404,7 +448,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Tipos de Servicio"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -415,7 +459,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Tipos de Usuario"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -426,7 +470,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="0dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Usuarios"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
@@ -437,7 +481,7 @@
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="20dp"
-                        android:backgroundTint="@color/grisoscuro"
+                        android:backgroundTint="@color/grisclaro"
                         android:text="Administrar Vehiculos"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>

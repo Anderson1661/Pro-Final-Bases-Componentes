@@ -603,14 +603,229 @@ INSERT INTO codigo_postal (id_codigo_postal, id_pais, departamento, ciudad) VALU
 
 -- Tablas de vehículos y servicios
 INSERT INTO estado_vehiculo (descripcion) VALUES ('Activo'), ('En Mantenimiento'), ('Inactivo');
-INSERT INTO marca_vehiculo (nombre_marca) VALUES ('Chevrolet'), ('Renault'), ('Nissan'), ('Mazda');
+INSERT INTO marca_vehiculo (nombre_marca) VALUES 
+('Chevrolet'), 
+('Renault'), 
+('Nissan'), 
+('Mazda'),
+('Toyota'),
+('Ford'),
+('Hyundai'),
+('Kia'),
+('Volkswagen'),
+('Mercedes-Benz'),
+('Mitsubishi'),
+('Suzuki'),
+('BMW'),
+('Audi'),
+('Dodge');
+
+-- Insertar líneas para Chevrolet (id_marca = 1)
 INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
-('N300', 1),
-('Spark', 1),
-('Logan', 2),
-('Versa', 3);
-INSERT INTO color_vehiculo (descripcion) VALUES ('Blanco'), ('Negro'), ('Gris'), ('Rojo'), ('Azul');
+('Aveo', 1),
+('Spark GT', 1),
+('Cruze', 1),
+('Trax', 1),
+('Equinox', 1),
+('Captiva', 1),
+('Orlando', 1),
+('Tornado', 1),
+('D-Max', 1),
+('Silverado', 1),
+('Colorado', 1),
+('Tahoe', 1),
+('Suburban', 1),
+('Blazer', 1),
+('Malibu', 1);
+-- Insertar líneas para Renault (id_marca = 2)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Sandero', 2),
+('Sandero Stepway', 2),
+('Duster', 2),
+('Koleos', 2),
+('Captur', 2),
+('Kwid', 2),
+('Twingo', 2),
+('Clio', 2),
+('Megane', 2),
+('Scenic', 2),
+('Kangoo', 2),
+('Master', 2),
+('Trafic', 2),
+('Alaskan', 2),
+('Symbol', 2);
+-- Insertar líneas para Nissan (id_marca = 3)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('March', 3),
+('Versa', 3),
+('Sentra', 3),
+('Altima', 3),
+('Maxima', 3),
+('X-Trail', 3),
+('Qashqai', 3),
+('Juke', 3),
+('Murano', 3),
+('Pathfinder', 3),
+('Frontier', 3),
+('Navara', 3),
+('Urvan', 3),
+('Tiida', 3),
+('Kicks', 3);
+-- Insertar líneas para Mazda (id_marca = 4)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Mazda2', 4),
+('Mazda3', 4),
+('Mazda6', 4),
+('CX-3', 4),
+('CX-5', 4),
+('CX-9', 4),
+('CX-30', 4),
+('BT-50', 4),
+('MX-5', 4),
+('RX-8', 4),
+('CX-7', 4),
+('CX-8', 4),
+('Tribute', 4),
+('Premacy', 4),
+('Bongo', 4);
+-- Insertar líneas para Toyota (id_marca = 5)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Yaris', 5),
+('Corolla', 5),
+('Camry', 5),
+('RAV4', 5),
+('Hilux', 5),
+('Fortuner', 5),
+('Prado', 5),
+('Land Cruiser', 5),
+('4Runner', 5),
+('Tacoma', 5),
+('Tundra', 5),
+('Sienna', 5),
+('Highlander', 5),
+('Avanza', 5),
+('Innova', 5);
+-- Insertar líneas para Ford (id_marca = 6)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Fiesta', 6),
+('Focus', 6),
+('Fusion', 6),
+('Escape', 6),
+('Explorer', 6),
+('Expedition', 6),
+('Ranger', 6),
+('F-150', 6),
+('Transit', 6),
+('Tourneo', 6),
+('EcoSport', 6),
+('Edge', 6),
+('Bronco', 6),
+('Mustang', 6),
+('Territory', 6);
+-- Insertar líneas para Hyundai (id_marca = 7)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Accent', 7),
+('Elantra', 7),
+('Tucson', 7),
+('Santa Fe', 7),
+('Creta', 7),
+('Kona', 7),
+('Palisade', 7),
+('Venue', 7),
+('i10', 7),
+('i20', 7),
+('i30', 7),
+('Grand i10', 7),
+('H-1', 7),
+('Staria', 7),
+('Sonata', 7);
+-- Insertar líneas para Kia (id_marca = 8)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Rio', 8),
+('Forte', 8),
+('Optima', 8),
+('Sportage', 8),
+('Sorento', 8),
+('Picanto', 8),
+('Stonic', 8),
+('Seltos', 8),
+('Carnival', 8),
+('Telluride', 8),
+('Soul', 8),
+('Niro', 8),
+('Cerato', 8),
+('K2500', 8),
+('K2700', 8);
+-- Insertar líneas para Volkswagen (id_marca = 9)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Golf', 9),
+('Jetta', 9),
+('Passat', 9),
+('Tiguan', 9),
+('Amarok', 9),
+('T-Cross', 9),
+('Taos', 9),
+('Virtus', 9),
+('Polo', 9),
+('Vento', 9),
+('Transporter', 9),
+('Crafter', 9),
+('Caddy', 9),
+('Teramont', 9),
+('Arteon', 9);
+-- Insertar líneas para Mercedes-Benz (id_marca = 10)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('Clase A', 10),
+('Clase C', 10),
+('Clase E', 10),
+('Clase G', 10),
+('Sprinter', 10),
+('Vito', 10),
+('Viano', 10),
+('Clase B', 10),
+('Clase CLA', 10),
+('Clase GLA', 10),
+('Clase GLB', 10),
+('Clase GLC', 10),
+('Clase GLE', 10),
+('Clase GLS', 10),
+('Clase V', 10);
+-- Insertar líneas para Mitsubishi (id_marca = 11)
+INSERT INTO linea_vehiculo (id_linea, id_marca) VALUES 
+('L200', 11),
+('Outlander', 11),
+('Eclipse Cross', 11),
+('ASX', 11),
+('Montero', 11),
+('Pajero', 11),
+('Mirage', 11),
+('Lancer', 11),
+('XPANDER', 11),
+('Delica', 11),
+('Triton', 11),
+('Strada', 11),
+('Galant', 11),
+('Space Star', 11),
+('Attrage', 11);
+
+
+INSERT INTO color_vehiculo (descripcion) VALUES 
+('Blanco'), 
+('Negro'), 
+('Gris'), 
+('Rojo'), 
+('Azul'),
+('Verde'),
+('Amarillo'),
+('Plateado'),
+('Beige'),
+('Marrón'),
+('Vino Tinto'),
+('Verde Militar'),
+('Naranja');
+
 INSERT INTO tipo_servicio (descripcion) VALUES ('Alimentos'),('Pasajeros'),('Pasajeros y alimentos');
+
 INSERT INTO categoria_servicio (descripcion, valor_km) VALUES 
 ('Económico', 2500.00),
 ('Estándar', 3500.00),
@@ -624,10 +839,10 @@ INSERT INTO metodo_pago (descripcion) VALUES ('Efectivo'),('Tarjeta Debito'),('T
 
 -- Vehículos
 INSERT INTO vehiculo (placa, linea_vehiculo, modelo, id_color, id_marca, id_tipo_servicio, id_estado_vehiculo) VALUES 
-('ABC123', 'N300', 2020, 1, 1, 1, 1),
-('DEF456', 'Spark', 2021, 2, 1, 1, 1),
-('SEX69H', 'Logan', 2026, 5, 2, 3, 1),
-('GHI789', 'Logan', 2019, 3, 2, 1, 1);
+('ABC123', 'D-Max', 2020, 1, 1, 1, 1),
+('DEF456', 'Trax', 2021, 2, 1, 1, 1),
+('SEX69H', 'Duster', 2023, 5, 2, 3, 1),
+('GHI789', 'Sandero', 2019, 3, 2, 1, 1);
 
 -- Administradores
 INSERT INTO administrador (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal) VALUES 
@@ -706,7 +921,7 @@ insert into respuestas_seguridad (id_pregunta, id_usuario, respuesta_pregunta) V
 (2, 7,'ciudad'),
 (3, 7,'colegio');
 
--- ======== VISTAS ========
+-- ======== VISTAS CONVENCIONALES ========
 
 CREATE OR REPLACE VIEW vw_total_por_tipo_y_categoria AS
 SELECT 
@@ -751,3 +966,184 @@ FROM ruta r
 JOIN metodo_pago mp ON r.id_metodo_pago = mp.id_metodo_pago
 GROUP BY mp.descripcion
 ORDER BY valor_total DESC;
+
+
+CREATE OR REPLACE VIEW vw_analisis_categoria_metodo_pago AS
+SELECT 
+    cs.descripcion AS categoria_servicio,
+    mp.descripcion AS metodo_pago,
+    COUNT(r.id_ruta) AS cantidad_servicios,
+    COALESCE(SUM(r.total), 0) AS valor_total,
+    COALESCE(AVG(r.total), 0) AS valor_promedio,
+    COALESCE(SUM(r.pago_conductor), 0) AS pago_conductores,
+    COALESCE(SUM(r.total) - COALESCE(SUM(r.pago_conductor), 0), 0) AS ganancia_empresa,
+    COUNT(DISTINCT r.id_cliente) AS clientes_unicos,
+    COUNT(DISTINCT r.id_conductor) AS conductores_unicos
+FROM ruta r
+JOIN categoria_servicio cs ON r.id_categoria_servicio = cs.id_categoria_servicio
+JOIN metodo_pago mp ON r.id_metodo_pago = mp.id_metodo_pago
+WHERE r.id_estado_servicio IN (2, 3) -- Solo servicios en proceso y finalizados
+GROUP BY cs.descripcion, mp.descripcion
+ORDER BY valor_total DESC;
+
+
+
+
+
+-- ======== VISTAS MATERIALIZADAS ========
+
+-- Esta vista materializada almacenaría los ingresos mensuales precalculados
+CREATE TABLE mv_resumen_mensual_ingresos (
+    anio_mes VARCHAR(7) PRIMARY KEY,
+    total_ingresos DECIMAL(12,2) NOT NULL,
+    total_servicios INT NOT NULL,
+    promedio_por_servicio DECIMAL(10,2) NOT NULL,
+    ingresos_conductor DECIMAL(12,2) NOT NULL,
+    ingresos_empresa DECIMAL(12,2) NOT NULL,
+    ultima_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Procedimiento para actualizar la vista materializada
+DELIMITER //
+
+CREATE PROCEDURE ActualizarResumenMensual()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE current_year_month VARCHAR(7);
+    DECLARE cur CURSOR FOR 
+        SELECT DISTINCT DATE_FORMAT(fecha_hora_reserva, '%Y-%m') 
+        FROM ruta 
+        WHERE fecha_hora_reserva IS NOT NULL;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    -- Limpiar tabla existente
+    DELETE FROM mv_resumen_mensual_ingresos;
+    
+    OPEN cur;
+    
+    read_loop: LOOP
+        FETCH cur INTO current_year_month;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        INSERT INTO mv_resumen_mensual_ingresos (
+            anio_mes, 
+            total_ingresos, 
+            total_servicios, 
+            promedio_por_servicio,
+            ingresos_conductor,
+            ingresos_empresa
+        )
+        SELECT 
+            current_year_month,
+            COALESCE(SUM(total), 0),
+            COUNT(id_ruta),
+            COALESCE(AVG(total), 0),
+            COALESCE(SUM(pago_conductor), 0),
+            COALESCE(SUM(total) - SUM(pago_conductor), 0)
+        FROM ruta 
+        WHERE DATE_FORMAT(fecha_hora_reserva, '%Y-%m') = current_year_month
+        AND id_estado_servicio IN (2, 3); -- Solo servicios en proceso y finalizados
+    END LOOP;
+    
+    CLOSE cur;
+END//
+
+DELIMITER ;
+
+-- Evento para actualización automática diaria
+CREATE EVENT IF NOT EXISTS event_actualizar_resumen_mensual
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_TIMESTAMP
+DO
+    CALL ActualizarResumenMensual();
+
+
+
+
+
+
+
+-- Vista materializada para estadísticas de conductores por ciudad
+CREATE TABLE mv_estadisticas_conductores_ciudad (
+    id_ciudad VARCHAR(10) PRIMARY KEY,
+    ciudad VARCHAR(50) NOT NULL,
+    departamento VARCHAR(50) NOT NULL,
+    total_conductores INT NOT NULL,
+    conductores_activos INT NOT NULL,
+    conductores_conectados INT NOT NULL,
+    vehiculos_activos INT NOT NULL,
+    promedio_servicios_por_conductor DECIMAL(10,2) NOT NULL,
+    ultima_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Procedimiento para actualizar estadísticas de conductores
+DELIMITER //
+
+CREATE PROCEDURE ActualizarEstadisticasConductores()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE current_codigo_postal VARCHAR(10);
+    DECLARE cur CURSOR FOR 
+        SELECT DISTINCT cp.id_codigo_postal 
+        FROM codigo_postal cp 
+        JOIN conductor c ON cp.id_codigo_postal = c.codigo_postal;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    -- Limpiar tabla existente
+    DELETE FROM mv_estadisticas_conductores_ciudad;
+    
+    OPEN cur;
+    
+    read_loop: LOOP
+        FETCH cur INTO current_codigo_postal;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        INSERT INTO mv_estadisticas_conductores_ciudad (
+            id_ciudad,
+            ciudad,
+            departamento,
+            total_conductores,
+            conductores_activos,
+            conductores_conectados,
+            vehiculos_activos,
+            promedio_servicios_por_conductor
+        )
+        SELECT 
+            cp.id_codigo_postal,
+            cp.ciudad,
+            cp.departamento,
+            COUNT(DISTINCT c.id_conductor) as total_conductores,
+            COUNT(DISTINCT CASE WHEN ec.descripcion = 'Conectado' THEN c.id_conductor END) as conductores_activos,
+            COUNT(DISTINCT CASE WHEN c.id_estado_conductor = 1 THEN c.id_conductor END) as conductores_conectados,
+            COUNT(DISTINCT CASE WHEN ev.descripcion = 'Activo' THEN v.placa END) as vehiculos_activos,
+            COALESCE(
+                (SELECT COUNT(r.id_ruta) / COUNT(DISTINCT r.id_conductor) 
+                 FROM ruta r 
+                 JOIN conductor c2 ON r.id_conductor = c2.id_conductor 
+                 WHERE c2.codigo_postal = current_codigo_postal
+                 AND r.id_estado_servicio IN (2, 3)), 0
+            ) as promedio_servicios
+        FROM codigo_postal cp
+        LEFT JOIN conductor c ON cp.id_codigo_postal = c.codigo_postal
+        LEFT JOIN estado_conductor ec ON c.id_estado_conductor = ec.id_estado_conductor
+        LEFT JOIN vehiculo v ON c.placa_vehiculo = v.placa
+        LEFT JOIN estado_vehiculo ev ON v.id_estado_vehiculo = ev.id_estado_vehiculo
+        WHERE cp.id_codigo_postal = current_codigo_postal
+        GROUP BY cp.id_codigo_postal, cp.ciudad, cp.departamento;
+    END LOOP;
+    
+    CLOSE cur;
+END//
+
+DELIMITER ;
+
+-- Evento para actualización automática cada 6 horas
+CREATE EVENT IF NOT EXISTS event_actualizar_estadisticas_conductores
+ON SCHEDULE EVERY 6 HOUR
+STARTS CURRENT_TIMESTAMP
+DO
+    CALL ActualizarEstadisticasConductores();
