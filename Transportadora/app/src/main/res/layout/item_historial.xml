@@ -59,7 +59,7 @@
             android:textColor="#616161"
             android:textSize="14sp"
             android:layout_marginTop="2dp" />
-        
+
         <TextView
             android:id="@+id/tvMetodoPago"
             android:layout_width="wrap_content"
@@ -77,6 +77,31 @@
             android:textColor="#616161"
             android:textSize="14sp"
             android:layout_marginTop="2dp" />
+
+        <!-- Nuevo: Imagen del conductor (visible solo cuando estado es "En proceso") -->
+        <LinearLayout
+            android:id="@+id/layoutConductor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Conductor asignado: "
+                android:textColor="@color/negro"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imgConductor"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Foto del conductor"
+                android:src="@drawable/fondo_main" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Columna derecha (botones) -->

@@ -30,7 +30,11 @@ object Historial_servicio_almacenados {
                             ciudad_destino = obj.optString("ciudad_destino"),
                             tipo_servicio = obj.optString("tipo_servicio"),
                             estado_servicio = obj.optString("estado_servicio"),
-                            metodo_pago = obj.optString("metodo_pago")
+                            metodo_pago = obj.optString("metodo_pago"),
+                            // Nuevo campo
+                            url_foto_conductor = obj.optString("url_foto_conductor").takeIf {
+                                it != null && it != "null" && it.isNotEmpty()
+                            }
                         )
                     )
                 }

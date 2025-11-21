@@ -18,7 +18,9 @@ if (isset($_POST['correo'])) {
                 cd.ciudad AS ciudad_destino,
                 ts.descripcion AS tipo_servicio,
                 es.descripcion AS estado_servicio,
-                mp.descripcion AS metodo_pago
+                mp.descripcion AS metodo_pago,
+                -- Nuevo campo: URL de foto del conductor
+                cnd.url_foto AS url_foto_conductor
             FROM ruta r
             JOIN cliente c ON r.id_cliente = c.id_cliente
             JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio
@@ -26,6 +28,7 @@ if (isset($_POST['correo'])) {
             JOIN metodo_pago mp ON r.id_metodo_pago = mp.id_metodo_pago
             JOIN codigo_postal co ON r.id_codigo_postal_origen = co.id_codigo_postal
             JOIN codigo_postal cd ON r.id_codigo_postal_destino = cd.id_codigo_postal
+            LEFT JOIN conductor cnd ON r.id_conductor = cnd.id_conductor  -- LEFT JOIN para obtener datos del conductor
             WHERE c.correo = ?
             ORDER BY r.fecha_hora_reserva DESC";
     

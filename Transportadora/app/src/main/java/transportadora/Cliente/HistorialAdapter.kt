@@ -4,16 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import transportadora.Modelos.Cliente.HistorialServicio
 import transportadora.Login.R
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.squareup.picasso.Picasso
 
 class HistorialAdapter(
     private var servicios: List<HistorialServicio>,
-    // CAMBIO 3: onCancelClick ahora espera un Int (idRuta) y un String (metodoPago)
     private val onCancelClick: (Int, String) -> Unit,
     private val onDetailsClick: (Int) -> Unit
 ) : RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder>() {
@@ -29,7 +30,6 @@ class HistorialAdapter(
 
     override fun onBindViewHolder(holder: HistorialViewHolder, position: Int) {
         val servicio = servicios[position]
-        // CAMBIO 4: La función bind recibe el nuevo listener de 2 argumentos
         holder.bind(servicio, onCancelClick, onDetailsClick)
     }
 
@@ -51,7 +51,10 @@ class HistorialAdapter(
         private val btnCancelar: Button = itemView.findViewById(R.id.btnCancelar)
         private val btnDetalle: Button = itemView.findViewById(R.id.btnDetalle)
 
-        // CAMBIO 5: La función bind usa el nuevo listener con 2 argumentos
+        // Nuevas vistas para la imagen del conductor
+        private val layoutConductor: View = itemView.findViewById(R.id.layoutConductor)
+        private val imgConductor: ImageView = itemView.findViewById(R.id.imgConductor)
+
         fun bind(servicio: HistorialServicio, onCancelClick: (Int, String) -> Unit, onDetailsClick: (Int) -> Unit) {
 
             val idRutaInt = try { servicio.id_ruta.toInt() } catch (e: NumberFormatException) { 0 }
@@ -73,6 +76,20 @@ class HistorialAdapter(
 
             val estadoCancelable = servicio.estado_servicio == "Pendiente"
 
+            // NUEVA LÓGICA: Mostrar imagen del conductor solo si el estado es "En proceso"
+            if (servicio.estado_servicio == "En proceso" && !servicio.url_foto_conductor.isNullOrEmpty()) {
+                layoutConductor.visibility = View.VISIBLE
+
+                // Cargar imagen con Picasso (similar al perfil del conductor)
+                Picasso.get()
+                    .load(servicio.url_foto_conductor)
+                    .placeholder(R.drawable.fondo_main)
+                    .error(R.drawable.fondo_main)
+                    .into(imgConductor)
+            } else {
+                layoutConductor.visibility = View.GONE
+            }
+
             if (idRutaInt > 0) {
                 btnDetalle.visibility = View.VISIBLE
                 btnDetalle.setOnClickListener {
@@ -85,7 +102,6 @@ class HistorialAdapter(
             if (estadoCancelable) {
                 btnCancelar.visibility = View.VISIBLE
                 btnCancelar.setOnClickListener {
-                    // CAMBIO 6: Se pasa el idRuta Y el servicio.metodo_pago
                     onCancelClick(idRutaInt, servicio.metodo_pago)
                 }
             } else {

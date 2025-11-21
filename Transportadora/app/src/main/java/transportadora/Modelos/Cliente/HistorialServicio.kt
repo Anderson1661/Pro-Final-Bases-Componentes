@@ -9,5 +9,6 @@ data class HistorialServicio(
     val ciudad_destino: String,
     val tipo_servicio: String,
     val estado_servicio: String,
-    val metodo_pago: String
+    val metodo_pago: String,
+    val url_foto_conductor: String? = null
 )
