@@ -78,22 +78,32 @@
             android:textSize="14sp"
             android:layout_marginTop="2dp" />
 
-        <!-- Nuevo: Imagen del conductor (visible solo cuando estado es "En proceso") -->
+        <!-- Nuevo: Información del conductor (visible solo cuando estado es "En proceso") -->
         <LinearLayout
             android:id="@+id/layoutConductor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="gone"
             android:layout_marginTop="8dp"
-            android:gravity="center_vertical">
+            android:gravity="center_horizontal">
 
-            <TextView
+        <TextView
+                android:id="@+id/tvConductorLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Conductor asignado: "
                 android:textColor="@color/negro"
+                android:textStyle="bold"
                 android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvNombreConductor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre del conductor"
+                android:textColor="#616161"
+                android:textSize="12sp"/>
 
             <ImageView
                 android:id="@+id/imgConductor"
@@ -117,7 +127,7 @@
             android:layout_height="wrap_content"
             android:text="Detalles"
             android:textSize="12sp"
-            android:backgroundTint="@color/grisoscuro"
+            android:backgroundTint="@color/amarillo"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="4dp" />
 

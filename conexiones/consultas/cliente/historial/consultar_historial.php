@@ -19,8 +19,9 @@ if (isset($_POST['correo'])) {
                 ts.descripcion AS tipo_servicio,
                 es.descripcion AS estado_servicio,
                 mp.descripcion AS metodo_pago,
-                -- Nuevo campo: URL de foto del conductor
-                cnd.url_foto AS url_foto_conductor
+                -- Nuevos campos: URL de foto y nombre del conductor
+                cnd.url_foto AS url_foto_conductor,
+                cnd.nombre AS nombre_conductor
             FROM ruta r
             JOIN cliente c ON r.id_cliente = c.id_cliente
             JOIN tipo_servicio ts ON r.id_tipo_servicio = ts.id_tipo_servicio

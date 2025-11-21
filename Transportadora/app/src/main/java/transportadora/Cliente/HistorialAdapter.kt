@@ -51,8 +51,9 @@ class HistorialAdapter(
         private val btnCancelar: Button = itemView.findViewById(R.id.btnCancelar)
         private val btnDetalle: Button = itemView.findViewById(R.id.btnDetalle)
 
-        // Nuevas vistas para la imagen del conductor
+        // Nuevas vistas para la información del conductor
         private val layoutConductor: View = itemView.findViewById(R.id.layoutConductor)
+        private val tvNombreConductor: TextView = itemView.findViewById(R.id.tvNombreConductor)
         private val imgConductor: ImageView = itemView.findViewById(R.id.imgConductor)
 
         fun bind(servicio: HistorialServicio, onCancelClick: (Int, String) -> Unit, onDetailsClick: (Int) -> Unit) {
@@ -76,16 +77,21 @@ class HistorialAdapter(
 
             val estadoCancelable = servicio.estado_servicio == "Pendiente"
 
-            // NUEVA LÓGICA: Mostrar imagen del conductor solo si el estado es "En proceso"
-            if (servicio.estado_servicio == "En proceso" && !servicio.url_foto_conductor.isNullOrEmpty()) {
+            // NUEVA LÓGICA: Mostrar información del conductor solo si el estado es "En proceso"
+            if (servicio.estado_servicio == "En proceso" && !servicio.nombre_conductor.isNullOrEmpty()) {
                 layoutConductor.visibility = View.VISIBLE
+                tvNombreConductor.text = servicio.nombre_conductor
 
                 // Cargar imagen con Picasso (similar al perfil del conductor)
-                Picasso.get()
-                    .load(servicio.url_foto_conductor)
-                    .placeholder(R.drawable.fondo_main)
-                    .error(R.drawable.fondo_main)
-                    .into(imgConductor)
+                if (!servicio.url_foto_conductor.isNullOrEmpty()) {
+                    Picasso.get()
+                        .load(servicio.url_foto_conductor)
+                        .placeholder(R.drawable.fondo_main)
+                        .error(R.drawable.fondo_main)
+                        .into(imgConductor)
+                } else {
+                    imgConductor.setImageResource(R.drawable.fondo_main)
+                }
             } else {
                 layoutConductor.visibility = View.GONE
             }
