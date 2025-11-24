@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para actualizar la imagen de perfil del conductor.
+ * 
+ * Recibe el correo del conductor y la URL de la nueva foto.
+ * Verifica que el conductor exista y actualiza el campo 'url_foto'.
+ */
+
 include('../../../config/conexion.php');
 
 header('Content-Type: application/json; charset=utf-8');

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para obtener el código postal basado en ubicación.
+ * 
+ * Recibe País, Departamento y Ciudad y devuelve el ID del código postal correspondiente.
+ * Se utiliza en formularios donde el usuario selecciona su ubicación mediante selectores.
+ */
+
 // Incluir el archivo de conexión a la base de datos
 include('../../../config/conexion.php');
 $link = Conectar();

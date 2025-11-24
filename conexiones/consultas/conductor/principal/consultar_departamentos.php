@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar departamentos por país.
+ * 
+ * Recibe el ID del país y devuelve una lista única de departamentos.
+ * Se utiliza para llenar selectores dependientes en formularios.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

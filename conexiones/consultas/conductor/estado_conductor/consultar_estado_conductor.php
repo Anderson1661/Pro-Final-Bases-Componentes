@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar el estado actual de un conductor.
+ * 
+ * Recibe el ID del conductor y devuelve su estado (ID y descripción).
+ * Se utiliza para verificar si el conductor puede recibir nuevos servicios.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

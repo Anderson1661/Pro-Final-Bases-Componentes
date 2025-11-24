@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para cambiar el estado de una ruta (servicio).
+ * 
+ * Recibe el ID de la ruta, el nuevo estado y el ID del conductor.
+ * Maneja diferentes lógicas según el estado:
+ * - Estado 2 (Aceptar): Asigna el conductor y marca la hora de inicio.
+ * - Estado 3 (Finalizar): Marca la hora de finalización.
+ * - Otros estados: Solo actualiza el estado.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar los pagos y ganancias de un conductor.
+ * 
+ * Recibe el correo del conductor.
+ * Devuelve una lista de servicios finalizados, el total cobrado y la ganancia del conductor (80%).
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');

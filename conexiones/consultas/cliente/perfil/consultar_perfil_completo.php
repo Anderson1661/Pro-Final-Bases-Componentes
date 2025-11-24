@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para consultar el perfil completo de un cliente.
+ * 
+ * Recibe el correo y devuelve todos los datos personales, incluyendo:
+ * - Identificación y tipo
+ * - Nacionalidad
+ * - Ubicación detallada (País, Departamento, Ciudad)
+ * - Lista de teléfonos asociados
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -9,7 +19,7 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
-    // Consulta principal del cliente
+    // Consulta principal del cliente con JOINs a catálogos
     $sql = "SELECT 
                 ti.descripcion AS tipo_identificacion,
                 c.identificacion,
@@ -38,7 +48,7 @@ if (isset($_POST['correo'])) {
     if ($result && mysqli_num_rows($result) > 0) {
         $cliente_data = mysqli_fetch_assoc($result);
 
-        // Consulta de teléfonos
+        // Subconsulta para obtener los teléfonos
         $sql_tel = "SELECT telefono FROM telefono_cliente WHERE id_cliente = (SELECT id_cliente FROM cliente WHERE correo = ?)";
         $stmt_tel = mysqli_prepare($link, $sql_tel);
         mysqli_stmt_bind_param($stmt_tel, "s", $correo);

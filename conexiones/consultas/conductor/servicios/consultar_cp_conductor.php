@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar el código postal y tipo de servicio de un conductor.
+ * 
+ * Recibe el correo del conductor.
+ * Devuelve el ID del conductor, su código postal y el tipo de servicio de su vehículo.
+ * Se utiliza para filtrar los servicios disponibles que coincidan con su ubicación y tipo.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');

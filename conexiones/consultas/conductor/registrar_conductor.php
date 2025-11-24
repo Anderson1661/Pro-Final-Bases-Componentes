@@ -1,12 +1,24 @@
 <?php
+/**
+ * Script para registrar un nuevo conductor.
+ * 
+ * Este proceso es complejo y transaccional, involucrando múltiples tablas:
+ * 1. Vehículo: Se registra o valida el vehículo.
+ * 2. Conductor: Se crea el perfil del conductor.
+ * 3. Teléfonos: Se asocian los números de contacto.
+ * 4. Seguridad: Se registran las respuestas a las preguntas de seguridad.
+ * 
+ * Recibe un JSON con toda la estructura de datos anidada.
+ */
+
 include('../../config/conexion.php');
 $link = Conectar();
 
-// Leer datos JSON
+// Leer datos JSON del cuerpo de la solicitud
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-// Validar que existan todos los datos requeridos
+// Validar que existan todos los datos requeridos en la estructura JSON
 if (!isset($data['id_tipo_identificacion']) || !isset($data['identificacion']) || 
     !isset($data['nombre']) || !isset($data['direccion']) || !isset($data['correo']) ||
     !isset($data['id_genero']) || !isset($data['id_pais_nacionalidad']) || 
@@ -19,7 +31,7 @@ if (!isset($data['id_tipo_identificacion']) || !isset($data['identificacion']) |
     exit;
 }
 
-// Extraer datos
+// Extraer y escapar datos personales
 $id_tipo_identificacion = mysqli_real_escape_string($link, $data['id_tipo_identificacion']);
 $identificacion = mysqli_real_escape_string($link, $data['identificacion']);
 $nombre = mysqli_real_escape_string($link, $data['nombre']);
@@ -39,19 +51,19 @@ $modelo = mysqli_real_escape_string($link, $vehiculo['modelo']);
 $color = mysqli_real_escape_string($link, $vehiculo['color']);
 $tipo_servicio = mysqli_real_escape_string($link, $vehiculo['tipo_servicio']);
 
-// Teléfonos
+// Teléfonos (Array)
 $telefonos = $data['telefonos'];
 
-// Preguntas seguridad
+// Preguntas seguridad (Array)
 $preguntas_seguridad = $data['preguntas_seguridad'];
 
-// Iniciar transacción
+// Iniciar transacción global
 mysqli_begin_transaction($link);
 
 try {
     // PASO 1: Insertar o verificar datos del vehículo
     
-    // Obtener ID de marca
+    // 1.1 Obtener ID de marca (debe existir en catálogo)
     $sql_marca = "SELECT id_marca FROM marca_vehiculo WHERE nombre_marca = '$marca'";
     $result_marca = mysqli_query($link, $sql_marca);
     if (!$result_marca || mysqli_num_rows($result_marca) == 0) {
@@ -60,7 +72,7 @@ try {
     $row_marca = mysqli_fetch_assoc($result_marca);
     $id_marca = $row_marca['id_marca'];
     
-    // Obtener ID de color
+    // 1.2 Obtener ID de color (debe existir en catálogo)
     $sql_color = "SELECT id_color FROM color_vehiculo WHERE descripcion = '$color'";
     $result_color = mysqli_query($link, $sql_color);
     if (!$result_color || mysqli_num_rows($result_color) == 0) {
@@ -69,7 +81,7 @@ try {
     $row_color = mysqli_fetch_assoc($result_color);
     $id_color = $row_color['id_color'];
     
-    // Obtener ID de tipo servicio
+    // 1.3 Obtener ID de tipo servicio (debe existir en catálogo)
     $sql_servicio = "SELECT id_tipo_servicio FROM tipo_servicio WHERE descripcion = '$tipo_servicio'";
     $result_servicio = mysqli_query($link, $sql_servicio);
     if (!$result_servicio || mysqli_num_rows($result_servicio) == 0) {
@@ -78,7 +90,7 @@ try {
     $row_servicio = mysqli_fetch_assoc($result_servicio);
     $id_tipo_servicio = $row_servicio['id_tipo_servicio'];
     
-    // Verificar/insertar línea de vehículo
+    // 1.4 Verificar/insertar línea de vehículo si no existe para esa marca
     $sql_linea = "SELECT 1 FROM linea_vehiculo WHERE id_linea = '$linea' AND id_marca = $id_marca";
     $result_linea = mysqli_query($link, $sql_linea);
     if (!$result_linea || mysqli_num_rows($result_linea) == 0) {
@@ -88,10 +100,10 @@ try {
         }
     }
     
+    // 1.5 Insertar vehículo
     // Estado del vehículo por defecto (Activo = 1)
     $id_estado_vehiculo = 1;
     
-    // Insertar vehículo
     $sql_vehiculo = "INSERT INTO vehiculo (placa, linea_vehiculo, modelo, id_color, id_marca, id_tipo_servicio, id_estado_vehiculo) 
                      VALUES ('$placa', '$linea', $modelo, $id_color, $id_marca, $id_tipo_servicio, $id_estado_vehiculo)";
     if (!mysqli_query($link, $sql_vehiculo)) {
@@ -121,11 +133,13 @@ try {
     }
     
     // PASO 4: Insertar respuestas de seguridad
-    // Primero obtener el ID de usuario creado por el trigger
+    // Nota: El trigger en la BD crea automáticamente el usuario al insertar el conductor.
+    // Debemos buscar ese usuario recién creado usando el correo.
+    
     $sql_usuario = "SELECT id_usuario FROM usuario WHERE correo = '$correo'";
     $result_usuario = mysqli_query($link, $sql_usuario);
     if (!$result_usuario || mysqli_num_rows($result_usuario) == 0) {
-        throw new Exception("No se encontró usuario para el conductor");
+        throw new Exception("No se encontró usuario para el conductor (Fallo en Trigger)");
     }
     $row_usuario = mysqli_fetch_assoc($result_usuario);
     $id_usuario = $row_usuario['id_usuario'];
@@ -141,12 +155,12 @@ try {
         }
     }
     
-    // Confirmar transacción
+    // Confirmar transacción si todo es correcto
     mysqli_commit($link);
     echo json_encode(array("success" => "1", "mensaje" => "Conductor registrado correctamente"));
     
 } catch (Exception $e) {
-    // Revertir transacción en caso de error
+    // Revertir transacción en caso de cualquier error
     mysqli_rollback($link);
     echo json_encode(array("success" => "0", "mensaje" => $e->getMessage()));
 }

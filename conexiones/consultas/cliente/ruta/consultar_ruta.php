@@ -1,15 +1,26 @@
 <?php
+/**
+ * Script para consultar los detalles completos de una ruta específica.
+ * 
+ * Recibe el ID de la ruta y devuelve toda la información relacionada:
+ * - Detalles de origen y destino (dirección, ciudad, país).
+ * - Fechas y horarios.
+ * - Conductor asignado y vehículo.
+ * - Pasajeros registrados.
+ * - Costos y método de pago.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');
 
-// Permitir tanto POST como GET
+// Permitir tanto POST como GET para flexibilidad en la integración
 $id_ruta = $_POST['id_ruta'] ?? $_GET['id_ruta'] ?? '';
 
 $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 
 if (!empty($id_ruta)) {
-    // Consulta principal de la ruta
+    // Consulta principal de la ruta con múltiples JOINs para obtener descripciones
     $sql = "SELECT 
             r.id_ruta,
             r.id_cliente,       
@@ -45,8 +56,6 @@ if (!empty($id_ruta)) {
         LEFT JOIN pais p_dest ON cp_dest.id_pais = p_dest.id_pais
         WHERE r.id_ruta = ? LIMIT 1";
 
-
-
     $stmt = mysqli_prepare($link, $sql);
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "i", $id_ruta);
@@ -56,7 +65,7 @@ if (!empty($id_ruta)) {
         if ($result && mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
 
-            // Obtener cantidad de pasajeros
+            // Subconsulta: Obtener cantidad de pasajeros
             $sql_count = "SELECT COUNT(*) AS cnt FROM pasajero_ruta WHERE id_ruta = ?";
             $stmt_cnt = mysqli_prepare($link, $sql_count);
             $cantidad_pasajeros = 0;
@@ -71,7 +80,7 @@ if (!empty($id_ruta)) {
                 mysqli_stmt_close($stmt_cnt);
             }
 
-            // Obtener hasta 4 nombres de pasajeros
+            // Subconsulta: Obtener hasta 4 nombres de pasajeros para mostrar en resumen
             $sql_pas = "SELECT nombre_pasajero FROM pasajero_ruta WHERE id_ruta = ? LIMIT 4";
             $stmt_pas = mysqli_prepare($link, $sql_pas);
             $pasajeros = array();
@@ -85,13 +94,13 @@ if (!empty($id_ruta)) {
                 mysqli_stmt_close($stmt_pas);
             }
 
-            // Rellenar pasajeros 1..4 con null si faltan
+            // Rellenar pasajeros 1..4 con null si faltan para mantener estructura fija
             for ($i = 0; $i < 4; $i++) {
                 $key = 'nombre_pasajero' . ($i + 1);
                 $row[$key] = $pasajeros[$i] ?? null;
             }
 
-            // Preparar respuesta
+            // Preparar respuesta estructurada
             $datos = [
                 'id_ruta' => (int)$row['id_ruta'],
                 'id_cliente' => (int)$row['id_cliente'], 
@@ -121,8 +130,6 @@ if (!empty($id_ruta)) {
                 'nombre_conductor' => $row['nombre_conductor'],
                 'placa_vehiculo' => $row['placa_vehiculo']
             ];
-
-
 
             $res = [
                 "success" => "1",

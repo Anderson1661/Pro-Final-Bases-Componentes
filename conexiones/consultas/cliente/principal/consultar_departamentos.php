@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar departamentos por país.
+ * 
+ * Recibe el ID del país y devuelve una lista única de departamentos.
+ * Se utiliza para llenar selectores dependientes en formularios.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -12,7 +19,7 @@ $res['datos'] = array();
 $id_pais = isset($_POST['id_pais']) ? (int)$_POST['id_pais'] : 0;
 
 if ($id_pais > 0) {
-    // Usamos DISTINCT para no repetir departamentos
+    // Usamos DISTINCT para no repetir departamentos ya que la tabla codigo_postal tiene múltiples entradas por ciudad
     $sql = "SELECT DISTINCT departamento 
             FROM codigo_postal 
             WHERE id_pais = ?";

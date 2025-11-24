@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar los pagos de servicios finalizados de un conductor.
+ * 
+ * Recibe el correo del conductor y devuelve una lista de servicios finalizados con sus montos.
+ * Se utiliza para que el conductor pueda ver sus ganancias.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');
@@ -14,6 +21,7 @@ if (isset($_POST['correo'])) {
 }
 
 if ($correo !== null && $correo !== '') {
+    // Consulta para obtener detalles de pagos de servicios finalizados
     $sql = "SELECT 
                 r.id_ruta,
                 r.fecha_hora_destino AS fecha_finalizacion,

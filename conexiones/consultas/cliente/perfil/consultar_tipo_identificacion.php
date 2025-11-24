@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar los tipos de identificación.
+ * 
+ * Devuelve una lista de tipos de identificación (ej. Cédula, Pasaporte).
+ * Se utiliza en el formulario de registro.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -18,8 +25,6 @@ if ($res1) {
             );
             array_push($res['datos'], $item);
         }
-        // Puedes devolver solo el array si prefieres: echo json_encode($res['datos']);
-        // Pero envolverlo en "datos" permite extensibilidad (mensaje, success, etc.)
         $res["success"] = "1";
     } else {
         $res["success"] = "1";

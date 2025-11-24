@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar las preguntas de seguridad disponibles.
+ * 
+ * Devuelve una lista de preguntas de seguridad.
+ * Se utiliza para que el usuario seleccione sus preguntas de recuperación.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

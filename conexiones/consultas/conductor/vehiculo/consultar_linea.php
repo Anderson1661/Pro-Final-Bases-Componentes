@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar las líneas de vehículos por marca.
+ * 
+ * Recibe el ID de la marca y devuelve las líneas asociadas (ej. para Toyota: Corolla, Yaris).
+ * Se utiliza en el formulario de registro de vehículo, dependiente de la marca seleccionada.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

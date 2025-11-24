@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar el historial de servicios de un cliente.
+ * 
+ * Recibe el correo del cliente y devuelve una lista de todos los servicios (rutas)
+ * asociados a ese cliente, ordenados por fecha de reserva descendente.
+ * Incluye detalles como origen, destino, conductor, estado y método de pago.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -9,6 +17,8 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
+    // Consulta compleja con múltiples JOINs para obtener toda la información legible
+    // Se usa LEFT JOIN para el conductor por si la ruta aún no tiene uno asignado (aunque en historial debería tenerlo)
     $sql = "SELECT 
                 r.id_ruta,
                 r.fecha_hora_reserva,
@@ -19,7 +29,7 @@ if (isset($_POST['correo'])) {
                 ts.descripcion AS tipo_servicio,
                 es.descripcion AS estado_servicio,
                 mp.descripcion AS metodo_pago,
-                -- Nuevos campos: URL de foto y nombre del conductor
+                -- Nuevos campos: URL de foto y nombre del conductor para cuando esta en proceso
                 cnd.url_foto AS url_foto_conductor,
                 cnd.nombre AS nombre_conductor
             FROM ruta r

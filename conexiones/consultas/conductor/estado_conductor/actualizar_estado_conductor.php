@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para actualizar el estado de un conductor.
+ * 
+ * Recibe el ID del conductor y el nuevo ID de estado.
+ * Actualiza la tabla 'conductor' con el nuevo estado (ej. Activo, Inactivo, Ocupado).
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

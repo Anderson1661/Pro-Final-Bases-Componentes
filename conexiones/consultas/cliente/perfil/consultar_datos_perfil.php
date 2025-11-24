@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar los datos del perfil de un cliente.
+ * 
+ * Recibe el correo del cliente.
+ * Devuelve información detallada: identificación, nombre, dirección, género, nacionalidad, residencia, ubicación y teléfonos.
+ * Realiza múltiples JOINs para obtener las descripciones de las claves foráneas.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

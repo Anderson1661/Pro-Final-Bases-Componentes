@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para crear una nueva ruta (servicio).
+ * 
+ * Recibe todos los detalles del servicio: origen, destino, cliente, tipo de servicio, etc.
+ * Inserta el registro en la tabla 'ruta' y devuelve el ID generado.
+ * Este ID se usa posteriormente para registrar los pasajeros.
+ */
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 // 1. MANEJO DE ERRORES Y CONEXIÓN
@@ -34,7 +42,7 @@ $fecha_hora_destino = !empty($_REQUEST['fecha_hora_destino']) ? $_REQUEST['fecha
 $id_conductor = !empty($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : NULL;
 
 // Valores fijos
-$id_estado_servicio = 4;
+$id_estado_servicio = 4; // Estado inicial (ej. Pendiente o Solicitado)
 
 // Validar campos requeridos
 if (

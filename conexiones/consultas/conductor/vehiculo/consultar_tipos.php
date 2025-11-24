@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar los tipos de servicio de vehículos.
+ * 
+ * Devuelve una lista de tipos de servicio (ej. Transporte, Carga).
+ * Se utiliza para clasificar el vehículo del conductor durante el registro.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -19,8 +26,6 @@ if ($res1) {
             );
             array_push($res['datos'], $item);
         }
-        // Puedes devolver solo el array si prefieres: echo json_encode($res['datos']);
-        // Pero envolverlo en "datos" permite extensibilidad (mensaje, success, etc.)
         $res["success"] = "1";
     } else {
         $res["success"] = "1";

@@ -1,6 +1,15 @@
 <?php
+/**
+ * Script para actualizar el perfil completo de un cliente.
+ * 
+ * Realiza una actualización transaccional que incluye:
+ * 1. Datos personales en la tabla 'cliente'.
+ * 2. Actualización de teléfonos (borrado y reinserción) en 'telefono_cliente'.
+ * 
+ * Recibe todos los campos del formulario de edición de perfil.
+ */
+
 // Incluir el archivo de conexión a la base de datos
-// CORRECCIÓN 1: Se corrigió la ruta. 
 // Para ir de '/consultas/cliente/perfil/' a '/config/', solo se necesitan tres '../'.
 include('../../../config/conexion.php');
 $link = Conectar();
@@ -62,7 +71,6 @@ if ($all_set) {
         
         $stmt_cliente = mysqli_prepare($link, $sql_cliente);
         
-        // CORRECCIÓN 2: El string de tipificación era "issssisss" y se corrigió a "issssisii"
         // Los tipos son: int, string, string, string, string, int, int, string, int (i s s s s i i s i)
         // Se asume que codigo_postal es string (s) y id_cliente es int (i)
         mysqli_stmt_bind_param(
@@ -88,7 +96,7 @@ if ($all_set) {
 
         // --- 3. Actualizar la tabla TELEFONO_CLIENTE ---
         if ($success_transaction) {
-            // A. Eliminar todos los teléfonos existentes del cliente
+            // A. Eliminar todos los teléfonos existentes del cliente para evitar duplicados o inconsistencias
             $sql_del_tel = "DELETE FROM telefono_cliente WHERE id_cliente = ?";
             $stmt_del = mysqli_prepare($link, $sql_del_tel);
             mysqli_stmt_bind_param($stmt_del, "i", $id_cliente);
@@ -102,8 +110,6 @@ if ($all_set) {
         if ($success_transaction) {
             // B. Insertar tel1 si no está vacío
             if (!empty($tel1)) {
-                // Se cambió ON DUPLICATE KEY UPDATE por un simple INSERT, 
-                // ya que se borran todos los teléfonos antes (DELETE FROM).
                 $sql_ins_tel1 = "INSERT INTO telefono_cliente (id_cliente, telefono) VALUES (?, ?)";
                 $stmt_ins1 = mysqli_prepare($link, $sql_ins_tel1);
                 // Usamos 's' para telefono ya que puede ser VARCHAR/BIGINT en la BD
@@ -119,7 +125,6 @@ if ($all_set) {
         if ($success_transaction) {
             // C. Insertar tel2 si no está vacío
             if (!empty($tel2)) {
-                // Se cambió ON DUPLICATE KEY UPDATE por un simple INSERT.
                 $sql_ins_tel2 = "INSERT INTO telefono_cliente (id_cliente, telefono) VALUES (?, ?)";
                 $stmt_ins2 = mysqli_prepare($link, $sql_ins_tel2);
                 mysqli_stmt_bind_param($stmt_ins2, "is", $id_cliente, $tel2);

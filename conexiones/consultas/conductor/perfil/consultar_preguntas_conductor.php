@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar el catálogo de preguntas de seguridad.
+ * 
+ * Devuelve todas las preguntas de seguridad disponibles.
+ * Se utiliza para que el conductor pueda seleccionar o cambiar sus preguntas.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

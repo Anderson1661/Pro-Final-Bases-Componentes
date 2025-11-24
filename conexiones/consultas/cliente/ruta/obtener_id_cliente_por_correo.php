@@ -1,4 +1,10 @@
 <?php
+/**
+ * Script para obtener el ID de cliente dado su correo.
+ * 
+ * Recibe el correo electrónico y devuelve el ID del cliente.
+ * Se utiliza para vincular operaciones (como crear ruta) al cliente correcto.
+ */
 
 // 1. MANEJO DE ERRORES Y CONEXIÓN
 try {

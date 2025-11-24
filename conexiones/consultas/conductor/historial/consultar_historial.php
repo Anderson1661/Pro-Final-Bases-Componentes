@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar el historial de servicios de un conductor.
+ * 
+ * Recibe el correo del conductor y devuelve una lista de servicios realizados.
+ * Incluye detalles como origen, destino, costo, estado y método de pago.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -20,6 +27,7 @@ if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+// Consulta compleja con múltiples JOINs para obtener descripciones legibles
 $sql = "SELECT 
             r.id_ruta,
             r.fecha_hora_reserva,
@@ -53,7 +61,7 @@ if ($stmt = mysqli_prepare($link, $sql)) {
                 $historial[] = $row;
             }
         } else {
-            // Fallback si mysqli_stmt_get_result no está disponible
+            // Fallback si mysqli_stmt_get_result no está disponible (versiones antiguas de PHP/MySQLnd)
             mysqli_stmt_bind_result($stmt,
                 $id_ruta, $fecha_hora_reserva, $direccion_origen, $ciudad_origen,
                 $direccion_destino, $ciudad_destino, $tipo_servicio, $estado_servicio,

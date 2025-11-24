@@ -1,4 +1,10 @@
 <?php
+/**
+ * Script para obtener el ID de conductor dado su correo.
+ * 
+ * Recibe el correo electrónico y devuelve el ID del conductor.
+ * Se utiliza para vincular operaciones al conductor correcto.
+ */
 
 try {
     include('../../../config/conexion.php');

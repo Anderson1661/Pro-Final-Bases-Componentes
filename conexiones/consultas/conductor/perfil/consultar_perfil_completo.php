@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para consultar el perfil completo de un conductor.
+ * 
+ * Recibe el correo del conductor y devuelve toda su información:
+ * - Datos personales (nombre, identificación, dirección, etc.).
+ * - Datos del vehículo (placa, marca, modelo, color).
+ * - Estado del conductor y del vehículo.
+ * - Teléfonos de contacto.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -9,7 +19,7 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
-    // Consulta principal del conductor con joins para obtener las descripciones
+    // Consulta principal del conductor con joins para obtener las descripciones de todas las tablas relacionadas
     $sql = "SELECT 
                 ti.descripcion AS tipo_identificacion,
                 c.identificacion,
@@ -56,7 +66,7 @@ if (isset($_POST['correo'])) {
     if ($result && mysqli_num_rows($result) > 0) {
         $conductor_data = mysqli_fetch_assoc($result);
 
-        // Consulta de teléfonos
+        // Subconsulta para obtener los teléfonos asociados
         $sql_tel = "SELECT telefono FROM telefono_conductor WHERE id_conductor = (SELECT id_conductor FROM conductor WHERE correo = ?)";
         $stmt_tel = mysqli_prepare($link, $sql_tel);
         mysqli_stmt_bind_param($stmt_tel, "s", $correo);

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para registrar un nuevo cliente.
+ * 
+ * Realiza un registro transaccional que incluye:
+ * 1. Datos personales en la tabla 'cliente'.
+ * 2. Teléfonos de contacto en 'telefono_cliente'.
+ * 
+ * Nota: El usuario de acceso (tabla 'usuario') se crea automáticamente mediante un TRIGGER en la base de datos.
+ */
+
 include('../../config/conexion.php'); // Asegúrate que la ruta a tu conexión es correcta
 $link = Conectar();
 
@@ -26,7 +36,7 @@ if (empty($identificacion) || empty($id_tipo_identificacion) || empty($nombre) |
     exit;
 }
 
-// --- Escapar todas las variables ---
+// --- Escapar todas las variables para prevenir inyección SQL ---
 $identificacion = mysqli_real_escape_string($link, $identificacion);
 $id_tipo_identificacion = mysqli_real_escape_string($link, $id_tipo_identificacion);
 $nombre = mysqli_real_escape_string($link, $nombre);
@@ -39,6 +49,7 @@ $tel1 = mysqli_real_escape_string($link, $tel1);
 $tel2 = mysqli_real_escape_string($link, $tel2);
 
 // --- Iniciar Transacción ---
+// Se usa transacción para asegurar que se guarden cliente y teléfonos, o nada.
 mysqli_begin_transaction($link);
 
 try {
@@ -54,7 +65,6 @@ try {
     $id_cliente_nuevo = mysqli_insert_id($link);
     
     // Paso 3: Insertar el Teléfono 1 (obligatorio)
-    // ########## CORRECCIÓN AQUÍ ##########
     $sql_tel1 = "INSERT INTO telefono_cliente (id_cliente, telefono) VALUES ('$id_cliente_nuevo', '$tel1')";
     if (!mysqli_query($link, $sql_tel1)) {
         throw new Exception("Error al registrar teléfono 1: " . mysqli_error($link));
@@ -62,7 +72,6 @@ try {
 
     // Paso 4: Insertar el Teléfono 2 (solo si no está vacío)
     if (!empty($tel2)) {
-        // ########## CORRECCIÓN AQUÍ ##########
         $sql_tel2 = "INSERT INTO telefono_cliente (id_cliente, telefono) VALUES ('$id_cliente_nuevo', '$tel2')";
         if (!mysqli_query($link, $sql_tel2)) {
             throw new Exception("Error al registrar teléfono 2: " . mysqli_error($link));

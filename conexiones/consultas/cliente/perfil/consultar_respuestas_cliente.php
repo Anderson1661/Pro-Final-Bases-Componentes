@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar las respuestas de seguridad de un cliente.
+ * 
+ * Recibe el correo del cliente.
+ * Devuelve las preguntas seleccionadas y sus respuestas (para visualización o edición).
+ * Se utiliza en la sección de perfil para gestionar la seguridad de la cuenta.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

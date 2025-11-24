@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para consultar detalles adicionales de una ruta.
+ * 
+ * Recibe el ID de la ruta.
+ * Devuelve:
+ * 1. Teléfonos del cliente asociado.
+ * 2. Lista de pasajeros registrados en la ruta.
+ * Se utiliza para que el conductor pueda contactar al cliente o verificar pasajeros.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');

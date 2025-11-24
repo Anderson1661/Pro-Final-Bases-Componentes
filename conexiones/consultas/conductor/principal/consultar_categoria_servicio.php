@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar las categorías de servicio disponibles.
+ * 
+ * Devuelve la descripción y el valor por kilómetro de cada categoría.
+ * Se utiliza para calcular tarifas estimadas o mostrar opciones al usuario.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para actualizar las respuestas de seguridad de un conductor.
+ * 
+ * Recibe el ID de usuario y las 3 preguntas/respuestas nuevas.
+ * Utiliza una transacción para reemplazar las respuestas anteriores.
+ * Si la pregunta cambia, elimina la anterior; si es la misma, actualiza la respuesta.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -24,6 +32,7 @@ if (isset($_POST['id_usuario'], $_POST['original_id_pregunta1'], $_POST['nuevo_i
     mysqli_autocommit($link, FALSE);
     $all_success = true;
 
+    // REPLACE INTO funciona como INSERT o UPDATE si la clave primaria/única coincide
     $sql_update_or_insert = "
         REPLACE INTO respuestas_seguridad (id_usuario, id_pregunta, respuesta_pregunta) 
         VALUES (?, ?, ?)";
@@ -40,6 +49,7 @@ if (isset($_POST['id_usuario'], $_POST['original_id_pregunta1'], $_POST['nuevo_i
         $nuevo_id = $data['nuevo_id'];
         $respuesta = $data['respuesta'];
 
+        // Si se cambió la pregunta, borrar la anterior
         if ($original_id != $nuevo_id) {
             mysqli_stmt_bind_param($stmt_delete, "ii", $id_usuario, $original_id);
             if (!mysqli_stmt_execute($stmt_delete)) {
@@ -48,6 +58,7 @@ if (isset($_POST['id_usuario'], $_POST['original_id_pregunta1'], $_POST['nuevo_i
             }
         }
         
+        // Insertar o actualizar la nueva pregunta/respuesta
         mysqli_stmt_bind_param($stmt_update, "iis", $id_usuario, $nuevo_id, $respuesta);
         if (!mysqli_stmt_execute($stmt_update)) {
             $all_success = false;

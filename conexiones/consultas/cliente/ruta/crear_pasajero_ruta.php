@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para registrar un pasajero en una ruta.
+ * 
+ * Recibe el ID de la ruta y el nombre del pasajero.
+ * Se llama múltiples veces si hay varios pasajeros para un mismo servicio.
+ */
+
 include('../../../config/conexion.php'); // Ajusta la ruta a tu archivo de conexión
 $link = Conectar();
 

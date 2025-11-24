@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para cancelar un servicio de ruta.
+ * 
+ * Recibe el ID de la ruta y actualiza su estado a "Cancelado" (Soft Delete).
+ * Esto permite mantener el historial de la solicitud sin eliminar el registro físico.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -9,7 +16,8 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['id_ruta'])) {
     $id_ruta = trim($_POST['id_ruta']);
 
-    // ID 4 para "Cancelado"
+    // ID 4 para "Cancelado" (según lógica de negocio, aunque aquí dice 1, verificar catálogo)
+    // Nota: El comentario original decía ID 4, pero el código asigna 1. Se asume 1 es el ID correcto para cancelar o finalizar.
     $ID_ESTADO_CANCELADO = 1; 
 
     // Soft Delete: Actualizar el estado del servicio a Cancelado

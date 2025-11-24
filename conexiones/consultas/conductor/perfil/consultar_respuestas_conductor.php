@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar las respuestas de seguridad de un conductor.
+ * 
+ * Recibe el correo del conductor y devuelve sus preguntas y respuestas actuales.
+ * Se utiliza para validar la identidad o permitir la edición de las mismas.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

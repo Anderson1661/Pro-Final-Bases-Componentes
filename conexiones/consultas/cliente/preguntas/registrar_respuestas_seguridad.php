@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para registrar las respuestas de seguridad de un usuario.
+ * 
+ * Recibe el correo del usuario y un array de 3 preguntas con sus respuestas.
+ * Realiza una transacción para asegurar que se guarden las 3 respuestas correctamente.
+ */
+
 // Incluye el archivo de configuración de la conexión a la base de datos.
 include('../../../config/conexion.php');
 $link = Conectar();
@@ -22,6 +29,7 @@ if ($data === null) {
 $correo = $data['correo'] ?? '';
 $preguntas = $data['preguntas'] ?? [];
 
+// Validación: Deben ser exactamente 3 preguntas
 if (empty($correo) || count($preguntas) !== 3) {
     $res["mensaje"] = "Datos incompletos o formato incorrecto (se esperan 3 preguntas).";
     echo json_encode($res, JSON_UNESCAPED_UNICODE);

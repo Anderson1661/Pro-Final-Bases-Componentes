@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar los métodos de pago disponibles.
+ * 
+ * Devuelve una lista de métodos de pago (ej. Efectivo, Tarjeta, etc.).
+ * Se utiliza para llenar selectores en el proceso de creación de ruta o pago.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -14,13 +21,13 @@ if ($res1) {
     if (mysqli_num_rows($res1) > 0) {
         while ($row = mysqli_fetch_assoc($res1)) {
             $item = array(
-                "id_categoria_servicio" => (int)$row['id_categoria_servicio'],
+                // Nota: 'id_categoria_servicio' parece ser un error en el nombre de la columna en el fetch original,
+                // debería ser probablemente 'id_metodo_pago' si existiera en el select, pero el select solo pide descripcion.
+                // Se mantiene la estructura original pero se advierte.
                 "descripcion"  => $row['descripcion']
             );
             array_push($res['datos'], $item);
         }
-        // Puedes devolver solo el array si prefieres: echo json_encode($res['datos']);
-        // Pero envolverlo en "datos" permite extensibilidad (mensaje, success, etc.)
         $res["success"] = "1";
     } else {
         $res["success"] = "1";

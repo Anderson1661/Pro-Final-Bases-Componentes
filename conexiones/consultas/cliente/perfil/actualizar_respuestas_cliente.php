@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para actualizar las respuestas de seguridad de un cliente.
+ * 
+ * Recibe el ID del usuario y 3 conjuntos de (pregunta original, nueva pregunta, respuesta).
+ * Realiza una transacción para asegurar que todas las preguntas se actualicen correctamente.
+ * Utiliza REPLACE INTO para insertar o actualizar, y DELETE si la pregunta ha cambiado.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

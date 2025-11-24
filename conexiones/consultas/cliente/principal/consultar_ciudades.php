@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar ciudades por país y departamento.
+ * 
+ * Recibe el ID del país y el nombre del departamento.
+ * Devuelve una lista de ciudades disponibles en esa región.
+ * Se utiliza para llenar selectores dependientes en formularios.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 

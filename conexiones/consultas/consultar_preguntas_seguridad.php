@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para recuperar las preguntas de seguridad de un usuario.
+ * 
+ * Se utiliza en el flujo de "Olvidé mi contraseña".
+ * Recibe un correo electrónico y devuelve las 3 preguntas de seguridad asociadas.
+ */
+
 include('../config/conexion.php');
 $link = Conectar();
 
@@ -9,7 +16,8 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 if (isset($_POST['correo'])) {
     $correo = trim($_POST['correo']);
 
-    // 1. Obtener id_usuario por correo y las preguntas asociadas
+    // Consulta SQL para obtener ID de usuario y sus preguntas de seguridad
+    // Realiza JOINs entre usuario, respuestas_seguridad y preguntas_seguridad
     $sql = "SELECT 
                 u.id_usuario,
                 ps.id_pregunta,
@@ -29,6 +37,7 @@ if (isset($_POST['correo'])) {
             $preguntas = array();
             $id_usuario = -1;
             
+            // Recorrer resultados para construir el array de preguntas
             while ($row = mysqli_fetch_assoc($result)) {
                 $id_usuario = $row['id_usuario'];
                 $preguntas[] = array(
@@ -37,7 +46,7 @@ if (isset($_POST['correo'])) {
                 );
             }
             
-            // Se verifica que sean exactamente 3 preguntas
+            // Validación: El usuario debe tener exactamente 3 preguntas configuradas
             if (count($preguntas) == 3) {
                 $res["success"] = "1";
                 $res["mensaje"] = "Usuario y preguntas encontradas";
@@ -49,7 +58,7 @@ if (isset($_POST['correo'])) {
             }
 
         } else {
-            // El correo no está registrado o no tiene respuestas de seguridad
+            // No se encontraron registros para ese correo
             $res["success"] = "0";
             $res["mensaje"] = "El correo no está asociado a una cuenta o no tiene respuestas de seguridad registradas.";
         }

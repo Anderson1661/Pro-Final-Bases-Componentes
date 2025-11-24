@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para consultar los detalles completos de un servicio (ruta).
+ * 
+ * Recibe el ID de la ruta.
+ * Devuelve información detallada: origen, destino, cliente, pasajeros, costo, estado, etc.
+ * Se utiliza para mostrar la información completa de un servicio en la app del conductor.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 header('Content-Type: application/json; charset=utf-8');

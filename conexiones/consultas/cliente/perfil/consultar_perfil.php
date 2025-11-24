@@ -1,4 +1,11 @@
 <?php
+/**
+ * Script para consultar información básica del perfil de un cliente.
+ * 
+ * Recibe el correo del cliente y devuelve su dirección y ubicación (departamento, ciudad).
+ * Se utiliza para mostrar información rápida en la cabecera o resumen del perfil.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 
@@ -9,6 +16,7 @@ $res = array();
 $correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
 
 if (!empty($correo)) {
+    // Consulta con JOIN a codigo_postal para obtener nombres legibles de ubicación
     $sql = "SELECT 
                 c.direccion, 
                 cp.departamento, 

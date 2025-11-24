@@ -1,4 +1,14 @@
 <?php
+/**
+ * Script para consultar servicios pendientes o en proceso para un conductor.
+ * 
+ * Recibe el código postal, ID del conductor y tipo de servicio.
+ * Devuelve:
+ * 1. Servicios pendientes (estado 4) en el mismo código postal.
+ * 2. Servicios en proceso (estado 2) asignados a este conductor.
+ * Filtra por fecha actual y tipo de servicio compatible.
+ */
+
 // En /config/conexion.php se encuentra la función Conectar()
 include('../../../config/conexion.php');
 $link = Conectar();

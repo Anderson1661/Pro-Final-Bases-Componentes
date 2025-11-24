@@ -1,4 +1,12 @@
 <?php
+/**
+ * Script para actualizar los datos del perfil de un conductor.
+ * 
+ * Recibe todos los datos personales del conductor (nombre, dirección, correo, etc.).
+ * Realiza una transacción para actualizar la tabla 'conductor' y gestionar sus teléfonos.
+ * Elimina los teléfonos anteriores y registra los nuevos para mantener la consistencia.
+ */
+
 include('../../../config/conexion.php');
 $link = Conectar();
 // Habilitar reporte de errores temporalmente para depuración
@@ -85,7 +93,7 @@ if ($all_set) {
         mysqli_stmt_close($stmt_con);
 
         if ($success_transaction) {
-            // Eliminar teléfonos existentes
+            // Eliminar teléfonos existentes para reemplazarlos con los nuevos
             $sql_del_tel = "DELETE FROM telefono_conductor WHERE id_conductor = ?";
             $stmt_del = mysqli_prepare($link, $sql_del_tel);
             if ($stmt_del === false) {
@@ -104,6 +112,7 @@ if ($all_set) {
             }
         }
 
+        // Insertar teléfono 1
         if ($success_transaction) {
             if (!empty($tel1)) {
                 $sql_ins1 = "INSERT INTO telefono_conductor (id_conductor, telefono) VALUES (?, ?)";
@@ -125,6 +134,7 @@ if ($all_set) {
             }
         }
 
+        // Insertar teléfono 2 (si existe)
         if ($success_transaction) {
             if (!empty($tel2)) {
                 $sql_ins2 = "INSERT INTO telefono_conductor (id_conductor, telefono) VALUES (?, ?)";
