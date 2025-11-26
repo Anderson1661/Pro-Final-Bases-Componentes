@@ -292,62 +292,49 @@ CREATE TABLE IF NOT EXISTS respuestas_seguridad (
 -- ===================================
 
 -- 1. Se cambia el delimitador para permitir bloques BEGIN...END
-DELIMITER /
-/
+DELIMITER //
 
 -- Trigger: trg_insert_usuario_cliente
--- Propósito: Crear automáticamente un usuario en la tabla 'usuario' cuando se registra un nuevo 'cliente'.
--- Lógica: Verifica si el correo ya existe. Si no, inserta el usuario con rol 'Cliente' y usa la identificación como contraseña inicial.
-CREATE OR REPLACE TRIGGER trg_insert_usuario_cliente
+CREATE TRIGGER trg_insert_usuario_cliente
 AFTER INSERT ON cliente
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña inicial = Identificacion
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Cliente'
     LIMIT 1;
   END IF;
-END
-/
-/
+END//
 
 -- Trigger: trg_insert_usuario_conductor
--- Propósito: Crear automáticamente un usuario en la tabla 'usuario' cuando se registra un nuevo 'conductor'.
--- Lógica: Similar al de cliente, pero asigna el rol 'Conductor'.
-CREATE OR REPLACE TRIGGER trg_insert_usuario_conductor
+CREATE TRIGGER trg_insert_usuario_conductor
 AFTER INSERT ON conductor
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña inicial = Identificacion
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Conductor'
     LIMIT 1;
   END IF;
-END
-/
-/
+END//
 
 -- Trigger: trg_insert_usuario_admin
--- Propósito: Crear automáticamente un usuario en la tabla 'usuario' cuando se registra un nuevo 'administrador'.
--- Lógica: Similar al de cliente, pero asigna el rol 'Administrador'.
-CREATE OR REPLACE TRIGGER trg_insert_usuario_admin
+CREATE TRIGGER trg_insert_usuario_admin
 AFTER INSERT ON administrador
 FOR EACH ROW
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM usuario WHERE correo = NEW.correo) THEN
     INSERT INTO usuario (id_tipo_usuario, correo, contrasenia)
-    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion -- Contraseña inicial = Identificacion
+    SELECT id_tipo_usuario, NEW.correo, NEW.identificacion
     FROM tipo_usuario
     WHERE descripcion = 'Administrador'
     LIMIT 1;
   END IF;
-END
-/
-/
+END//
 
 -- Trigger: trg_calcular_total_ruta
 -- Propósito: Calcular automáticamente el costo total del servicio antes de insertarlo.
@@ -357,11 +344,12 @@ BEFORE INSERT ON ruta
 FOR EACH ROW
 BEGIN
   DECLARE precio_km DECIMAL(12,2);
-  SELECT valor_km INTO precio_km FROM categoria_servicio WHERE id_categoria_servicio = NEW.id_categoria_servicio LIMIT 1;
+  SELECT valor_km INTO precio_km 
+  FROM categoria_servicio 
+  WHERE id_categoria_servicio = NEW.id_categoria_servicio 
+  LIMIT 1;
   SET NEW.total = NEW.distancia_km * precio_km;
-END
-/
-/
+END//
 
 -- Trigger: trg_calcular_pago_conductor
 -- Propósito: Calcular la comisión del conductor.
@@ -370,13 +358,10 @@ CREATE TRIGGER trg_calcular_pago_conductor
 BEFORE INSERT ON ruta
 FOR EACH ROW
 BEGIN
-  -- Se asume que total ya fue calculado por el trigger anterior
   IF NEW.total IS NOT NULL THEN 
     SET NEW.pago_conductor = ROUND(NEW.total * 0.30, 2);
   END IF;
-END
-/
-/
+END//
 
 -- Trigger: trg_update_correo_cliente
 -- Propósito: Mantener la consistencia del correo electrónico.
@@ -390,13 +375,10 @@ BEGIN
     SET correo = NEW.correo
     WHERE correo = OLD.correo;
   END IF;
-END
-/
-/
+END//
 
+-- Los demás triggers de actualización de correo siguen la misma estructura
 -- Trigger: trg_update_correo_conductor
--- Propósito: Mantener la consistencia del correo electrónico para conductores.
--- Lógica: Si se actualiza el correo en la tabla 'conductor', se actualiza también en la tabla 'usuario'.
 CREATE TRIGGER trg_update_correo_conductor
 BEFORE UPDATE ON conductor
 FOR EACH ROW
@@ -406,13 +388,9 @@ BEGIN
     SET correo = NEW.correo
     WHERE correo = OLD.correo;
   END IF;
-END
-/
-/
+END//
 
 -- Trigger: trg_update_correo_admin
--- Propósito: Mantener la consistencia del correo electrónico para administradores.
--- Lógica: Si se actualiza el correo en la tabla 'administrador', se actualiza también en la tabla 'usuario'.
 CREATE TRIGGER trg_update_correo_admin
 BEFORE UPDATE ON administrador
 FOR EACH ROW
@@ -422,12 +400,10 @@ BEGIN
     SET correo = NEW.correo
     WHERE correo = OLD.correo;
   END IF;
-END
-/
-/
+END//
 
 -- Se restablece el delimitador al punto y coma
-DELIMITER;
+DELIMITER ;
 
 -- ======== DATOS DE PRUEBA ========
 
@@ -947,6 +923,9 @@ INSERT INTO vehiculo (placa, linea_vehiculo, modelo, id_color, id_marca, id_tipo
 INSERT INTO administrador (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal) VALUES 
 ('1012345678', 1, 'Carlos Andrés Rodríguez García', 'Calle 72 # 11-20', 'admin@empresa.com', 1, '110111'),
 ('1018765432', 1, 'María Fernanda López Martínez', 'Carrera 50 # 30-45', 'maria.lopez@empresa.com', 2, '050001');
+
+INSERT INTO administrador (identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal) VALUES 
+('1029', 1, 'Admin William Diaz', 'Carrera 50 # 30-45', 'w@empresa.com', 2, '050001');
 
 -- Teléfonos de administradores
 INSERT INTO telefono_administrador (id_administrador, telefono) VALUES 
