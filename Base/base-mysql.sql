@@ -1005,6 +1005,11 @@ insert into respuestas_seguridad (id_pregunta, id_usuario, respuesta_pregunta) V
 (2, 7,'ciudad'),
 (3, 7,'colegio');
 
+insert into respuestas_seguridad (id_pregunta, id_usuario, respuesta_pregunta) VALUES
+(1, 3,'mascota'),
+(2, 3,'ciudad'),
+(3, 3,'colegio');
+
 -- ======== VISTAS CONVENCIONALES ========
 
 -- Vista: vw_total_por_tipo_y_categoria

@@ -1,0 +1,38 @@
+<?php
+/**
+ * Script para consultar las preguntas de seguridad disponibles.
+ * 
+ * Devuelve una lista de preguntas de seguridad.
+ * Se utiliza para que el usuario seleccione sus preguntas de recuperación.
+ */
+
+include('../../../config/conexion.php');
+$link = Conectar();
+
+header('Content-Type: application/json; charset=utf-8');
+
+$res = array("success" => "0", "mensaje" => "Error al obtener preguntas");
+
+$sql = "SELECT id_pregunta, descripcion FROM preguntas_seguridad ORDER BY id_pregunta ASC";
+$result = mysqli_query($link, $sql);
+
+if ($result) {
+    if (mysqli_num_rows($result) > 0) {
+        $preguntas = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $preguntas[] = $row;
+        }
+        $res["success"] = "1";
+        $res["mensaje"] = "Preguntas cargadas con éxito";
+        $res["preguntas"] = $preguntas;
+    } else {
+        $res["success"] = "0";
+        $res["mensaje"] = "No se encontraron preguntas de seguridad.";
+    }
+} else {
+    $res["mensaje"] = "Error en la consulta SQL: " . mysqli_error($link);
+}
+
+echo json_encode($res);
+mysqli_close($link);
+?>
