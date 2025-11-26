@@ -4,6 +4,7 @@
  * 
  * Utiliza la vista: vw_clientes_con_servicios
  * Muestra: id_cliente, nombre, correo, cantidad_servicios, valor_total
+ * Ahora con filtros de fecha
  */
 
 include('../../../config/conexion.php');
@@ -14,7 +15,11 @@ header('Content-Type: application/json; charset=utf-8');
 $res = array("success" => "0", "mensaje" => "No se pudieron obtener los datos");
 
 try {
-    // Consulta usando la vista vw_clientes_con_servicios
+    // Obtener parámetros de fecha
+    $fecha_desde = isset($_POST['fecha_desde']) ? $_POST['fecha_desde'] : null;
+    $fecha_hasta = isset($_POST['fecha_hasta']) ? $_POST['fecha_hasta'] : null;
+
+    // Consulta base usando la vista vw_clientes_con_servicios
     $sql = "SELECT 
                 id_cliente,
                 nombre,
@@ -22,9 +27,34 @@ try {
                 cantidad_servicios,
                 valor_total
             FROM vw_clientes_con_servicios
-            ORDER BY cantidad_servicios DESC";
+            WHERE 1=1";
     
-    $stmt = mysqli_prepare($link, $sql);
+    // Agregar filtros de fecha si se proporcionan
+    if ($fecha_desde && $fecha_hasta) {
+        // Convertir formato de fecha si es necesario
+        $fecha_desde_mysql = date('Y-m-d H:i:s', strtotime($fecha_desde));
+        $fecha_hasta_mysql = date('Y-m-d H:i:s', strtotime($fecha_hasta));
+        
+        // Cambiar la consulta para usar filtros de fecha
+        $sql = "SELECT 
+                    c.id_cliente,
+                    c.nombre,
+                    c.correo,
+                    COUNT(r.id_ruta) AS cantidad_servicios,
+                    COALESCE(SUM(r.total), 0) AS valor_total
+                FROM cliente c
+                JOIN ruta r ON c.id_cliente = r.id_cliente
+                WHERE r.fecha_hora_reserva BETWEEN ? AND ?
+                GROUP BY c.id_cliente, c.nombre, c.correo
+                ORDER BY cantidad_servicios DESC";
+        
+        $stmt = mysqli_prepare($link, $sql);
+        mysqli_stmt_bind_param($stmt, "ss", $fecha_desde_mysql, $fecha_hasta_mysql);
+    } else {
+        // Sin filtros de fecha
+        $stmt = mysqli_prepare($link, $sql);
+    }
+    
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -45,9 +75,17 @@ try {
         $res["success"] = "1";
         $res["mensaje"] = "Datos del reporte obtenidos correctamente";
         $res["total_registros"] = count($datos_reporte);
+        
+        // Agregar información de filtros aplicados
+        if ($fecha_desde && $fecha_hasta) {
+            $res["filtros"] = array(
+                "fecha_desde" => $fecha_desde,
+                "fecha_hasta" => $fecha_hasta
+            );
+        }
 
     } else {
-        $res["mensaje"] = "No se encontraron datos para el reporte.";
+        $res["mensaje"] = "No se encontraron datos para el reporte con los filtros aplicados.";
     }
     
     mysqli_stmt_close($stmt);

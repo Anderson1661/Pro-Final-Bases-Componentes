@@ -1,15 +1,15 @@
 package transportadora.Administrador
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
@@ -18,6 +18,8 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 class Reporte3_admin : AppCompatActivity() {
 
@@ -25,6 +27,12 @@ class Reporte3_admin : AppCompatActivity() {
     private lateinit var progressBar: View
     private lateinit var tvMensajeVacio: TextView
     private lateinit var adapter: ReporteAdapter
+    private lateinit var etFechaDesde: EditText
+    private lateinit var etFechaHasta: EditText
+    private lateinit var btnFiltrar: Button
+
+    private var fechaDesdeSeleccionada: Calendar = Calendar.getInstance()
+    private var fechaHastaSeleccionada: Calendar = Calendar.getInstance()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +41,8 @@ class Reporte3_admin : AppCompatActivity() {
         setContentView(R.layout.activity_reporte3_admin)
         initViews()
         setupRecyclerView()
-        cargarDatosReporte()
+        setupDatePickers()
+        setupFiltrarButton()
 
         val txtVolver = findViewById<TextView>(R.id.txt_volver)
         txtVolver.setOnClickListener { finish() }
@@ -43,6 +52,9 @@ class Reporte3_admin : AppCompatActivity() {
         recyclerView = findViewById(R.id.rvReporte)
         progressBar = findViewById(R.id.progressBar)
         tvMensajeVacio = findViewById(R.id.tvMensajeVacio)
+        etFechaDesde = findViewById(R.id.etFechaDesde)
+        etFechaHasta = findViewById(R.id.etFechaHasta)
+        btnFiltrar = findViewById(R.id.btnFiltrar)
     }
 
     private fun setupRecyclerView() {
@@ -51,11 +63,69 @@ class Reporte3_admin : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun cargarDatosReporte() {
+    private fun setupDatePickers() {
+        // Configurar DatePicker para Fecha Desde
+        etFechaDesde.setOnClickListener {
+            val now = Calendar.getInstance()
+            val datePicker = DatePickerDialog(this, { _, year, month, day ->
+                val timePicker = TimePickerDialog(this, { _, hour, minute ->
+                    fechaDesdeSeleccionada.set(year, month, day, hour, minute, 0)
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                    etFechaDesde.setText(sdf.format(fechaDesdeSeleccionada.time))
+                }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
+                timePicker.setTitle("Selecciona la hora inicial")
+                timePicker.show()
+            }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
+            datePicker.setTitle("Selecciona la fecha inicial")
+            datePicker.show()
+        }
+
+        // Configurar DatePicker para Fecha Hasta
+        etFechaHasta.setOnClickListener {
+            val now = Calendar.getInstance()
+            val datePicker = DatePickerDialog(this, { _, year, month, day ->
+                val timePicker = TimePickerDialog(this, { _, hour, minute ->
+                    fechaHastaSeleccionada.set(year, month, day, hour, minute, 0)
+                    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                    etFechaHasta.setText(sdf.format(fechaHastaSeleccionada.time))
+                }, now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true)
+                timePicker.setTitle("Selecciona la hora final")
+                timePicker.show()
+            }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH))
+            datePicker.setTitle("Selecciona la fecha final")
+            datePicker.show()
+        }
+    }
+
+    private fun setupFiltrarButton() {
+        btnFiltrar.setOnClickListener {
+            val fechaDesde = etFechaDesde.text.toString().trim()
+            val fechaHasta = etFechaHasta.text.toString().trim()
+
+            if (fechaDesde.isEmpty() || fechaHasta.isEmpty()) {
+                Toast.makeText(this, "Por favor selecciona ambas fechas", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validar que fecha hasta sea mayor o igual que fecha desde
+            if (fechaHastaSeleccionada.before(fechaDesdeSeleccionada)) {
+                Toast.makeText(this, "La fecha final debe ser mayor o igual a la fecha inicial", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            cargarDatosReporte(fechaDesde, fechaHasta)
+        }
+    }
+
+    private fun cargarDatosReporte(fechaDesde: String? = null, fechaHasta: String? = null) {
         mostrarCarga(true)
 
-        val jsonObject = JSONObject()
-        // No se necesitan parámetros para este reporte
+        val jsonObject = JSONObject().apply {
+            if (fechaDesde != null && fechaHasta != null) {
+                put("fecha_desde", fechaDesde)
+                put("fecha_hasta", fechaHasta)
+            }
+        }
 
         val url = ApiConfig.BASE_URL + "consultas/administrador/reportes/consultar_reporte3.php"
         val request = JsonObjectRequest(
@@ -84,18 +154,24 @@ class Reporte3_admin : AppCompatActivity() {
                         adapter.actualizarDatos(listaReporte)
                         recyclerView.visibility = View.VISIBLE
                         tvMensajeVacio.visibility = View.GONE
+
+                        // Mostrar información de filtros aplicados
+                        if (fechaDesde != null && fechaHasta != null) {
+                            val mensajeFiltro = "Mostrando datos del $fechaDesde al $fechaHasta"
+                            Toast.makeText(this, mensajeFiltro, Toast.LENGTH_SHORT).show()
+                        }
                     } else {
                         mostrarMensajeVacio()
                     }
                 } else {
                     mostrarMensajeVacio()
+                    Toast.makeText(this, response.getString("mensaje"), Toast.LENGTH_LONG).show()
                 }
             },
             { error ->
                 mostrarCarga(false)
                 mostrarMensajeVacio()
-                // Aquí podrías mostrar un Toast con el error
-                // Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_LONG).show()
             }
         )
 

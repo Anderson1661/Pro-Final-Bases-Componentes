@@ -33,6 +33,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <!-- Header del Reporte -->
     <TextView
         android:id="@+id/tvTituloReporte"
@@ -49,6 +50,78 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Filtros de Fecha -->
+    <LinearLayout
+        android:id="@+id/layoutFiltros"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloReporte">
+
+        <!-- Fecha Desde -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha Desde"
+            android:textColor="@color/negro"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etFechaDesde"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/negro"
+            android:clickable="true"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+            android:focusable="false"
+            android:hint="Selecciona fecha y hora inicial"
+            android:inputType="none"
+            android:padding="10dp"
+            android:textColor="@color/negro"
+            android:textColorHint="@color/negro" />
+
+        <!-- Fecha Hasta -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Fecha Hasta"
+            android:textColor="@color/negro"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etFechaHasta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/negro"
+            android:clickable="true"
+            android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+            android:focusable="false"
+            android:hint="Selecciona fecha y hora final"
+            android:inputType="none"
+            android:padding="10dp"
+            android:textColor="@color/negro"
+            android:textColorHint="@color/negro" />
+
+        <!-- Botón para aplicar filtros -->
+        <Button
+            android:id="@+id/btnFiltrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/naranja"
+            android:text="Aplicar Filtros"
+            android:textColor="@color/blanco" />
+
+    </LinearLayout>
 
     <!-- ProgressBar para mostrar carga -->
     <ProgressBar
@@ -71,7 +144,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTituloReporte" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutFiltros" />
 
     <!-- Mensaje cuando no hay datos -->
     <TextView
