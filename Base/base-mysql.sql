@@ -1279,3 +1279,9 @@ ON SCHEDULE EVERY 6 HOUR
 STARTS CURRENT_TIMESTAMP
 DO
     CALL ActualizarEstadisticasConductores();
+
+
+
+-- Ejecutar estos comandos en MySQL para poblar las tablas materializadas
+CALL ActualizarResumenMensual();
+CALL ActualizarEstadisticasConductores();

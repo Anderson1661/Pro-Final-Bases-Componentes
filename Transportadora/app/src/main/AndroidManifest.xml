@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Transportadora"
         android:usesCleartextTraffic="true">
         <activity
+            android:name="transportadora.Administrador.Reporte7_admin"
+            android:exported="false" />
+        <activity
             android:name="transportadora.Administrador.Reporte6_admin"
             android:exported="false" />
         <activity
