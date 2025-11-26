@@ -33,11 +33,5 @@ class Administrar_colores_vehiculo : AppCompatActivity() {
             val intent = Intent(this, Crear_colores_vehiculo::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_colores_vehiculo::class.java)
-            startActivity(intent)
-        }
     }
 }

@@ -35,11 +35,5 @@ class Administrar_marcas_vehiculo : AppCompatActivity() {
             val intent = Intent(this, Crear_marcas_vehiculo::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_marcas_vehiculo::class.java)
-            startActivity(intent)
-        }
     }
 }

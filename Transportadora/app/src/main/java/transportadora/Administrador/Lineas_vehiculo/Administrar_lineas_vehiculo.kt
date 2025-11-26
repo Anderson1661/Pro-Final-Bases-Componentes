@@ -35,11 +35,5 @@ class Administrar_lineas_vehiculo : AppCompatActivity() {
             val intent = Intent(this, Crear_lineas_vehiculo::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_lineas_vehiculo::class.java)
-            startActivity(intent)
-        }
     }
 }

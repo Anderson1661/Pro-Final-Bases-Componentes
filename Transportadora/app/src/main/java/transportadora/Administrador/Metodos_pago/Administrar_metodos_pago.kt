@@ -35,12 +35,5 @@ class Administrar_metodos_pago : AppCompatActivity() {
             val intent = Intent(this, Crear_metodos_pago::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_metodos_pago::class.java)
-            startActivity(intent)
-        }
-
     }
 }

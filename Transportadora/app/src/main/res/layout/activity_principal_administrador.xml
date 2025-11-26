@@ -120,13 +120,35 @@
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
+                    <!-- Botones actualizar-->
+                    <Button
+                        android:id="@+id/btn_actualizar1"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/amarillo"
+                        android:text="Actualizar Resumen Mensual Ahora"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <Button
+                        android:id="@+id/btn_actualizar2"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="0dp"
+                        android:backgroundTint="@color/amarillo"
+                        android:text="Actualizar Estadisticas Conductores Ahora"
+                        android:textColor="@color/blanco"
+                        android:layout_gravity="center_horizontal"/>
 
                     <!-- Botones reportes-->
                     <Button
                         android:id="@+id/btn_reporte1"
                         android:layout_width="270dp"
                         android:layout_height="60dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="0dp"
                         android:backgroundTint="@color/naranja"
                         android:text="Reporte Totales por Tipo y Categoria"

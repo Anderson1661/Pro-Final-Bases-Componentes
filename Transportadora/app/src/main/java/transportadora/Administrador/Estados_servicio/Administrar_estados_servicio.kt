@@ -34,11 +34,5 @@ class Administrar_estados_servicio : AppCompatActivity() {
             val intent = Intent(this, Crear_estados_servicio::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_estados_servicio::class.java)
-            startActivity(intent)
-        }
     }
 }

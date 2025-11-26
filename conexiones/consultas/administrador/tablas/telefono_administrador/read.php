@@ -1,11 +1,11 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
 $res = array();
 $res['datos'] = array();
 
-$sql = "SELECT * FROM telefono_administrador ORDER BY id_administrador, telefono";
+$sql = "SELECT * FROM telefono_administrador ORDER BY id_administrador";
 
 $res1 = mysqli_query($link, $sql);
 
@@ -31,4 +31,3 @@ header('Content-Type: application/json; charset=utf-8');
 echo json_encode($res, JSON_UNESCAPED_UNICODE);
 mysqli_close($link);
 ?>
-

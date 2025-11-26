@@ -35,11 +35,5 @@ class Administrar_tipos_usuario : AppCompatActivity() {
             val intent = Intent(this, Crear_tipos_usuario::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_tipos_usuario::class.java)
-            startActivity(intent)
-        }
     }
 }

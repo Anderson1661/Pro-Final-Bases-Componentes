@@ -33,11 +33,5 @@ class Administrar_administradores : AppCompatActivity() {
             val intent = Intent(this, Crear_administradores::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_administradores::class.java)
-            startActivity(intent)
-        }
     }
 }

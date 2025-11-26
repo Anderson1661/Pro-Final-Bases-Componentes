@@ -33,11 +33,5 @@ class Administrar_codigos_postales : AppCompatActivity() {
             val intent = Intent(this, Crear_codigos_postales::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_codigos_postales::class.java)
-            startActivity(intent)
-        }
     }
 }

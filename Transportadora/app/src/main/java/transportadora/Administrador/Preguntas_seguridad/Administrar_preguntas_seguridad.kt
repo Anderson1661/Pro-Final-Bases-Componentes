@@ -35,11 +35,5 @@ class Administrar_preguntas_seguridad : AppCompatActivity() {
             val intent = Intent(this, Crear_preguntas_seguridad::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_preguntas_seguridad::class.java)
-            startActivity(intent)
-        }
     }
 }

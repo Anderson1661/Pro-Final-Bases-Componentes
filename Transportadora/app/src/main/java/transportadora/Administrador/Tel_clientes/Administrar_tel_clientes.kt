@@ -35,11 +35,5 @@ class Administrar_tel_clientes : AppCompatActivity() {
             val intent = Intent(this, Crear_tel_clientes::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_tel_clientes::class.java)
-            startActivity(intent)
-        }
     }
 }

@@ -5,13 +5,22 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import transportadora.Cliente.Perfil_cliente
+import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
+import java.net.HttpURLConnection
+import java.net.URL
 
 class Principal_administrador : AppCompatActivity() {
 
@@ -53,6 +62,46 @@ class Principal_administrador : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        //Botones actualizar
+        val btn_actualizar1=findViewById<Button>(R.id.btn_actualizar1)
+        btn_actualizar1.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val resultado = withContext(Dispatchers.IO) {
+                        ejecutarActualizacion_resumen_mensual()
+                    }
+
+                    if (resultado) {
+                        Toast.makeText(this@Principal_administrador, "Resumen Mensual Actualizado", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@Principal_administrador, "Error al actualizar datos", Toast.LENGTH_LONG).show()
+                    }
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@Principal_administrador, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        val btn_actualizar2=findViewById<Button>(R.id.btn_actualizar2)
+        btn_actualizar2.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val resultado = withContext(Dispatchers.IO) {
+                        ejecutarActualizacion_estadisticas_conductores()
+                    }
+
+                    if (resultado) {
+                        Toast.makeText(this@Principal_administrador, "Estadisticas de Conductores Actualizado", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this@Principal_administrador, "Error al actualizar datos", Toast.LENGTH_LONG).show()
+                    }
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@Principal_administrador, "Error de conexión: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
         //Botones reportes
         val btn_reporte1 = findViewById<Button>(R.id.btn_reporte1)
@@ -300,6 +349,43 @@ class Principal_administrador : AppCompatActivity() {
                 transportadora.Administrador.Vehiculos.Administrar_vehiculos::class.java
             )
             startActivity(intent)
+        }
+    }
+    private suspend fun ejecutarActualizacion_resumen_mensual(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/administrador/actualizar/actualizar_resumen_mensual.php")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET" // o "POST" si necesitas
+
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                // Si tu PHP retorna JSON, puedes parsearlo:
+                val json = JSONObject(response)
+                return@withContext json.optString("success") == "1"
+            }
+            return@withContext false
+        } catch (e: Exception) {
+            return@withContext false
+        }
+    }
+
+    private suspend fun ejecutarActualizacion_estadisticas_conductores(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/administrador/actualizar/actualizar_estadisticas_conductores.php")
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET" // o "POST" si necesitas
+
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                // Si tu PHP retorna JSON, puedes parsearlo:
+                val json = JSONObject(response)
+                return@withContext json.optString("success") == "1"
+            }
+            return@withContext false
+        } catch (e: Exception) {
+            return@withContext false
         }
     }
 }

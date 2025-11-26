@@ -28,11 +28,5 @@ class Administrar_clientes : AppCompatActivity() {
             val intent = Intent(this, Crear_clientes::class.java)
             startActivity(intent)
         }
-
-        val btnEditar = findViewById<Button>(R.id.btnEditar)
-        btnEditar.setOnClickListener {
-            val intent = Intent(this, Editar_clientes::class.java)
-            startActivity(intent)
-        }
     }
 }
