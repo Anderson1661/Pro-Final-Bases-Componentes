@@ -2,13 +2,25 @@
 include('../../../../config/conexion.php');
 $link = Conectar();
 
-$placa = isset($_REQUEST['placa']) ? $_REQUEST['placa'] : '';
-$linea_vehiculo = isset($_REQUEST['linea_vehiculo']) ? $_REQUEST['linea_vehiculo'] : '';
-$modelo = isset($_REQUEST['modelo']) ? $_REQUEST['modelo'] : '';
-$id_color = isset($_REQUEST['id_color']) ? $_REQUEST['id_color'] : '';
-$id_marca = isset($_REQUEST['id_marca']) ? $_REQUEST['id_marca'] : '';
-$id_tipo_servicio = isset($_REQUEST['id_tipo_servicio']) ? $_REQUEST['id_tipo_servicio'] : '';
-$id_estado_vehiculo = isset($_REQUEST['id_estado_vehiculo']) ? $_REQUEST['id_estado_vehiculo'] : '';
+function getRequestData($key) {
+    // Primero intenta leer de JSON
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input[$key])) {
+        return $input[$key];
+    }
+    
+    // Si no viene en JSON, busca en $_REQUEST (form-data)
+    return isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+}
+
+// USAR LA FUNCIÓN EN LUGAR DE $_REQUEST
+$placa = getRequestData('placa');
+$linea_vehiculo = getRequestData('linea_vehiculo');
+$modelo = getRequestData('modelo');
+$id_color = getRequestData('id_color');
+$id_marca = getRequestData('id_marca');
+$id_tipo_servicio = getRequestData('id_tipo_servicio');
+$id_estado_vehiculo = getRequestData('id_estado_vehiculo');
 
 if (empty($placa) || empty($linea_vehiculo) || empty($modelo) || empty($id_color) || 
     empty($id_marca) || empty($id_tipo_servicio) || empty($id_estado_vehiculo)) {

@@ -35,5 +35,4 @@ object Categorias_almacenados {
         }
         lista
     }
-
 }

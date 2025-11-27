@@ -5,11 +5,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
 import transportadora.Network.ApiHelper
-
-data class Color(
-    val id_color: Int,
-    val descripcion: String
-)
+import transportadora.Modelos.Administrador.Color
 
 object Color_almacenados {
     suspend fun obtenerColores(): List<Color> = withContext(Dispatchers.IO) {

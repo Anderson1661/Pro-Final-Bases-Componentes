@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import transportadora.Almacenados.Administrador.ID_ruta_almacenados
 import transportadora.Almacenados.Administrador.RutaSimple
 import transportadora.Almacenados.Administrador.Ruta_almacenados
 import transportadora.Configuracion.ApiConfig
@@ -30,7 +31,7 @@ class Crear_pasajeros_servicio : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     private lateinit var spinnerRuta: Spinner
     private lateinit var txtNombrePasajero: EditText
-    private var listaRutas: List<RutaSimple> = emptyList()
+    private var listaRutas: List<transportadora.Modelos.Administrador.Id_Ruta> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,22 +58,27 @@ class Crear_pasajeros_servicio : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 listaRutas = withContext(Dispatchers.IO) {
-                    Ruta_almacenados.obtenerRutas()
+                    ID_ruta_almacenados.obtenerIDrutas()
                 }
                 if (listaRutas.isNotEmpty()) {
-                    val descripcionesRutas = listaRutas.map { it.descripcion }
+                    // Mostrar los IDs de ruta en el spinner
+                    val idsRutas = listaRutas.map { "Ruta #${it.id_ruta}" }
                     spinnerRuta.adapter = ArrayAdapter(
                         this@Crear_pasajeros_servicio,
                         android.R.layout.simple_spinner_item,
-                        descripcionesRutas
+                        idsRutas
                     ).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
+
+                    // Opcional: mostrar mensaje de éxito
+                    Toast.makeText(this@Crear_pasajeros_servicio, "Rutas cargadas: ${listaRutas.size}", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this@Crear_pasajeros_servicio, "No hay rutas disponibles", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@Crear_pasajeros_servicio, "Error al cargar rutas: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
             }
         }
     }
@@ -91,6 +97,7 @@ class Crear_pasajeros_servicio : AppCompatActivity() {
             return
         }
 
+        // Obtener el ID de la ruta seleccionada
         val idRuta = listaRutas[posicionRuta].id_ruta
 
         val url = ApiConfig.BASE_URL + "consultas/administrador/tablas/pasajero_ruta/create.php"
@@ -113,6 +120,7 @@ class Crear_pasajeros_servicio : AppCompatActivity() {
             },
             { error ->
                 Toast.makeText(this, "Error al crear pasajero: ${error.message}", Toast.LENGTH_SHORT).show()
+                error.printStackTrace()
             }
         )
 

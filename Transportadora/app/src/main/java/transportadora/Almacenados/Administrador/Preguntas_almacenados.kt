@@ -9,7 +9,7 @@ import transportadora.Network.ApiHelper
 
 object Preguntas_almacenados {
     suspend fun obtener_preguntas(): List<Pregunta> = withContext(Dispatchers.IO) {
-        val url = ApiConfig.BASE_URL + "consultas/administrador/perfil/preguntas/consultar_preguntas.php"
+        val url = ApiConfig.BASE_URL + "consultas/administrador/datos/consultar_preguntas.php"
         val response = ApiHelper.getRequest(url) // devuelve el JSON como String
 
         val lista = mutableListOf<Pregunta>()

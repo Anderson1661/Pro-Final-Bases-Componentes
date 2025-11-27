@@ -20,10 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import transportadora.Almacenados.Administrador.PreguntaSimple
-import transportadora.Almacenados.Administrador.Pregunta_almacenados
-import transportadora.Almacenados.Administrador.UsuarioSimple
-import transportadora.Almacenados.Administrador.Usuario_almacenados
+import transportadora.Almacenados.Administrador.Correos_usuario_almacenados
+import transportadora.Almacenados.Administrador.Preguntas_almacenados
 import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 
@@ -31,8 +29,8 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
     private lateinit var spinnerPregunta: Spinner
     private lateinit var spinnerUsuario: Spinner
     private lateinit var txtRespuesta: EditText
-    private var listaPreguntas: List<PreguntaSimple> = emptyList()
-    private var listaUsuarios: List<UsuarioSimple> = emptyList()
+    private var listaPreguntas: List<transportadora.Modelos.Administrador.Pregunta> = emptyList()
+    private var listaUsuarios: List<transportadora.Modelos.Administrador.Correo_usuario> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +57,9 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
     private fun cargarDatos() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                // Cargar preguntas usando Preguntas_almacenados
                 listaPreguntas = withContext(Dispatchers.IO) {
-                    Pregunta_almacenados.obtenerPreguntas()
+                    Preguntas_almacenados.obtener_preguntas()
                 }
                 if (listaPreguntas.isNotEmpty()) {
                     val descripcionesPreguntas = listaPreguntas.map { it.descripcion }
@@ -71,10 +70,14 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
                     ).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
+                    Toast.makeText(this@Crear_respuestas_seguridad, "Preguntas cargadas: ${listaPreguntas.size}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@Crear_respuestas_seguridad, "No hay preguntas disponibles", Toast.LENGTH_SHORT).show()
                 }
 
+                // Cargar usuarios usando Correos_usuario_almacenados
                 listaUsuarios = withContext(Dispatchers.IO) {
-                    Usuario_almacenados.obtenerUsuarios()
+                    Correos_usuario_almacenados.obtenerCorreosUsuarios()
                 }
                 if (listaUsuarios.isNotEmpty()) {
                     val correosUsuarios = listaUsuarios.map { it.correo }
@@ -85,9 +88,14 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
                     ).apply {
                         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     }
+                    Toast.makeText(this@Crear_respuestas_seguridad, "Usuarios cargados: ${listaUsuarios.size}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@Crear_respuestas_seguridad, "No hay usuarios disponibles", Toast.LENGTH_SHORT).show()
                 }
+
             } catch (e: Exception) {
                 Toast.makeText(this@Crear_respuestas_seguridad, "Error al cargar datos: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
             }
         }
     }
@@ -97,6 +105,7 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
         val posicionPregunta = spinnerPregunta.selectedItemPosition
         val posicionUsuario = spinnerUsuario.selectedItemPosition
 
+        // Validaciones
         if (respuesta.isEmpty()) {
             Toast.makeText(this, "La respuesta es requerida", Toast.LENGTH_SHORT).show()
             return
@@ -112,6 +121,7 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
             return
         }
 
+        // Obtener IDs de los elementos seleccionados
         val idPregunta = listaPreguntas[posicionPregunta].id_pregunta
         val idUsuario = listaUsuarios[posicionUsuario].id_usuario
 
@@ -136,6 +146,7 @@ class Crear_respuestas_seguridad : AppCompatActivity() {
             },
             { error ->
                 Toast.makeText(this, "Error al crear respuesta: ${error.message}", Toast.LENGTH_SHORT).show()
+                error.printStackTrace()
             }
         )
 

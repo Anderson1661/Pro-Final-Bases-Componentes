@@ -2,9 +2,22 @@
 include('../../../../config/conexion.php');
 $link = Conectar();
 
-$id_pregunta = isset($_REQUEST['id_pregunta']) ? $_REQUEST['id_pregunta'] : '';
-$id_usuario = isset($_REQUEST['id_usuario']) ? $_REQUEST['id_usuario'] : '';
-$respuesta_pregunta = isset($_REQUEST['respuesta_pregunta']) ? $_REQUEST['respuesta_pregunta'] : '';
+// FUNCIÓN PARA LEER TANTO JSON COMO FORM-DATA
+function getRequestData($key) {
+    // Primero intenta leer de JSON
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input[$key])) {
+        return $input[$key];
+    }
+    
+    // Si no viene en JSON, busca en $_REQUEST (form-data)
+    return isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+}
+
+// USAR LA FUNCIÓN EN LUGAR DE $_REQUEST
+$id_pregunta = getRequestData('id_pregunta');
+$id_usuario = getRequestData('id_usuario');
+$respuesta_pregunta = getRequestData('respuesta_pregunta');
 
 if (empty($id_pregunta) || empty($id_usuario) || empty($respuesta_pregunta)) {
     echo json_encode(array("success" => "0", "mensaje" => "ID pregunta, ID usuario y respuesta son requeridos"));
