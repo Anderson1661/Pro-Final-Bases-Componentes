@@ -1,5 +1,5 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
 $placa = isset($_REQUEST['placa']) ? $_REQUEST['placa'] : '';

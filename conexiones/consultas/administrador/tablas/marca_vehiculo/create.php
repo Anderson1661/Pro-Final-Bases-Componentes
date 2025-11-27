@@ -1,8 +1,19 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
-$nombre_marca = isset($_REQUEST['nombre_marca']) ? $_REQUEST['nombre_marca'] : '';
+// FUNCIÓN PARA LEER TANTO JSON COMO FORM-DATA
+function getRequestData($key) {
+    // Primero intenta leer de JSON
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input[$key])) {
+        return $input[$key];
+    }
+    
+    // Si no viene en JSON, busca en $_REQUEST (form-data)
+    return isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+}
+$nombre_marca = getRequestData('nombre_marca');
 
 if (empty($nombre_marca)) {
     echo json_encode(array("success" => "0", "mensaje" => "El nombre de la marca es requerido"));

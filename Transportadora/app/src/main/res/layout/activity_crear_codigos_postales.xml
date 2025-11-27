@@ -60,7 +60,7 @@
         android:textColor="@color/grisoscuro"
         android:textColorHint="@color/grisclaro"
         android:hint="111111"
-        android:inputType="numberPassword"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -117,7 +117,7 @@
         android:textColor="@color/grisoscuro"
         android:textColorHint="@color/grisclaro"
         android:hint="cundinamarca"
-        android:inputType="numberPassword"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -134,7 +134,7 @@
         android:textColor="@color/negro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_marca" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_pais" />
 
     <EditText
         android:id="@+id/txt_ciudad"
@@ -147,7 +147,7 @@
         android:textColor="@color/grisoscuro"
         android:textColorHint="@color/grisclaro"
         android:hint="bogota"
-        android:inputType="numberPassword"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />

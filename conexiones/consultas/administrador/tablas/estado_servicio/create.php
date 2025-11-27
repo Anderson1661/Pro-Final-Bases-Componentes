@@ -1,9 +1,24 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
-$descripcion = isset($_REQUEST['descripcion']) ? $_REQUEST['descripcion'] : '';
+// FUNCIÓN PARA LEER TANTO JSON COMO FORM-DATA
+function getRequestData($key) {
+    // Primero intenta leer de JSON
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input[$key])) {
+        return $input[$key];
+    }
+    
+    // Si no viene en JSON, busca en $_REQUEST (form-data)
+    return isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+}
 
+// USAR LA FUNCIÓN EN LUGAR DE $_REQUEST
+$descripcion = getRequestData('descripcion');
+
+
+// EL RESTO DEL CÓDIGO PERMANECE IGUAL...
 if (empty($descripcion)) {
     echo json_encode(array("success" => "0", "mensaje" => "La descripción es requerida"));
 } else {

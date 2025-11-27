@@ -1,5 +1,5 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
 $id_tipo_usuario = isset($_REQUEST['id_tipo_usuario']) ? $_REQUEST['id_tipo_usuario'] : '';

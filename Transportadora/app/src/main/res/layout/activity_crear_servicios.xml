@@ -338,12 +338,16 @@
                 android:textColor="@color/negro"
                 android:textStyle="bold"
                 android:layout_marginTop="30dp" />
-            <TextView
+
+            <EditText
                 android:id="@+id/txt_km_recorrido"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0 km"
-                android:textColor="@color/grisoscuro" />
+                android:hint="Ingrese la distancia en km"
+                android:inputType="numberDecimal"
+                android:textColor="@color/grisoscuro"
+                android:textColorHint="@color/grisclaro"
+                android:padding="10dp" />
 
             <TextView
                 android:layout_width="match_parent"

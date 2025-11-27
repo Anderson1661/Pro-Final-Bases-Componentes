@@ -88,7 +88,7 @@
         android:textColor="@color/grisoscuro"
         android:textColorHint="@color/grisclaro"
         android:hint="numero"
-        android:inputType="numberPassword"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -118,7 +118,7 @@
         android:textColor="@color/grisoscuro"
         android:textColorHint="@color/grisclaro"
         android:hint="numero"
-        android:inputType="numberPassword"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />

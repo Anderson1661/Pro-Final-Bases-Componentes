@@ -2,16 +2,25 @@ package transportadora.Administrador.Generos
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import transportadora.Administrador.Colores_vehiculo.Administrar_colores_vehiculo
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONObject
+import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 
 class Crear_generos : AppCompatActivity() {
+    private lateinit var txtDescripcion: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,14 +31,51 @@ class Crear_generos : AppCompatActivity() {
             insets
         }
 
+        txtDescripcion = findViewById(R.id.txt_descripcion)
+
         val btnVolver = findViewById<TextView>(R.id.txt_volver_login)
         btnVolver.setOnClickListener {
             finish()
         }
+
         val botoncrear = findViewById<Button>(R.id.buttonCrear)
         botoncrear.setOnClickListener {
-            val intent = Intent(this, Administrar_generos::class.java)
-            startActivity(intent)
+            crearGenero()
         }
+    }
+
+    private fun crearGenero() {
+        val descripcion = txtDescripcion.text.toString().trim()
+
+        Log.d("valor descripcion", "Des: $descripcion")
+
+        if (descripcion.isEmpty()) {
+            Toast.makeText(this, "toast La descripción es requerida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val url = ApiConfig.BASE_URL + "consultas/administrador/tablas/genero/create.php"
+        val jsonObject = JSONObject().apply {
+            put("descripcion", descripcion)
+        }
+
+        val request = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                if (response.getString("success") == "1") {
+                    Toast.makeText(this, response.getString("mensaje"), Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, Administrar_generos::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, response.getString("mensaje"), Toast.LENGTH_SHORT).show()
+                }
+            },
+            { error ->
+                Toast.makeText(this, "Error al crear género: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        Volley.newRequestQueue(this).add(request)
     }
 }

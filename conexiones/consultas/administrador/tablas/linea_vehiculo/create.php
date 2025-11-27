@@ -1,5 +1,5 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
 $id_linea = isset($_REQUEST['id_linea']) ? $_REQUEST['id_linea'] : '';
