@@ -31,4 +31,3 @@ header('Content-Type: application/json; charset=utf-8');
 echo json_encode($res, JSON_UNESCAPED_UNICODE);
 mysqli_close($link);
 ?>
-

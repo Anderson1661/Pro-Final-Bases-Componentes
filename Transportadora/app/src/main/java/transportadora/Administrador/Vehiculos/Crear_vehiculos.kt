@@ -26,7 +26,7 @@ import transportadora.Almacenados.Administrador.EstadoVehiculo
 import transportadora.Almacenados.Administrador.Estado_vehiculo_almacenados
 import transportadora.Almacenados.Administrador.LineaSimple
 import transportadora.Almacenados.Administrador.Linea_por_marca_almacenados
-import transportadora.Almacenados.Administrador.Marca
+import transportadora.Modelos.Administrador.Marca
 import transportadora.Almacenados.Administrador.Marca_almacenados
 import transportadora.Almacenados.Administrador.TipoServicio
 import transportadora.Almacenados.Administrador.Tipo_servicio_almacenados

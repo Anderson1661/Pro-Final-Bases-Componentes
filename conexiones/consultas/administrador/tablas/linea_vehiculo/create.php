@@ -2,8 +2,21 @@
 include('../../../../config/conexion.php');
 $link = Conectar();
 
-$id_linea = isset($_REQUEST['id_linea']) ? $_REQUEST['id_linea'] : '';
-$id_marca = isset($_REQUEST['id_marca']) ? $_REQUEST['id_marca'] : '';
+// FUNCIÓN PARA LEER TANTO JSON COMO FORM-DATA
+function getRequestData($key) {
+    // Primero intenta leer de JSON
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (isset($input[$key])) {
+        return $input[$key];
+    }
+    
+    // Si no viene en JSON, busca en $_REQUEST (form-data)
+    return isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+}
+
+// USAR LA FUNCIÓN EN LUGAR DE $_REQUEST
+$id_linea = getRequestData('id_linea');
+$id_marca = getRequestData('id_marca');
 
 if (empty($id_linea) || empty($id_marca)) {
     echo json_encode(array("success" => "0", "mensaje" => "ID línea e ID marca son requeridos"));

@@ -5,11 +5,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Configuracion.ApiConfig
 import transportadora.Network.ApiHelper
-
-data class Marca(
-    val id_marca: Int,
-    val nombre_marca: String
-)
+import transportadora.Modelos.Administrador.Marca
 
 object Marca_almacenados {
     suspend fun obtenerMarcas(): List<Marca> = withContext(Dispatchers.IO) {
@@ -18,6 +14,7 @@ object Marca_almacenados {
 
         val lista = mutableListOf<Marca>()
         val json = JSONObject(response)
+
         if (json.optString("success") == "1") {
             val datos = json.optJSONArray("datos")
             if (datos != null) {
@@ -35,4 +32,3 @@ object Marca_almacenados {
         lista
     }
 }
-
