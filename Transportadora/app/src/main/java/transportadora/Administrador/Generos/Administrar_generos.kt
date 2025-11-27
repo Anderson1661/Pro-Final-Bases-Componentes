@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -60,14 +62,20 @@ class Administrar_generos : AppCompatActivity() {
     private fun setupRecyclerView() {
         recyclerView = findViewById(R.id.layoutAdministradores)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = GeneroAdapter(generosList) { genero ->
-            // Manejar clic en editar
-            val intent = Intent(this, Editar_generos::class.java).apply {
-                putExtra("id_genero", genero.id)
-                putExtra("descripcion", genero.descripcion)
+        adapter = GeneroAdapter(generosList,
+            onEditarClick = { genero ->
+                // Manejar clic en editar
+                val intent = Intent(this, Editar_generos::class.java).apply {
+                    putExtra("id_genero", genero.id)
+                    putExtra("descripcion", genero.descripcion)
+                }
+                startActivity(intent)
+            },
+            onEliminarClick = { genero ->
+                // Manejar clic en eliminar
+                mostrarDialogoEliminacion(genero)
             }
-            startActivity(intent)
-        }
+        )
         recyclerView.adapter = adapter
     }
 
@@ -130,7 +138,8 @@ class Administrar_generos : AppCompatActivity() {
     // Adapter para el RecyclerView
     inner class GeneroAdapter(
         private var generos: List<Genero>,
-        private val onEditarClick: (Genero) -> Unit
+        private val onEditarClick: (Genero) -> Unit,
+        private val onEliminarClick: (Genero) -> Unit
     ) : RecyclerView.Adapter<GeneroAdapter.GeneroViewHolder>() {
 
         inner class GeneroViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -157,8 +166,7 @@ class Administrar_generos : AppCompatActivity() {
             }
 
             holder.btnEliminarGenero.setOnClickListener {
-                // Lógica para eliminar el género
-                mostrarDialogoEliminacion(genero)
+                onEliminarClick(genero)
             }
         }
 
@@ -171,9 +179,132 @@ class Administrar_generos : AppCompatActivity() {
     }
 
     private fun mostrarDialogoEliminacion(genero: Genero) {
-        // Por ahora solo mostraremos un log
-        // Más adelante puedes implementar un AlertDialog para confirmar
-        Log.d("Administrar_generos", "Eliminar género: ${genero.id} - ${genero.descripcion}")
-        // TODO: Implementar la lógica de eliminación con un PHP
+        // Primero verificamos dependencias
+        verificarDependencias(genero.id) { tieneDependencias, mensaje, dependencias ->
+            if (tieneDependencias) {
+                // Mostrar alerta de que no se puede eliminar por dependencias
+                mostrarAlertaDependencias(mensaje, dependencias)
+            } else {
+                // Mostrar diálogo de confirmación para eliminar
+                mostrarConfirmacionEliminacion(genero)
+            }
+        }
+    }
+
+    private fun verificarDependencias(idGenero: Int, callback: (Boolean, String, Map<String, Int>?) -> Unit) {
+        val url = ApiConfig.BASE_URL + "consultas/administrador/tablas/genero/verificar_dependencias.php"
+        val jsonObject = JSONObject().apply {
+            put("id_genero", idGenero)
+        }
+
+        val request = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                try {
+                    Log.d("VerificarDependencias", "Respuesta: $response")
+
+                    if (response.getString("success") == "1") {
+                        // No hay dependencias, se puede eliminar
+                        callback(false, response.getString("mensaje"), null)
+                    } else {
+                        // Hay dependencias
+                        val dependencias = mutableMapOf<String, Int>()
+                        val jsonDependencies = response.getJSONObject("dependencies")
+                        val keys = jsonDependencies.keys()
+
+                        while (keys.hasNext()) {
+                            val key = keys.next()
+                            dependencias[key] = jsonDependencies.getInt(key)
+                        }
+
+                        callback(true, response.getString("mensaje"), dependencias)
+                    }
+                } catch (e: JSONException) {
+                    Log.e("VerificarDependencias", "Error parsing JSON: ${e.message}")
+                    callback(true, "Error al verificar dependencias", null)
+                }
+            },
+            { error ->
+                Log.e("VerificarDependencias", "Volley error: ${error.message}")
+                callback(true, "Error de conexión", null)
+            }
+        )
+
+        Volley.newRequestQueue(this).add(request)
+    }
+
+    private fun mostrarAlertaDependencias(mensaje: String, dependencias: Map<String, Int>?) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("No se puede eliminar")
+
+        val mensajeDetallado = StringBuilder(mensaje)
+        dependencias?.forEach { (tabla, count) ->
+            if (count > 0) {
+                when (tabla) {
+                    "clientes" -> mensajeDetallado.append("\n• Clientes: $count registro(s)")
+                    "administradores" -> mensajeDetallado.append("\n• Administradores: $count registro(s)")
+                    "conductores" -> mensajeDetallado.append("\n• Conductores: $count registro(s)")
+                    else -> mensajeDetallado.append("\n• $tabla: $count registro(s)")
+                }
+            }
+        }
+
+        builder.setMessage(mensajeDetallado.toString())
+        builder.setPositiveButton("Aceptar") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+    private fun mostrarConfirmacionEliminacion(genero: Genero) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirmar eliminación")
+        builder.setMessage("¿Estás seguro de que quieres eliminar el género '${genero.descripcion}'?")
+
+        builder.setPositiveButton("Eliminar") { dialog, _ ->
+            eliminarGenero(genero.id)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun eliminarGenero(idGenero: Int) {
+        val url = ApiConfig.BASE_URL + "consultas/administrador/tablas/genero/delete.php"
+        val jsonObject = JSONObject().apply {
+            put("id_genero", idGenero)
+        }
+
+        val request = JsonObjectRequest(
+            Request.Method.POST, url, jsonObject,
+            { response ->
+                try {
+                    Log.d("Administrar_generos", "Respuesta eliminación: $response")
+
+                    if (response.getString("success") == "1") {
+                        // Eliminación exitosa, recargar la lista
+                        cargarGeneros()
+                        // Mostrar mensaje de éxito
+                        Toast.makeText(this, "Género eliminado correctamente", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.e("Administrar_generos", "Error al eliminar: ${response.getString("mensaje")}")
+                        Toast.makeText(this, "Error al eliminar género: ${response.getString("mensaje")}", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: JSONException) {
+                    Log.e("Administrar_generos", "Error parsing JSON: ${e.message}")
+                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT).show()
+                }
+            },
+            { error ->
+                Log.e("Administrar_generos", "Volley error al eliminar: ${error.message}")
+                Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        Volley.newRequestQueue(this).add(request)
     }
 }

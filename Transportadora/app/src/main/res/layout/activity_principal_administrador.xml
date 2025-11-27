@@ -126,9 +126,8 @@
                         android:layout_width="270dp"
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
-                        android:layout_marginBottom="0dp"
                         android:backgroundTint="@color/amarillo"
-                        android:text="Actualizar Resumen Mensual Ahora"
+                        android:text="@string/txt_actualizar1"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
 
@@ -137,9 +136,8 @@
                         android:layout_width="270dp"
                         android:layout_height="60dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="0dp"
                         android:backgroundTint="@color/amarillo"
-                        android:text="Actualizar Estadisticas Conductores Ahora"
+                        android:text="@string/txt_actualizar2"
                         android:textColor="@color/blanco"
                         android:layout_gravity="center_horizontal"/>
 

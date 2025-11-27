@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Transportadorapp</string>
+    <string name="txt_actualizar1">Actualizar Resumen Mensual <b>AHORA</b></string>
+    <string name="txt_actualizar2">Actualizar Estadisticas Conductores <b>AHORA</b></string>
     <string-array name="cantidad_telefonos">
         <item>1</item>
         <item>2</item>
