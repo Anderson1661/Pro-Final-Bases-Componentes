@@ -52,27 +52,6 @@ if (empty($identificacion) || empty($id_tipo_identificacion) || empty($nombre) |
         
         $id_administrador = mysqli_insert_id($link);
         
-        // Insertar teléfonos
-        if (!empty($telefonos)) {
-            $telefonos_array = json_decode($telefonos, true);
-            
-            if (isset($telefonos_array['telefono1'])) {
-                $tel1 = mysqli_real_escape_string($link, $telefonos_array['telefono1']);
-                $sql_tel1 = "INSERT INTO telefono_administrador (id_administrador, telefono) VALUES ('$id_administrador', '$tel1')";
-                if (!mysqli_query($link, $sql_tel1)) {
-                    throw new Exception(mysqli_error($link));
-                }
-            }
-            
-            if (isset($telefonos_array['telefono2']) && !empty($telefonos_array['telefono2'])) {
-                $tel2 = mysqli_real_escape_string($link, $telefonos_array['telefono2']);
-                $sql_tel2 = "INSERT INTO telefono_administrador (id_administrador, telefono) VALUES ('$id_administrador', '$tel2')";
-                if (!mysqli_query($link, $sql_tel2)) {
-                    throw new Exception(mysqli_error($link));
-                }
-            }
-        }
-        
         // Confirmar transacción
         mysqli_commit($link);
         echo json_encode(array("success" => "1", "mensaje" => "Administrador registrado correctamente"));

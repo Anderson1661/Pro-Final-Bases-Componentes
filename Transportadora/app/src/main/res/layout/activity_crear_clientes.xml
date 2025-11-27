@@ -131,79 +131,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Cantidad de Teléfonos -->
-            <TextView
-                android:id="@+id/textViewCantidadTel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Cantidad de Teléfonos"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_tipo_id_reg1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <Spinner
-                android:id="@+id/spinner_cantidad_tel"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:entries="@array/cantidad_telefonos"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCantidadTel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <!-- Primer número de teléfono -->
-            <TextView
-                android:id="@+id/textViewNum1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Número de Teléfono 1"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/spinner_cantidad_tel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <EditText
-                android:id="@+id/txt_tel1"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:ems="10"
-                android:inputType="number"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNum1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <!-- Segundo número de teléfono -->
-            <TextView
-                android:id="@+id/textViewNum2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Número de Teléfono 2"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintTop_toBottomOf="@+id/txt_tel1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <EditText
-                android:id="@+id/txt_tel2"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:ems="10"
-                android:inputType="number"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNum2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="wrap_content"
@@ -297,68 +224,24 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/textView20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="País"
+                android:text="Código Postal de Residencia"
                 android:textStyle="bold"
                 android:textColor="@color/negro"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_contra2_reg1" />
+                app:layout_constraintTop_toBottomOf="@+id/txt_dir" />
 
             <Spinner
-                android:id="@+id/txt_pais"
+                android:id="@+id/txt_codigo_postal"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Departamento"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_pregunta1" />
-
-            <Spinner
-                android:id="@+id/txt_departamento"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView18"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/textView19"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Ciudad"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_pregunta2" />
-
-            <Spinner
-                android:id="@+id/txt_ciudad"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/grisoscuro"
-                app:layout_constraintTop_toBottomOf="@+id/textView19"
+                app:layout_constraintTop_toBottomOf="@+id/textView20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
