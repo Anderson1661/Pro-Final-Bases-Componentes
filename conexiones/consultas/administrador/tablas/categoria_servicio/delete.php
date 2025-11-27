@@ -1,31 +1,62 @@
 <?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include('../../../../config/conexion.php');
+$link = Conectar();
+
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../config/conexion.php');
-    $link = Conectar();
+    $data = json_decode(file_get_contents("php://input"), true);
     
-    $id_categoria_servicio = isset($_REQUEST['id_categoria_servicio']) ? $_REQUEST['id_categoria_servicio'] : '';
-    
-    if (empty($id_categoria_servicio)) {
-        echo json_encode(array("success" => "0", "mensaje" => "ID requerido"));
-    } else {
-        $id_categoria_servicio = mysqli_real_escape_string($link, $id_categoria_servicio);
+    if (isset($data['id_categoria_servicio'])) {
+        $id_categoria_servicio = mysqli_real_escape_string($link, $data['id_categoria_servicio']);
         
-        $sql = "DELETE FROM categoria_servicio WHERE id_categoria_servicio='$id_categoria_servicio'";
-        $res = mysqli_query($link, $sql);
+        // Primero verificamos si existe la categoría
+        $query_check = "SELECT COUNT(*) as count FROM categoria_servicio WHERE id_categoria_servicio = '$id_categoria_servicio'";
+        $result_check = mysqli_query($link, $query_check);
         
-        if ($res) {
-            if (mysqli_affected_rows($link) > 0) {
-                echo json_encode(array("success" => "1", "mensaje" => "Categoría de servicio eliminada correctamente"));
+        if ($result_check) {
+            $row = mysqli_fetch_assoc($result_check);
+            
+            if ($row['count'] == 0) {
+                $response['success'] = "0";
+                $response['mensaje'] = "La categoría de servicio no existe";
             } else {
-                echo json_encode(array("success" => "0", "mensaje" => "No se encontró el registro"));
+                // Eliminar la categoría
+                $query_delete = "DELETE FROM categoria_servicio WHERE id_categoria_servicio = '$id_categoria_servicio'";
+                $result_delete = mysqli_query($link, $query_delete);
+                
+                if ($result_delete) {
+                    if (mysqli_affected_rows($link) > 0) {
+                        $response['success'] = "1";
+                        $response['mensaje'] = "Categoría de servicio eliminada correctamente";
+                    } else {
+                        $response['success'] = "0";
+                        $response['mensaje'] = "No se pudo eliminar la categoría de servicio";
+                    }
+                } else {
+                    $response['success'] = "0";
+                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                }
             }
         } else {
-            echo json_encode(array("success" => "0", "mensaje" => "Error al eliminar: " . mysqli_error($link)));
+            $response['success'] = "0";
+            $response['mensaje'] = "Error en la consulta: " . mysqli_error($link);
         }
+        
+    } else {
+        $response['success'] = "0";
+        $response['mensaje'] = "ID de categoría de servicio no proporcionado";
     }
-    mysqli_close($link);
 } else {
-    echo json_encode(array("success" => "0", "mensaje" => "Método no permitido"));
+    $response['success'] = "0";
+    $response['mensaje'] = "Método no permitido";
 }
-?>
 
+echo json_encode($response);
+mysqli_close($link);
+?>
