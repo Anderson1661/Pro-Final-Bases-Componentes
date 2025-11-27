@@ -1,31 +1,63 @@
 <?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include('../../../../config/conexion.php');
+$link = Conectar();
+
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../config/conexion.php');
-    $link = Conectar();
+    $data = json_decode(file_get_contents("php://input"), true);
     
-    $id_tipo_identificacion = isset($_REQUEST['id_tipo_identificacion']) ? $_REQUEST['id_tipo_identificacion'] : '';
-    
-    if (empty($id_tipo_identificacion)) {
-        echo json_encode(array("success" => "0", "mensaje" => "ID requerido"));
-    } else {
-        $id_tipo_identificacion = mysqli_real_escape_string($link, $id_tipo_identificacion);
+    if (isset($data['id_tipo_identificacion'])) {
+        $id_tipo_identificacion = mysqli_real_escape_string($link, $data['id_tipo_identificacion']);
         
-        $sql = "DELETE FROM tipo_identificacion WHERE id_tipo_identificacion='$id_tipo_identificacion'";
-        $res = mysqli_query($link, $sql);
+        // Primero verificamos si existe
+        $query_check = "SELECT COUNT(*) as count FROM tipo_identificacion WHERE id_tipo_identificacion = '$id_tipo_identificacion'";
+        $result_check = mysqli_query($link, $query_check);
         
-        if ($res) {
-            if (mysqli_affected_rows($link) > 0) {
-                echo json_encode(array("success" => "1", "mensaje" => "Tipo de identificación eliminado correctamente"));
+        if ($result_check) {
+            $row = mysqli_fetch_assoc($result_check);
+            
+            if ($row['count'] == 0) {
+                $response['success'] = "0";
+                $response['mensaje'] = "El tipo de identificación no existe";
             } else {
-                echo json_encode(array("success" => "0", "mensaje" => "No se encontró el registro"));
+                // Eliminar
+                $query_delete = "DELETE FROM tipo_identificacion WHERE id_tipo_identificacion = '$id_tipo_identificacion'";
+                $result_delete = mysqli_query($link, $query_delete);
+                
+                if ($result_delete) {
+                    if (mysqli_affected_rows($link) > 0) {
+                        $response['success'] = "1";
+                        $response['mensaje'] = "Tipo de identificación eliminado correctamente";
+                    } else {
+                        $response['success'] = "0";
+                        $response['mensaje'] = "No se pudo eliminar el tipo de identificación";
+                    }
+                } else {
+                    $response['success'] = "0";
+                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                }
             }
         } else {
-            echo json_encode(array("success" => "0", "mensaje" => "Error al eliminar: " . mysqli_error($link)));
+            $response['success'] = "0";
+            $response['mensaje'] = "Error en la consulta: " . mysqli_error($link);
         }
+        
+    } else {
+        $response['success'] = "0";
+        $response['mensaje'] = "ID de tipo de identificación no proporcionado";
     }
-    mysqli_close($link);
 } else {
-    echo json_encode(array("success" => "0", "mensaje" => "Método no permitido"));
+    $response['success'] = "0";
+    $response['mensaje'] = "Método no permitido";
 }
+
+echo json_encode($response);
+mysqli_close($link);
 ?>
 

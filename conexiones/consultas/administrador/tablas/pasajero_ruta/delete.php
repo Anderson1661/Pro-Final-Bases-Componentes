@@ -1,33 +1,64 @@
 <?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include('../../../../config/conexion.php');
+$link = Conectar();
+
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../config/conexion.php');
-    $link = Conectar();
+    $data = json_decode(file_get_contents("php://input"), true);
     
-    $id_ruta = isset($_REQUEST['id_ruta']) ? $_REQUEST['id_ruta'] : '';
-    $nombre_pasajero = isset($_REQUEST['nombre_pasajero']) ? $_REQUEST['nombre_pasajero'] : '';
-    
-    if (empty($id_ruta) || empty($nombre_pasajero)) {
-        echo json_encode(array("success" => "0", "mensaje" => "ID ruta y nombre pasajero son requeridos"));
-    } else {
-        $id_ruta = mysqli_real_escape_string($link, $id_ruta);
-        $nombre_pasajero = mysqli_real_escape_string($link, $nombre_pasajero);
+    if (isset($data['id_ruta']) && isset($data['nombre_pasajero'])) {
+        $id_ruta = mysqli_real_escape_string($link, $data['id_ruta']);
+        $nombre_pasajero = mysqli_real_escape_string($link, $data['nombre_pasajero']);
         
-        $sql = "DELETE FROM pasajero_ruta WHERE id_ruta='$id_ruta' AND nombre_pasajero='$nombre_pasajero'";
-        $res = mysqli_query($link, $sql);
+        // Primero verificamos si existe
+        $query_check = "SELECT COUNT(*) as count FROM pasajero_ruta WHERE id_ruta = '$id_ruta' AND nombre_pasajero = '$nombre_pasajero'";
+        $result_check = mysqli_query($link, $query_check);
         
-        if ($res) {
-            if (mysqli_affected_rows($link) > 0) {
-                echo json_encode(array("success" => "1", "mensaje" => "Pasajero eliminado correctamente"));
+        if ($result_check) {
+            $row = mysqli_fetch_assoc($result_check);
+            
+            if ($row['count'] == 0) {
+                $response['success'] = "0";
+                $response['mensaje'] = "El pasajero no existe";
             } else {
-                echo json_encode(array("success" => "0", "mensaje" => "No se encontró el registro"));
+                // Eliminar
+                $query_delete = "DELETE FROM pasajero_ruta WHERE id_ruta = '$id_ruta' AND nombre_pasajero = '$nombre_pasajero'";
+                $result_delete = mysqli_query($link, $query_delete);
+                
+                if ($result_delete) {
+                    if (mysqli_affected_rows($link) > 0) {
+                        $response['success'] = "1";
+                        $response['mensaje'] = "Pasajero eliminado correctamente";
+                    } else {
+                        $response['success'] = "0";
+                        $response['mensaje'] = "No se pudo eliminar el pasajero";
+                    }
+                } else {
+                    $response['success'] = "0";
+                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                }
             }
         } else {
-            echo json_encode(array("success" => "0", "mensaje" => "Error al eliminar: " . mysqli_error($link)));
+            $response['success'] = "0";
+            $response['mensaje'] = "Error en la consulta: " . mysqli_error($link);
         }
+        
+    } else {
+        $response['success'] = "0";
+        $response['mensaje'] = "ID de ruta y nombre de pasajero no proporcionados";
     }
-    mysqli_close($link);
 } else {
-    echo json_encode(array("success" => "0", "mensaje" => "Método no permitido"));
+    $response['success'] = "0";
+    $response['mensaje'] = "Método no permitido";
 }
+
+echo json_encode($response);
+mysqli_close($link);
 ?>
 

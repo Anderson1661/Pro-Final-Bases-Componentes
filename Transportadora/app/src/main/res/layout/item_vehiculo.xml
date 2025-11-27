@@ -92,7 +92,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Color:"
+                android:text="ID Color:"
                 android:textStyle="bold" />
 
             <TextView
@@ -115,7 +115,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Marca:"
+                android:text="ID Marca:"
                 android:textStyle="bold" />
 
             <TextView
@@ -138,7 +138,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tipo Servicio:"
+                android:text="ID Tipo Servicio:"
                 android:textStyle="bold" />
 
             <TextView
@@ -161,7 +161,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Estado:"
+                android:text="ID Estado:"
                 android:textStyle="bold" />
 
             <TextView

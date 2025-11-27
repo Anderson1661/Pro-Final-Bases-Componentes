@@ -1,31 +1,63 @@
 <?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include('../../../../config/conexion.php');
+$link = Conectar();
+
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../config/conexion.php');
-    $link = Conectar();
+    $data = json_decode(file_get_contents("php://input"), true);
     
-    $id_metodo_pago = isset($_REQUEST['id_metodo_pago']) ? $_REQUEST['id_metodo_pago'] : '';
-    
-    if (empty($id_metodo_pago)) {
-        echo json_encode(array("success" => "0", "mensaje" => "ID requerido"));
-    } else {
-        $id_metodo_pago = mysqli_real_escape_string($link, $id_metodo_pago);
+    if (isset($data['id_metodo_pago'])) {
+        $id_metodo_pago = mysqli_real_escape_string($link, $data['id_metodo_pago']);
         
-        $sql = "DELETE FROM metodo_pago WHERE id_metodo_pago='$id_metodo_pago'";
-        $res = mysqli_query($link, $sql);
+        // Primero verificamos si existe
+        $query_check = "SELECT COUNT(*) as count FROM metodo_pago WHERE id_metodo_pago = '$id_metodo_pago'";
+        $result_check = mysqli_query($link, $query_check);
         
-        if ($res) {
-            if (mysqli_affected_rows($link) > 0) {
-                echo json_encode(array("success" => "1", "mensaje" => "Método de pago eliminado correctamente"));
+        if ($result_check) {
+            $row = mysqli_fetch_assoc($result_check);
+            
+            if ($row['count'] == 0) {
+                $response['success'] = "0";
+                $response['mensaje'] = "El método de pago no existe";
             } else {
-                echo json_encode(array("success" => "0", "mensaje" => "No se encontró el registro"));
+                // Eliminar
+                $query_delete = "DELETE FROM metodo_pago WHERE id_metodo_pago = '$id_metodo_pago'";
+                $result_delete = mysqli_query($link, $query_delete);
+                
+                if ($result_delete) {
+                    if (mysqli_affected_rows($link) > 0) {
+                        $response['success'] = "1";
+                        $response['mensaje'] = "Método de pago eliminado correctamente";
+                    } else {
+                        $response['success'] = "0";
+                        $response['mensaje'] = "No se pudo eliminar el método de pago";
+                    }
+                } else {
+                    $response['success'] = "0";
+                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                }
             }
         } else {
-            echo json_encode(array("success" => "0", "mensaje" => "Error al eliminar: " . mysqli_error($link)));
+            $response['success'] = "0";
+            $response['mensaje'] = "Error en la consulta: " . mysqli_error($link);
         }
+        
+    } else {
+        $response['success'] = "0";
+        $response['mensaje'] = "ID de método de pago no proporcionado";
     }
-    mysqli_close($link);
 } else {
-    echo json_encode(array("success" => "0", "mensaje" => "Método no permitido"));
+    $response['success'] = "0";
+    $response['mensaje'] = "Método no permitido";
 }
+
+echo json_encode($response);
+mysqli_close($link);
 ?>
 

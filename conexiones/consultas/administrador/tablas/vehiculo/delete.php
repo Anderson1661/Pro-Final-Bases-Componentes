@@ -1,31 +1,63 @@
 <?php
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+include('../../../../config/conexion.php');
+$link = Conectar();
+
+$response = array();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../config/conexion.php');
-    $link = Conectar();
+    $data = json_decode(file_get_contents("php://input"), true);
     
-    $placa = isset($_REQUEST['placa']) ? $_REQUEST['placa'] : '';
-    
-    if (empty($placa)) {
-        echo json_encode(array("success" => "0", "mensaje" => "La placa es requerida"));
-    } else {
-        $placa = mysqli_real_escape_string($link, $placa);
+    if (isset($data['placa'])) {
+        $placa = mysqli_real_escape_string($link, $data['placa']);
         
-        $sql = "DELETE FROM vehiculo WHERE placa='$placa'";
-        $res = mysqli_query($link, $sql);
+        // Primero verificamos si existe
+        $query_check = "SELECT COUNT(*) as count FROM vehiculo WHERE placa = '$placa'";
+        $result_check = mysqli_query($link, $query_check);
         
-        if ($res) {
-            if (mysqli_affected_rows($link) > 0) {
-                echo json_encode(array("success" => "1", "mensaje" => "Vehículo eliminado correctamente"));
+        if ($result_check) {
+            $row = mysqli_fetch_assoc($result_check);
+            
+            if ($row['count'] == 0) {
+                $response['success'] = "0";
+                $response['mensaje'] = "El vehículo no existe";
             } else {
-                echo json_encode(array("success" => "0", "mensaje" => "No se encontró el registro"));
+                // Eliminar
+                $query_delete = "DELETE FROM vehiculo WHERE placa = '$placa'";
+                $result_delete = mysqli_query($link, $query_delete);
+                
+                if ($result_delete) {
+                    if (mysqli_affected_rows($link) > 0) {
+                        $response['success'] = "1";
+                        $response['mensaje'] = "Vehículo eliminado correctamente";
+                    } else {
+                        $response['success'] = "0";
+                        $response['mensaje'] = "No se pudo eliminar el vehículo";
+                    }
+                } else {
+                    $response['success'] = "0";
+                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                }
             }
         } else {
-            echo json_encode(array("success" => "0", "mensaje" => "Error al eliminar: " . mysqli_error($link)));
+            $response['success'] = "0";
+            $response['mensaje'] = "Error en la consulta: " . mysqli_error($link);
         }
+        
+    } else {
+        $response['success'] = "0";
+        $response['mensaje'] = "Placa del vehículo no proporcionada";
     }
-    mysqli_close($link);
 } else {
-    echo json_encode(array("success" => "0", "mensaje" => "Método no permitido"));
+    $response['success'] = "0";
+    $response['mensaje'] = "Método no permitido";
 }
+
+echo json_encode($response);
+mysqli_close($link);
 ?>
 
