@@ -28,25 +28,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $correo = $row['correo'];
                 
-                // Eliminar el administrador
-                $query_delete = "DELETE FROM administrador WHERE id_administrador = '$id_administrador'";
-                $result_delete = mysqli_query($link, $query_delete);
+                // Iniciar transacción para asegurar consistencia
+                mysqli_begin_transaction($link);
                 
-                if ($result_delete) {
+                try {
+                    // PRIMERO: Eliminar el usuario asociado (si existe)
+                    $query_delete_usuario = "DELETE FROM usuario WHERE correo = '$correo'";
+                    $result_delete_usuario = mysqli_query($link, $query_delete_usuario);
+                    
+                    // No nos importa si no existía el usuario, continuamos
+                    
+                    // SEGUNDO: Eliminar teléfonos del administrador
+                    $query_delete_telefonos = "DELETE FROM telefono_administrador WHERE id_administrador = '$id_administrador'";
+                    $result_delete_telefonos = mysqli_query($link, $query_delete_telefonos);
+                    
+                    if (!$result_delete_telefonos) {
+                        throw new Exception("Error al eliminar teléfonos: " . mysqli_error($link));
+                    }
+                    
+                    // TERCERO: Eliminar el administrador
+                    $query_delete = "DELETE FROM administrador WHERE id_administrador = '$id_administrador'";
+                    $result_delete = mysqli_query($link, $query_delete);
+                    
+                    if (!$result_delete) {
+                        throw new Exception("Error al eliminar administrador: " . mysqli_error($link));
+                    }
+                    
                     if (mysqli_affected_rows($link) > 0) {
-                        // Si se eliminó el administrador, también eliminamos el usuario asociado
-                        $query_delete_usuario = "DELETE FROM usuario WHERE correo = '$correo'";
-                        $result_delete_usuario = mysqli_query($link, $query_delete_usuario);
-                        
+                        // Confirmar transacción
+                        mysqli_commit($link);
                         $response['success'] = "1";
                         $response['mensaje'] = "Administrador eliminado correctamente";
                     } else {
-                        $response['success'] = "0";
-                        $response['mensaje'] = "No se pudo eliminar el administrador";
+                        throw new Exception("No se pudo eliminar el administrador");
                     }
-                } else {
+                    
+                } catch (Exception $e) {
+                    // Revertir transacción en caso de error
+                    mysqli_rollback($link);
                     $response['success'] = "0";
-                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                    $response['mensaje'] = $e->getMessage();
                 }
             }
         } else {

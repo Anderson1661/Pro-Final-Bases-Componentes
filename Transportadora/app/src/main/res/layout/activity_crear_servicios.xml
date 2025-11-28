@@ -105,19 +105,22 @@
                 android:inputType="date"
                 android:padding="10dp" />
 
-            <!-- Dirección de origen (Mía u otra) -->
+            <!-- Fecha de inicio -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Dirección de origen"
-                android:textColor="@color/negro"
+                android:text="Fecha de Origen del Servicio"
+                android:layout_marginTop="30dp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp" />
-            <Spinner
-                android:id="@+id/spinner_origen_tipo"
-                android:entries="@array/tipos_origen"
+                android:textColorHint="@color/grisclaro"
+                android:textColor="@color/negro" />
+            <EditText
+                android:id="@+id/txt_fecha_origen"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="Selecciona la fecha"
+                android:inputType="date"
+                android:padding="10dp" />
 
             <!-- Dirección de origen -->
             <TextView
@@ -136,31 +139,17 @@
                 android:inputType="textPostalAddress"
                 android:padding="10dp" />
 
-            <!-- Departamento de origen -->
+            <!-- Codigo postal de origen -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Departamento de origen"
+                android:text="Codigo Postal de origen"
                 android:textColor="@color/negro"
                 android:textStyle="bold"
                 android:layout_marginTop="20dp" />
             <Spinner
-                android:id="@+id/spinner_depto_origen"
+                android:id="@+id/spinner_codigo_postal_origen"
                 android:entries="@array/departamentos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Ciudad de origen -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ciudad de origen"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp" />
-            <Spinner
-                android:id="@+id/spinner_ciudad_origen"
-                android:entries="@array/ciudades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -178,85 +167,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <!-- Cantidad de pasajeros -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cantidad de pasajeros"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp" />
-            <Spinner
-                android:id="@+id/spinner_cantidad_pasajeros"
-                android:entries="@array/cantidad_pasajeros"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Pasajeros -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre completo pasajero 1"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp" />
-            <EditText
-                android:id="@+id/txt_pasajero1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre completo"
-                android:textColorHint="@color/grisclaro"
-                android:inputType="textPersonName"
-                android:padding="10dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre completo pasajero 2"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-            <EditText
-                android:id="@+id/txt_pasajero2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre completo"
-                android:textColorHint="@color/grisclaro"
-                android:inputType="textPersonName"
-                android:padding="10dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre completo pasajero 3"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-            <EditText
-                android:id="@+id/txt_pasajero3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre completo"
-                android:textColorHint="@color/grisclaro"
-                android:inputType="textPersonName"
-                android:padding="10dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nombre completo pasajero 4"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="10dp" />
-            <EditText
-                android:id="@+id/txt_pasajero4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre completo"
-                android:textColorHint="@color/grisclaro"
-                android:inputType="textPersonName"
-                android:padding="10dp" />
-
             <!-- Categoría de servicio -->
             <TextView
                 android:layout_width="match_parent"
@@ -270,6 +180,23 @@
                 android:entries="@array/cat_servicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <!-- Fecha de entrega -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fecha de Entrega del Servicio"
+                android:layout_marginTop="30dp"
+                android:textStyle="bold"
+                android:textColorHint="@color/grisclaro"
+                android:textColor="@color/negro" />
+            <EditText
+                android:id="@+id/txt_fecha_destino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Selecciona la fecha"
+                android:inputType="date"
+                android:padding="10dp" />
 
             <!-- Dirección de entrega -->
             <TextView
@@ -288,44 +215,16 @@
                 android:textColorHint="@color/grisclaro"
                 android:padding="10dp" />
 
-            <!-- País destino -->
+            <!-- Codigo postal destino -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="País de destino"
+                android:text="Codigo Postal de destino"
                 android:textStyle="bold"
                 android:textColor="@color/negro"
                 android:layout_marginTop="20dp" />
             <Spinner
-                android:id="@+id/spinner_pais_destino"
-                android:entries="@array/paises"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Departamento destino -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Departamento de destino"
-                android:textColor="@color/negro"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp" />
-            <Spinner
-                android:id="@+id/spinner_depto_destino"
-                android:entries="@array/departamentos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Ciudad destino -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ciudad de destino"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                android:layout_marginTop="20dp" />
-            <Spinner
-                android:id="@+id/spinner_ciudad_destino"
+                android:id="@+id/spinner_codigo_postal_destino"
                 android:entries="@array/ciudades"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -349,20 +248,6 @@
                 android:textColorHint="@color/grisclaro"
                 android:padding="10dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total a pagar"
-                android:textStyle="bold"
-                android:textColor="@color/negro"
-                android:layout_marginTop="10dp" />
-            <TextView
-                android:id="@+id/txt_total_pagar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="$0"
-                android:textColor="@color/grisoscuro" />
-
             <!-- Método de pago -->
             <TextView
                 android:layout_width="match_parent"
@@ -372,6 +257,18 @@
                 android:layout_marginTop="20dp" />
             <Spinner
                 android:id="@+id/spinner_metodo_pago"
+                android:entries="@array/metodos_pago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estado del Servicio"
+                android:textColor="@color/negro"
+                android:layout_marginTop="20dp" />
+            <Spinner
+                android:id="@+id/spinner_estado_servicio"
                 android:entries="@array/metodos_pago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

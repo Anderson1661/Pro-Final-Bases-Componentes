@@ -22,7 +22,7 @@ object Cliente_simple_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         ClienteSimple(
-                            id_cliente = obj.optInt("id_administrador"),
+                            id_cliente = obj.optInt("id_cliente"),
                             nombre = obj.optString("nombre"),
                             correo = obj.optString("correo")
                         )

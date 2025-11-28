@@ -8,7 +8,7 @@ import transportadora.Modelos.Administrador.Estado_servicio
 import transportadora.Network.ApiHelper
 
 object Estados_servicio_almacenados {
-    suspend fun obtenerEstadosConductor(): List<Estado_servicio> = withContext(Dispatchers.IO) {
+    suspend fun obtenerEstadosServicio(): List<Estado_servicio> = withContext(Dispatchers.IO) { // CORREGIDO el nombre
         val url = ApiConfig.BASE_URL + "consultas/administrador/datos/consultar_estados_servicio.php"
         val response = ApiHelper.getRequest(url)
 

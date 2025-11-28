@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Array para almacenar los resultados de las verificaciones
         $dependencies = array();
         
-        // 1. Verificar en tabla telefono_cliente
+        // 1. Verificar en tabla telefono_cliente (BLOQUEANTE)
         $query_telefonos = "SELECT COUNT(*) as count FROM telefono_cliente WHERE id_cliente = '$id_cliente'";
         $result_telefonos = mysqli_query($link, $query_telefonos);
         if ($result_telefonos) {
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dependencies['telefonos'] = 0;
         }
         
-        // 2. Verificar en tabla ruta
+        // 2. Verificar en tabla ruta (BLOQUEANTE)
         $query_rutas = "SELECT COUNT(*) as count FROM ruta WHERE id_cliente = '$id_cliente'";
         $result_rutas = mysqli_query($link, $query_rutas);
         if ($result_rutas) {
@@ -38,15 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dependencies['rutas'] = 0;
         }
         
-        // 3. Verificar en tabla usuario (por el correo)
-        // Primero obtenemos el correo del cliente
+        // 3. Verificar en tabla usuario (NO BLOQUEANTE, solo informativo)
         $query_correo = "SELECT correo FROM cliente WHERE id_cliente = '$id_cliente'";
         $result_correo = mysqli_query($link, $query_correo);
         if ($result_correo && mysqli_num_rows($result_correo) > 0) {
             $row_correo = mysqli_fetch_assoc($result_correo);
             $correo = $row_correo['correo'];
             
-            // Verificamos si existe en la tabla usuario
             $query_usuario = "SELECT COUNT(*) as count FROM usuario WHERE correo = '$correo'";
             $result_usuario = mysqli_query($link, $query_usuario);
             if ($result_usuario) {
@@ -59,19 +57,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dependencies['usuarios'] = 0;
         }
         
-        // Calcular total de dependencias
-        $total_dependencies = array_sum($dependencies);
+        // Calcular total de dependencias BLOQUEANTES (teléfonos y rutas)
+        $dependencias_bloqueantes = $dependencies['telefonos'] + $dependencies['rutas'];
         
-        if ($total_dependencies > 0) {
+        if ($dependencias_bloqueantes > 0) {
             $response['success'] = "0";
             $response['mensaje'] = "No se puede eliminar el cliente porque tiene dependencias en otras tablas";
             $response['dependencies'] = $dependencies;
-            $response['total_dependencies'] = $total_dependencies;
+            $response['dependencias_bloqueantes'] = $dependencias_bloqueantes;
         } else {
             $response['success'] = "1";
-            $response['mensaje'] = "No hay dependencias, se puede eliminar";
+            $response['mensaje'] = "No hay dependencias bloqueantes, se puede eliminar";
             $response['dependencies'] = $dependencies;
-            $response['total_dependencies'] = 0;
+            $response['dependencias_bloqueantes'] = 0;
         }
         
     } else {

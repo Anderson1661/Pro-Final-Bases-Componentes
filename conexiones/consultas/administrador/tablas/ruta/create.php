@@ -2,20 +2,30 @@
 include('../../../../config/conexion.php');
 $link = Conectar();
 
-$direccion_origen = isset($_REQUEST['direccion_origen']) ? $_REQUEST['direccion_origen'] : '';
-$direccion_destino = isset($_REQUEST['direccion_destino']) ? $_REQUEST['direccion_destino'] : '';
-$id_codigo_postal_origen = isset($_REQUEST['id_codigo_postal_origen']) ? $_REQUEST['id_codigo_postal_origen'] : '';
-$id_codigo_postal_destino = isset($_REQUEST['id_codigo_postal_destino']) ? $_REQUEST['id_codigo_postal_destino'] : '';
-$distancia_km = isset($_REQUEST['distancia_km']) ? $_REQUEST['distancia_km'] : '';
-$fecha_hora_reserva = isset($_REQUEST['fecha_hora_reserva']) ? $_REQUEST['fecha_hora_reserva'] : '';
-$fecha_hora_origen = isset($_REQUEST['fecha_hora_origen']) ? $_REQUEST['fecha_hora_origen'] : '';
-$fecha_hora_destino = isset($_REQUEST['fecha_hora_destino']) ? $_REQUEST['fecha_hora_destino'] : '';
-$id_conductor = isset($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : '';
-$id_tipo_servicio = isset($_REQUEST['id_tipo_servicio']) ? $_REQUEST['id_tipo_servicio'] : '';
-$id_cliente = isset($_REQUEST['id_cliente']) ? $_REQUEST['id_cliente'] : '';
-$id_estado_servicio = isset($_REQUEST['id_estado_servicio']) ? $_REQUEST['id_estado_servicio'] : '';
-$id_categoria_servicio = isset($_REQUEST['id_categoria_servicio']) ? $_REQUEST['id_categoria_servicio'] : '';
-$id_metodo_pago = isset($_REQUEST['id_metodo_pago']) ? $_REQUEST['id_metodo_pago'] : '';
+// Leer el input JSON
+$input = json_decode(file_get_contents('php://input'), true);
+
+// Verificar si se recibieron datos JSON
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(array("success" => "0", "mensaje" => "Error en el formato JSON: " . json_last_error_msg()));
+    exit;
+}
+
+// Obtener datos del JSON
+$direccion_origen = isset($input['direccion_origen']) ? $input['direccion_origen'] : '';
+$direccion_destino = isset($input['direccion_destino']) ? $input['direccion_destino'] : '';
+$id_codigo_postal_origen = isset($input['id_codigo_postal_origen']) ? $input['id_codigo_postal_origen'] : '';
+$id_codigo_postal_destino = isset($input['id_codigo_postal_destino']) ? $input['id_codigo_postal_destino'] : '';
+$distancia_km = isset($input['distancia_km']) ? $input['distancia_km'] : '';
+$fecha_hora_reserva = isset($input['fecha_hora_reserva']) ? $input['fecha_hora_reserva'] : '';
+$fecha_hora_origen = isset($input['fecha_hora_origen']) ? $input['fecha_hora_origen'] : '';
+$fecha_hora_destino = isset($input['fecha_hora_destino']) ? $input['fecha_hora_destino'] : '';
+$id_conductor = isset($input['id_conductor']) ? $input['id_conductor'] : '';
+$id_tipo_servicio = isset($input['id_tipo_servicio']) ? $input['id_tipo_servicio'] : '';
+$id_cliente = isset($input['id_cliente']) ? $input['id_cliente'] : '';
+$id_estado_servicio = isset($input['id_estado_servicio']) ? $input['id_estado_servicio'] : '';
+$id_categoria_servicio = isset($input['id_categoria_servicio']) ? $input['id_categoria_servicio'] : '';
+$id_metodo_pago = isset($input['id_metodo_pago']) ? $input['id_metodo_pago'] : '';
 
 if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_postal_origen) || 
     empty($id_codigo_postal_destino) || empty($distancia_km) || empty($fecha_hora_reserva) || 
@@ -23,6 +33,7 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
     empty($id_categoria_servicio) || empty($id_metodo_pago)) {
     echo json_encode(array("success" => "0", "mensaje" => "Todos los campos son requeridos"));
 } else {
+    // Limpiar y escapar datos
     $direccion_origen = mysqli_real_escape_string($link, $direccion_origen);
     $direccion_destino = mysqli_real_escape_string($link, $direccion_destino);
     $id_codigo_postal_origen = mysqli_real_escape_string($link, $id_codigo_postal_origen);
@@ -30,9 +41,10 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
     $distancia_km = mysqli_real_escape_string($link, $distancia_km);
     $fecha_hora_reserva = mysqli_real_escape_string($link, $fecha_hora_reserva);
     
-    $fecha_hora_origen = !empty($fecha_hora_origen) ? "'" . mysqli_real_escape_string($link, $fecha_hora_origen) . "'" : "NULL";
-    $fecha_hora_destino = !empty($fecha_hora_destino) ? "'" . mysqli_real_escape_string($link, $fecha_hora_destino) . "'" : "NULL";
-    $id_conductor = !empty($id_conductor) ? "'" . mysqli_real_escape_string($link, $id_conductor) . "'" : "NULL";
+    // Manejar campos opcionales
+    $fecha_hora_origen_sql = !empty($fecha_hora_origen) ? "'" . mysqli_real_escape_string($link, $fecha_hora_origen) . "'" : "NULL";
+    $fecha_hora_destino_sql = !empty($fecha_hora_destino) ? "'" . mysqli_real_escape_string($link, $fecha_hora_destino) . "'" : "NULL";
+    $id_conductor_sql = !empty($id_conductor) ? "'" . mysqli_real_escape_string($link, $id_conductor) . "'" : "NULL";
 
     $id_tipo_servicio = mysqli_real_escape_string($link, $id_tipo_servicio);
     $id_cliente = mysqli_real_escape_string($link, $id_cliente);
@@ -45,12 +57,13 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
             distancia_km, fecha_hora_reserva, fecha_hora_origen, fecha_hora_destino, id_conductor, id_tipo_servicio, 
             id_cliente, id_estado_servicio, id_categoria_servicio, id_metodo_pago) 
             VALUES ('$direccion_origen', '$direccion_destino', '$id_codigo_postal_origen', '$id_codigo_postal_destino', 
-            '$distancia_km', '$fecha_hora_reserva', $fecha_hora_origen, $fecha_hora_destino, $id_conductor, 
+            '$distancia_km', '$fecha_hora_reserva', $fecha_hora_origen_sql, $fecha_hora_destino_sql, $id_conductor_sql, 
             '$id_tipo_servicio', '$id_cliente', '$id_estado_servicio', '$id_categoria_servicio', '$id_metodo_pago')";
+    
     $res = mysqli_query($link, $sql);
     
     if ($res) {
-        echo json_encode(array("success" => "1", "mensaje" => "Ruta registrada correctamente"));
+        echo json_encode(array("success" => "1", "mensaje" => "Servicio registrado correctamente"));
     } else {
         echo json_encode(array("success" => "0", "mensaje" => "Error al registrar: " . mysqli_error($link)));
     }
@@ -58,4 +71,3 @@ if (empty($direccion_origen) || empty($direccion_destino) || empty($id_codigo_po
 
 mysqli_close($link);
 ?>
-

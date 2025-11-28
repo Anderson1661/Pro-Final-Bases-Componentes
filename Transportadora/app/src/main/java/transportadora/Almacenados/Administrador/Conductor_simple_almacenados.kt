@@ -22,7 +22,7 @@ object Conductor_simple_almacenados {
                     val obj = datos.getJSONObject(i)
                     lista.add(
                         ConductorSimple(
-                            id_conductor = obj.optInt("id_administrador"),
+                            id_conductor = obj.optInt("id_conductor"),
                             nombre = obj.optString("nombre"),
                             correo = obj.optString("correo")
                         )

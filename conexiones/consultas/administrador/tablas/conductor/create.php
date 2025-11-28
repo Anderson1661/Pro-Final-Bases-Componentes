@@ -1,26 +1,36 @@
 <?php
-include('../config/conexion.php');
+include('../../../../config/conexion.php');
 $link = Conectar();
 
-$id_conductor = isset($_REQUEST['id_conductor']) ? $_REQUEST['id_conductor'] : '';
-$id_estado_conductor = isset($_REQUEST['id_estado_conductor']) ? $_REQUEST['id_estado_conductor'] : '';
-$placa_vehiculo = isset($_REQUEST['placa_vehiculo']) ? $_REQUEST['placa_vehiculo'] : '';
-$identificacion = isset($_REQUEST['identificacion']) ? $_REQUEST['identificacion'] : '';
-$id_tipo_identificacion = isset($_REQUEST['id_tipo_identificacion']) ? $_REQUEST['id_tipo_identificacion'] : '';
-$nombre = isset($_REQUEST['nombre']) ? $_REQUEST['nombre'] : '';
-$direccion = isset($_REQUEST['direccion']) ? $_REQUEST['direccion'] : '';
-$correo = isset($_REQUEST['correo']) ? $_REQUEST['correo'] : '';
-$id_genero = isset($_REQUEST['id_genero']) ? $_REQUEST['id_genero'] : '';
-$codigo_postal = isset($_REQUEST['codigo_postal']) ? $_REQUEST['codigo_postal'] : '';
-$id_pais_nacionalidad = isset($_REQUEST['id_pais_nacionalidad']) ? $_REQUEST['id_pais_nacionalidad'] : '';
-$url_foto = isset($_REQUEST['url_foto']) ? $_REQUEST['url_foto'] : '';
+// Leer el input JSON
+$input = json_decode(file_get_contents('php://input'), true);
 
-if (empty($id_conductor) || empty($id_estado_conductor) ||empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
+// Verificar si se recibieron datos JSON
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(array("success" => "0", "mensaje" => "Error en el formato JSON: " . json_last_error_msg()));
+    exit;
+}
+
+// Obtener datos del JSON
+$id_estado_conductor = isset($input['id_estado_conductor']) ? $input['id_estado_conductor'] : '';
+$placa_vehiculo = isset($input['placa_vehiculo']) ? $input['placa_vehiculo'] : '';
+$identificacion = isset($input['identificacion']) ? $input['identificacion'] : '';
+$id_tipo_identificacion = isset($input['id_tipo_identificacion']) ? $input['id_tipo_identificacion'] : '';
+$nombre = isset($input['nombre']) ? $input['nombre'] : '';
+$direccion = isset($input['direccion']) ? $input['direccion'] : '';
+$correo = isset($input['correo']) ? $input['correo'] : '';
+$id_genero = isset($input['id_genero']) ? $input['id_genero'] : '';
+$codigo_postal = isset($input['codigo_postal']) ? $input['codigo_postal'] : '';
+$id_pais_nacionalidad = isset($input['id_pais_nacionalidad']) ? $input['id_pais_nacionalidad'] : '';
+$url_foto = isset($input['url_foto']) ? $input['url_foto'] : '';
+
+// Validar campos requeridos
+if (empty($id_estado_conductor) || empty($placa_vehiculo) || empty($identificacion) || empty($id_tipo_identificacion) || 
     empty($nombre) || empty($direccion) || empty($correo) || empty($id_genero) || 
     empty($codigo_postal) || empty($id_pais_nacionalidad) || empty($url_foto)) {
     echo json_encode(array("success" => "0", "mensaje" => "Todos los campos son requeridos"));
 } else {
-    $id_conductor = mysqli_real_escape_string($link, $id_conductor);
+    // Limpiar y escapar datos
     $id_estado_conductor = mysqli_real_escape_string($link, $id_estado_conductor);
     $placa_vehiculo = mysqli_real_escape_string($link, $placa_vehiculo);
     $identificacion = mysqli_real_escape_string($link, $identificacion);
@@ -33,8 +43,10 @@ if (empty($id_conductor) || empty($id_estado_conductor) ||empty($placa_vehiculo)
     $id_pais_nacionalidad = mysqli_real_escape_string($link, $id_pais_nacionalidad);
     $url_foto = mysqli_real_escape_string($link, $url_foto);
     
-    $sql = "INSERT INTO conductor (id_conductor,id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) 
-            VALUES ('$id_conductor', '$id_estado_conductor', '$placa_vehiculo', '$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$codigo_postal', '$id_pais_nacionalidad', '$url_foto')";
+    // Preparar y ejecutar la consulta
+    $sql = "INSERT INTO conductor (id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) 
+            VALUES ('$id_estado_conductor', '$placa_vehiculo', '$identificacion', '$id_tipo_identificacion', '$nombre', '$direccion', '$correo', '$id_genero', '$codigo_postal', '$id_pais_nacionalidad', '$url_foto')";
+    
     $res = mysqli_query($link, $sql);
     
     if ($res) {
@@ -46,4 +58,3 @@ if (empty($id_conductor) || empty($id_estado_conductor) ||empty($placa_vehiculo)
 
 mysqli_close($link);
 ?>
-

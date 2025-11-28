@@ -28,29 +28,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
                 $correo = $row['correo'];
                 
-                // Eliminar teléfonos del cliente primero (si existen)
-                $query_delete_telefonos = "DELETE FROM telefono_cliente WHERE id_cliente = '$id_cliente'";
-                mysqli_query($link, $query_delete_telefonos);
+                // Iniciar transacción para asegurar consistencia
+                mysqli_begin_transaction($link);
                 
-                // Eliminar el cliente
-                $query_delete = "DELETE FROM cliente WHERE id_cliente = '$id_cliente'";
-                $result_delete = mysqli_query($link, $query_delete);
-                
-                if ($result_delete) {
+                try {
+                    // PRIMERO: Eliminar el usuario asociado (si existe)
+                    $query_delete_usuario = "DELETE FROM usuario WHERE correo = '$correo'";
+                    $result_delete_usuario = mysqli_query($link, $query_delete_usuario);
+                    
+                    // No nos importa si no existía el usuario, continuamos
+                    
+                    // SEGUNDO: Eliminar teléfonos del cliente
+                    $query_delete_telefonos = "DELETE FROM telefono_cliente WHERE id_cliente = '$id_cliente'";
+                    $result_delete_telefonos = mysqli_query($link, $query_delete_telefonos);
+                    
+                    if (!$result_delete_telefonos) {
+                        throw new Exception("Error al eliminar teléfonos: " . mysqli_error($link));
+                    }
+                    
+                    // TERCERO: Eliminar el cliente
+                    $query_delete = "DELETE FROM cliente WHERE id_cliente = '$id_cliente'";
+                    $result_delete = mysqli_query($link, $query_delete);
+                    
+                    if (!$result_delete) {
+                        throw new Exception("Error al eliminar cliente: " . mysqli_error($link));
+                    }
+                    
                     if (mysqli_affected_rows($link) > 0) {
-                        // Si se eliminó el cliente, también eliminamos el usuario asociado
-                        $query_delete_usuario = "DELETE FROM usuario WHERE correo = '$correo'";
-                        $result_delete_usuario = mysqli_query($link, $query_delete_usuario);
-                        
+                        // Confirmar transacción
+                        mysqli_commit($link);
                         $response['success'] = "1";
                         $response['mensaje'] = "Cliente eliminado correctamente";
                     } else {
-                        $response['success'] = "0";
-                        $response['mensaje'] = "No se pudo eliminar el cliente";
+                        throw new Exception("No se pudo eliminar el cliente");
                     }
-                } else {
+                    
+                } catch (Exception $e) {
+                    // Revertir transacción en caso de error
+                    mysqli_rollback($link);
                     $response['success'] = "0";
-                    $response['mensaje'] = "Error al eliminar: " . mysqli_error($link);
+                    $response['mensaje'] = $e->getMessage();
                 }
             }
         } else {

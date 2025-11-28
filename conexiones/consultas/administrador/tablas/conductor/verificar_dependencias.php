@@ -28,15 +28,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dependencies['telefonos'] = 0;
         }
         
-        // 2. Verificar en tabla usuario (por el correo)
-        // Primero obtenemos el correo del conductor
+        // 2. Verificar en tabla ruta (rutas asignadas al conductor) - ESTA SÍ ES BLOQUEANTE
+        $query_rutas = "SELECT COUNT(*) as count FROM ruta WHERE id_conductor = '$id_conductor'";
+        $result_rutas = mysqli_query($link, $query_rutas);
+        if ($result_rutas) {
+            $row = mysqli_fetch_assoc($result_rutas);
+            $dependencies['rutas'] = (int)$row['count'];
+        } else {
+            $dependencies['rutas'] = 0;
+        }
+        
+        // 3. Verificar en tabla usuario (NO ES BLOQUEANTE, solo informativo)
         $query_correo = "SELECT correo FROM conductor WHERE id_conductor = '$id_conductor'";
         $result_correo = mysqli_query($link, $query_correo);
         if ($result_correo && mysqli_num_rows($result_correo) > 0) {
             $row_correo = mysqli_fetch_assoc($result_correo);
             $correo = $row_correo['correo'];
             
-            // Verificamos si existe en la tabla usuario
             $query_usuario = "SELECT COUNT(*) as count FROM usuario WHERE correo = '$correo'";
             $result_usuario = mysqli_query($link, $query_usuario);
             if ($result_usuario) {
@@ -49,29 +57,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $dependencies['usuarios'] = 0;
         }
         
-        // 3. Verificar en tabla ruta (rutas asignadas al conductor)
-        $query_rutas = "SELECT COUNT(*) as count FROM ruta WHERE id_conductor = '$id_conductor'";
-        $result_rutas = mysqli_query($link, $query_rutas);
-        if ($result_rutas) {
-            $row = mysqli_fetch_assoc($result_rutas);
-            $dependencies['rutas'] = (int)$row['count'];
-        } else {
-            $dependencies['rutas'] = 0;
-        }
+        // Calcular total de dependencias BLOQUEANTES (solo rutas y teléfonos)
+        $dependencias_bloqueantes = $dependencies['telefonos'] + $dependencies['rutas'];
         
-        // Calcular total de dependencias
-        $total_dependencies = array_sum($dependencies);
-        
-        if ($total_dependencies > 0) {
+        if ($dependencias_bloqueantes > 0) {
             $response['success'] = "0";
             $response['mensaje'] = "No se puede eliminar el conductor porque tiene dependencias en otras tablas";
             $response['dependencies'] = $dependencies;
-            $response['total_dependencies'] = $total_dependencies;
+            $response['dependencias_bloqueantes'] = $dependencias_bloqueantes;
         } else {
             $response['success'] = "1";
-            $response['mensaje'] = "No hay dependencias, se puede eliminar";
+            $response['mensaje'] = "No hay dependencias bloqueantes, se puede eliminar";
             $response['dependencies'] = $dependencies;
-            $response['total_dependencies'] = 0;
+            $response['dependencias_bloqueantes'] = 0;
         }
         
     } else {

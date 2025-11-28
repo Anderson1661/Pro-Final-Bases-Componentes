@@ -8,7 +8,7 @@ import transportadora.Modelos.Administrador.Categoria
 import transportadora.Network.ApiHelper
 
 object Categoria_servicio_almacenados {
-    suspend fun obtener_categoria_servicio(): List<Categoria> = withContext(Dispatchers.IO) {
+    suspend fun obtenerCategoriasServicio(): List<Categoria> = withContext(Dispatchers.IO) {
         val url = ApiConfig.BASE_URL + "consultas/administrador/datos/consultar_categorias.php"
         val response = ApiHelper.getRequest(url)
 

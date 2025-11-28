@@ -242,10 +242,10 @@ class Administrar_clientes : AppCompatActivity() {
                     Log.d("VerificarDependencias", "Respuesta: $response")
 
                     if (response.getString("success") == "1") {
-                        // No hay dependencias, se puede eliminar
+                        // No hay dependencias bloqueantes, se puede eliminar
                         callback(false, response.getString("mensaje"), null)
                     } else {
-                        // Hay dependencias
+                        // Hay dependencias bloqueantes
                         val dependencias = mutableMapOf<String, Int>()
                         val jsonDependencies = response.getJSONObject("dependencies")
                         val keys = jsonDependencies.keys()
@@ -255,6 +255,7 @@ class Administrar_clientes : AppCompatActivity() {
                             dependencias[key] = jsonDependencies.getInt(key)
                         }
 
+                        val dependenciasBloqueantes = response.getInt("dependencias_bloqueantes")
                         callback(true, response.getString("mensaje"), dependencias)
                     }
                 } catch (e: JSONException) {
@@ -279,9 +280,9 @@ class Administrar_clientes : AppCompatActivity() {
         dependencias?.forEach { (tabla, count) ->
             if (count > 0) {
                 when (tabla) {
-                    "telefonos" -> mensajeDetallado.append("\n• Teléfonos: $count registro(s)")
-                    "rutas" -> mensajeDetallado.append("\n• Rutas: $count registro(s)")
-                    "usuarios" -> mensajeDetallado.append("\n• Usuarios: $count registro(s)")
+                    "telefonos" -> mensajeDetallado.append("\n• Teléfonos: $count registro(s) - BLOQUEANTE")
+                    "rutas" -> mensajeDetallado.append("\n• Rutas: $count registro(s) - BLOQUEANTE")
+                    "usuarios" -> mensajeDetallado.append("\n• Usuario: $count registro(s) - SE ELIMINARÁ")
                     else -> mensajeDetallado.append("\n• $tabla: $count registro(s)")
                 }
             }
