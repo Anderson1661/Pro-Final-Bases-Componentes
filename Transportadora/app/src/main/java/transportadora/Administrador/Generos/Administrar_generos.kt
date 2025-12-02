@@ -67,7 +67,6 @@ class Administrar_generos : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_generos::class.java).apply {
                     putExtra("id_genero", genero.id)
-                    putExtra("descripcion", genero.descripcion)
                 }
                 startActivity(intent)
             },

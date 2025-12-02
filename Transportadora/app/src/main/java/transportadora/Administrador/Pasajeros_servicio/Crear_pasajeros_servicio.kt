@@ -22,8 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import transportadora.Almacenados.Administrador.ID_ruta_almacenados
-import transportadora.Almacenados.Administrador.RutaSimple
-import transportadora.Almacenados.Administrador.Ruta_almacenados
 import transportadora.Configuracion.ApiConfig
 import transportadora.Login.R
 
