@@ -67,13 +67,7 @@ class Administrar_administradores : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_administradores::class.java).apply {
                     putExtra("id_administrador", administrador.id)
-                    putExtra("identificacion", administrador.identificacion)
-                    putExtra("id_tipo_identificacion", administrador.idTipoIdentificacion)
-                    putExtra("nombre", administrador.nombre)
-                    putExtra("direccion", administrador.direccion)
-                    putExtra("correo", administrador.correo)
-                    putExtra("id_genero", administrador.idGenero)
-                    putExtra("codigo_postal", administrador.codigoPostal)
+                    // Solo pasamos el ID, los demás datos se cargarán desde el servidor
                 }
                 startActivity(intent)
             },

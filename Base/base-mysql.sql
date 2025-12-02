@@ -955,10 +955,10 @@ INSERT INTO estado_conductor (descripcion) VALUES ('Conectado'), ('Desconectado'
 -- 7. Conductores
 -- Registro de conductores y asociación con sus vehículos.
 INSERT INTO conductor (id_estado_conductor, placa_vehiculo, identificacion, id_tipo_identificacion, nombre, direccion, correo, id_genero, codigo_postal, id_pais_nacionalidad, url_foto) VALUES 
-(1, 'ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://example.com/fotos/conductor1.jpg'),
-(2, 'DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://example.com/fotos/conductor2.jpg'),
-(2, 'SEX69H', '100', 1, 'Mostro', 'Carrera 30 # 50-25', '2@2.com', 3, '050001', 1, 'https://example.com/fotos/mostro.jpg'),
-(2, 'GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://example.com/fotos/conductor3.jpg');
+(1, 'ABC123', '1056789012', 1, 'Roberto Carlos Méndez Vargas', 'Calle 80 # 20-15', 'conductor1@empresa.com', 1, '110111', 1, 'https://guillermogonzalezpimiento.com/wp-content/uploads/2022/06/Sin-foto-de-perfil-1024x1024.png'),
+(2, 'DEF456', '1067890123', 1, 'Sandra Milena Ramírez Ortiz', 'Carrera 30 # 50-25', 'conductor2@empresa.com', 2, '050001', 1, 'https://guillermogonzalezpimiento.com/wp-content/uploads/2022/06/Sin-foto-de-perfil-1024x1024.png'),
+(2, 'SEX69H', '100', 1, 'Mostro', 'Carrera 30 # 50-25', '2@2.com', 3, '050001', 1, 'https://guillermogonzalezpimiento.com/wp-content/uploads/2022/06/Sin-foto-de-perfil-1024x1024.png'),
+(2, 'GHI789', '1078901234', 1, 'Diego Armando Suárez Pérez', 'Avenida 6N # 35-10', 'conductor3@empresa.com', 1, '760001', 1, 'https://guillermogonzalezpimiento.com/wp-content/uploads/2022/06/Sin-foto-de-perfil-1024x1024.png');
 
 -- Teléfonos de conductores
 INSERT INTO telefono_conductor (id_conductor, telefono) VALUES 

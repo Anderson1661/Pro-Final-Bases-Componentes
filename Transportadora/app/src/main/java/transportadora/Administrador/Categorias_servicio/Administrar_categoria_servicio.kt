@@ -67,8 +67,7 @@ class Administrar_categoria_servicio : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_categoria_servicio::class.java).apply {
                     putExtra("id_categoria_servicio", categoria.id)
-                    putExtra("descripcion", categoria.descripcion)
-                    putExtra("valor_km", categoria.valorKm)
+                    // Solo pasamos el ID, los demás datos se cargarán desde el servidor
                 }
                 startActivity(intent)
             },
