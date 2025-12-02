@@ -64,13 +64,7 @@ class Administrar_vehiculos : AppCompatActivity() {
         adapter = VehiculoAdapter(vehiculosList,
             onEditarClick = { vehiculo ->
                 val intent = Intent(this, Editar_vehiculos::class.java).apply {
-                    putExtra("placa", vehiculo.placa)
-                    putExtra("linea_vehiculo", vehiculo.lineaVehiculo)
-                    putExtra("modelo", vehiculo.modelo)
-                    putExtra("id_color", vehiculo.idColor)
-                    putExtra("id_marca", vehiculo.idMarca)
-                    putExtra("id_tipo_servicio", vehiculo.idTipoServicio)
-                    putExtra("id_estado_vehiculo", vehiculo.idEstadoVehiculo)
+                    putExtra("placa", vehiculo.placa.toString())
                 }
                 startActivity(intent)
             },

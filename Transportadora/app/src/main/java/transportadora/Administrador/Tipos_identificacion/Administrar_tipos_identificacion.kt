@@ -65,7 +65,6 @@ class Administrar_tipos_identificacion : AppCompatActivity() {
             onEditarClick = { tipo ->
                 val intent = Intent(this, Editar_tipos_identificacion::class.java).apply {
                     putExtra("id_tipo_identificacion", tipo.id)
-                    putExtra("descripcion", tipo.descripcion)
                 }
                 startActivity(intent)
             },

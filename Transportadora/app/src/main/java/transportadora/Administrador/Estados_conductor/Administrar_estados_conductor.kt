@@ -64,10 +64,9 @@ class Administrar_estados_conductor : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = EstadoConductorAdapter(estadosConductorList,
             onEditarClick = { estadoConductor ->
-                // Manejar clic en editar
+                // Manejar clic en editar: Solo se necesita pasar el ID
                 val intent = Intent(this, Editar_estados_conductor::class.java).apply {
                     putExtra("id_estado_conductor", estadoConductor.id)
-                    putExtra("descripcion", estadoConductor.descripcion)
                 }
                 startActivity(intent)
             },

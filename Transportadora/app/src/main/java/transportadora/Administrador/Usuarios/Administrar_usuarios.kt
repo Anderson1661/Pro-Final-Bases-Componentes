@@ -65,8 +65,6 @@ class Administrar_usuarios : AppCompatActivity() {
             onEditarClick = { usuario ->
                 val intent = Intent(this, Editar_usuarios::class.java).apply {
                     putExtra("id_usuario", usuario.id)
-                    putExtra("id_tipo_usuario", usuario.idTipoUsuario)
-                    putExtra("correo", usuario.correo)
                 }
                 startActivity(intent)
             },

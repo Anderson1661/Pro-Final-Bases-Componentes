@@ -65,7 +65,6 @@ class Administrar_preguntas_seguridad : AppCompatActivity() {
             onEditarClick = { pregunta ->
                 val intent = Intent(this, Editar_preguntas_seguridad::class.java).apply {
                     putExtra("id_pregunta", pregunta.id)
-                    putExtra("descripcion", pregunta.descripcion)
                 }
                 startActivity(intent)
             },

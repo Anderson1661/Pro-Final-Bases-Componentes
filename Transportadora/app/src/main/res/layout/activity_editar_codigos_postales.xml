@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/editar_codigos_postales"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="40dp"
     tools:context="transportadora.Administrador.Codigos_postales.Editar_codigos_postales">
 
     <ImageView
@@ -20,176 +22,154 @@
         app:srcCompat="@drawable/fondo_boton_volver" />
 
     <TextView
-        android:id="@+id/txt_volver_login"
+        android:id="@+id/txt_volver_reg2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="343dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="75dp"
         android:text="Volver"
         android:textStyle="bold"
         android:textColor="@color/negro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="137dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="137dp"
-        android:text="Editar Codigo Postal"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@color/negro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/txt_codigo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="126dp"
-        android:ems="10"
-        android:textColor="@color/grisoscuro"
-        android:textColorHint="@color/grisclaro"
-        android:hint="111111"
-        android:inputType="numberPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="270dp"
-        android:text="Codigo"
-        android:textStyle="bold"
-        android:textColor="@color/negro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="280dp"
-        android:text="Pais"
-        android:textStyle="bold"
-        android:textColor="@color/negro"
-        app:layout_constraintTop_toBottomOf="@+id/txt_codigo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Spinner
-        android:id="@+id/spinner_pais"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="146dp"
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="206dp"
-        android:textColor="@color/grisoscuro"
-        android:entries="@array/paises"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@id/txt_volver_reg2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <EditText
-        android:id="@+id/txt_departamento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="126dp"
-        android:ems="10"
-        android:textColor="@color/grisoscuro"
-        android:textColorHint="@color/grisclaro"
-        android:hint="cundinamarca"
-        android:inputType="numberPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="250dp"
-        android:text="Departamento"
-        android:textStyle="bold"
-        android:textColor="@color/negro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_marca" />
+        android:orientation="vertical"
+        android:padding="40dp">
 
-    <EditText
-        android:id="@+id/txt_ciudad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="126dp"
-        android:ems="10"
-        android:textColor="@color/grisoscuro"
-        android:textColorHint="@color/grisclaro"
-        android:hint="bogota"
-        android:inputType="numberPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            android:text="Editar Código Postal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/negro" />
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="270dp"
-        android:text="Ciudad"
-        android:textStyle="bold"
-        android:textColor="@color/negro"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_departamento" />
+        <!-- ID Código Postal (solo lectura) -->
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="ID Código Postal"
+            android:textStyle="bold"
+            android:textColor="@color/negro" />
 
-    <Button
-        android:id="@+id/buttonDescartar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descartar cambios"
-        android:textColor="@color/blanco"
-        android:backgroundTint="@color/grisoscuro"
-        android:layout_marginTop="70dp"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="@+id/textView11"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <EditText
+            android:id="@+id/txt_pk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/grisoscuro"
+            android:enabled="false" />
 
-    <Button
-        android:id="@+id/buttonGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Guardar cambios"
-        android:textColor="@color/blanco"
-        android:backgroundTint="@color/naranja"
-        android:layout_marginTop="60dp"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="@+id/buttonDescartar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <!-- ID País -->
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="ID País"
+            android:textStyle="bold"
+            android:textColor="@color/negro" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/txt_pais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="number"
+            android:textColor="@color/grisoscuro" />
+
+        <!-- Departamento -->
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Departamento"
+            android:textStyle="bold"
+            android:textColor="@color/negro" />
+
+        <EditText
+            android:id="@+id/txt_departamento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/grisoscuro" />
+
+        <!-- Ciudad -->
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Ciudad"
+            android:textStyle="bold"
+            android:textColor="@color/negro" />
+
+        <EditText
+            android:id="@+id/txt_ciudad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/grisoscuro" />
+
+        <!-- Botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="40dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/buttonDescartar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descartar"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/grisoscuro"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp" />
+
+            <Button
+                android:id="@+id/buttonGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:textColor="@color/blanco"
+                android:backgroundTint="@color/naranja"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>

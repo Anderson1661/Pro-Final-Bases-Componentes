@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS conductor (
     id_pais_nacionalidad INT NOT NULL,
     url_foto VARCHAR(255) NOT NULL, -- Link de la foto del conductor
     FOREIGN KEY (id_estado_conductor) REFERENCES estado_conductor (id_estado_conductor),
-    FOREIGN KEY (placa_vehiculo) REFERENCES vehiculo (placa),
+    FOREIGN KEY (placa_vehiculo) REFERENCES vehiculo (placa) ON UPDATE CASCADE, 
     FOREIGN KEY (id_tipo_identificacion) REFERENCES tipo_identificacion (id_tipo_identificacion),
     FOREIGN KEY (id_genero) REFERENCES genero (id_genero),
     FOREIGN KEY (codigo_postal) REFERENCES codigo_postal (id_codigo_postal),
@@ -400,6 +400,20 @@ BEGIN
     SET correo = NEW.correo
     WHERE correo = OLD.correo;
   END IF;
+END//
+
+-- Trigger: update_placa_conductor
+CREATE TRIGGER `update_placa_conductor`
+BEFORE UPDATE ON `vehiculo`
+FOR EACH ROW
+BEGIN
+    -- Verifica si el valor de la placa ha cambiado
+    IF OLD.placa <> NEW.placa THEN
+        -- Actualiza la placa_vehiculo en la tabla conductor con la nueva placa
+        UPDATE conductor
+        SET placa_vehiculo = NEW.placa
+        WHERE placa_vehiculo = OLD.placa;
+    END IF;
 END//
 
 -- Se restablece el delimitador al punto y coma

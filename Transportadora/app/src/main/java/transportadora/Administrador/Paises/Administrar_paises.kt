@@ -65,7 +65,6 @@ class Administrar_paises : AppCompatActivity() {
             onEditarClick = { pais ->
                 val intent = Intent(this, Editar_paises::class.java).apply {
                     putExtra("id_pais", pais.id)
-                    putExtra("nombre", pais.nombre)
                 }
                 startActivity(intent)
             },

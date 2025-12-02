@@ -64,10 +64,9 @@ class Administrar_colores_vehiculo : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ColorVehiculoAdapter(coloresList,
             onEditarClick = { color ->
-                // Manejar clic en editar
+                // Pasar solo el ID, los demás datos se cargarán desde el servidor
                 val intent = Intent(this, Editar_colores_vehiculo::class.java).apply {
                     putExtra("id_color", color.id)
-                    putExtra("descripcion", color.descripcion)
                 }
                 startActivity(intent)
             },

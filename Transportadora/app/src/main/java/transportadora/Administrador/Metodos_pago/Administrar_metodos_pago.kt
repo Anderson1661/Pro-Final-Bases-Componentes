@@ -65,7 +65,6 @@ class Administrar_metodos_pago : AppCompatActivity() {
             onEditarClick = { metodo ->
                 val intent = Intent(this, Editar_metodos_pago::class.java).apply {
                     putExtra("id_metodo_pago", metodo.id)
-                    putExtra("descripcion", metodo.descripcion)
                 }
                 startActivity(intent)
             },

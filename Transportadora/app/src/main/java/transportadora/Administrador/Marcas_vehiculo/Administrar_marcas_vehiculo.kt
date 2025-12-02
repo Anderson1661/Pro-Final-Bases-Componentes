@@ -67,7 +67,6 @@ class Administrar_marcas_vehiculo : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_marcas_vehiculo::class.java).apply {
                     putExtra("id_marca", marca.id)
-                    putExtra("nombre_marca", marca.nombreMarca)
                 }
                 startActivity(intent)
             },

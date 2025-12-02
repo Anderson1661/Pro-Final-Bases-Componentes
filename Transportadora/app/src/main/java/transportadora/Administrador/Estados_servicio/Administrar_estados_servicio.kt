@@ -67,7 +67,6 @@ class Administrar_estados_servicio : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_estados_servicio::class.java).apply {
                     putExtra("id_estado_servicio", estadoServicio.id)
-                    putExtra("descripcion", estadoServicio.descripcion)
                 }
                 startActivity(intent)
             },

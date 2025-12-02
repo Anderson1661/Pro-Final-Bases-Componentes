@@ -67,7 +67,6 @@ class Administrar_estados_vehiculo : AppCompatActivity() {
                 // Manejar clic en editar
                 val intent = Intent(this, Editar_estados_vehiculo::class.java).apply {
                     putExtra("id_estado_vehiculo", estadoVehiculo.id)
-                    putExtra("descripcion", estadoVehiculo.descripcion)
                 }
                 startActivity(intent)
             },

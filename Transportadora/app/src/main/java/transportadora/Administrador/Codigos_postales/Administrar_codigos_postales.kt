@@ -64,12 +64,9 @@ class Administrar_codigos_postales : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = CodigoPostalAdapter(codigosPostalesList,
             onEditarClick = { codigoPostal ->
-                // Manejar clic en editar
+                // Pasar solo el ID, los demás datos se cargarán desde el servidor
                 val intent = Intent(this, Editar_codigos_postales::class.java).apply {
                     putExtra("id_codigo_postal", codigoPostal.id)
-                    putExtra("id_pais", codigoPostal.idPais)
-                    putExtra("departamento", codigoPostal.departamento)
-                    putExtra("ciudad", codigoPostal.ciudad)
                 }
                 startActivity(intent)
             },

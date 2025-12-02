@@ -64,20 +64,9 @@ class Administrar_conductores : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ConductorAdapter(conductoresList,
             onEditarClick = { conductor ->
-                // Manejar clic en editar
+                // Pasar solo el ID, los demás datos se cargarán desde el servidor
                 val intent = Intent(this, Editar_conductores::class.java).apply {
                     putExtra("id_conductor", conductor.id)
-                    putExtra("id_estado_conductor", conductor.idEstadoConductor)
-                    putExtra("placa_vehiculo", conductor.placaVehiculo)
-                    putExtra("identificacion", conductor.identificacion)
-                    putExtra("id_tipo_identificacion", conductor.idTipoIdentificacion)
-                    putExtra("nombre", conductor.nombre)
-                    putExtra("direccion", conductor.direccion)
-                    putExtra("correo", conductor.correo)
-                    putExtra("id_genero", conductor.idGenero)
-                    putExtra("codigo_postal", conductor.codigoPostal)
-                    putExtra("id_pais_nacionalidad", conductor.idPaisNacionalidad)
-                    putExtra("url_foto", conductor.urlFoto)
                 }
                 startActivity(intent)
             },

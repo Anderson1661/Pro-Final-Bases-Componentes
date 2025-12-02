@@ -65,7 +65,7 @@ class Administrar_tel_administradores : AppCompatActivity() {
             onEditarClick = { telefono ->
                 val intent = Intent(this, Editar_tel_administradores::class.java).apply {
                     putExtra("id_administrador", telefono.idAdministrador)
-                    putExtra("telefono", telefono.telefono)
+                    putExtra("telefono", telefono.telefono.toString())
                 }
                 startActivity(intent)
             },

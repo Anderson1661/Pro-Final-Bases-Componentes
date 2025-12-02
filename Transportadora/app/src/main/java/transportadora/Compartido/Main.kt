@@ -3,6 +3,8 @@ package transportadora.Compartido
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
@@ -12,22 +14,30 @@ import android.text.TextPaint
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import transportadora.Login.R
-import android.widget.Toast
 import transportadora.Compartido.Registrar1
 
-
-
 class Main : AppCompatActivity() {
+
+    private var doubleBackToExitPressedOnce = false
+    private lateinit var backToast: Toast
+
+    @SuppressLint("ShowToast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main2)
+
+        // Configurar el toast para mostrar el mensaje de salida
+        backToast = Toast.makeText(this, "Presiona de nuevo para salir", Toast.LENGTH_SHORT)
+
+        // Configurar el manejador personalizado para el botón de retroceso
+        setupBackPressedHandler()
 
         // Texto clicable + color personalizado
         val textView = findViewById<TextView>(R.id.textView5)
@@ -72,9 +82,37 @@ class Main : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingSuperCall", "GestureBackNavigation")
-    override fun onBackPressed() {
-        Toast.makeText(this, "No puedes volver atrás desde esta pantalla", Toast.LENGTH_SHORT).show()
+    private fun setupBackPressedHandler() {
+        // Crear un callback personalizado para manejar el botón de retroceso
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    // Si ya presionó una vez, salir completamente
+                    backToast.cancel() // Cancelar toast anterior si existe
+                    finishAffinity() // Cerrar todas las actividades
+                    return
+                }
+
+                doubleBackToExitPressedOnce = true
+                backToast.show()
+
+                // Resetear el estado después de 2 segundos
+                Handler(Looper.getMainLooper()).postDelayed({
+                    doubleBackToExitPressedOnce = false
+                }, 2000)
+            }
+        }
+
+        // Agregar el callback al dispatcher
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
+    // Opcional: Sobrescribir onSupportNavigateUp si usas ActionBar/AppBar
+    override fun onSupportNavigateUp(): Boolean {
+        // Prevenir navegación mediante la flecha de arriba
+        return false
+    }
+
+    // Ya no necesitas sobrescribir onBackPressed() o onKeyDown()
+    // porque OnBackPressedDispatcher maneja todo
 }

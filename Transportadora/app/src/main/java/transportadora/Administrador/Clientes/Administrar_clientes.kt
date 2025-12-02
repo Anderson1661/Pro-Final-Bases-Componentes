@@ -64,17 +64,9 @@ class Administrar_clientes : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = ClienteAdapter(clientesList,
             onEditarClick = { cliente ->
-                // Manejar clic en editar
+                // Pasar solo el ID, los demás datos se cargarán desde el servidor
                 val intent = Intent(this, Editar_clientes::class.java).apply {
                     putExtra("id_cliente", cliente.id)
-                    putExtra("identificacion", cliente.identificacion)
-                    putExtra("id_tipo_identificacion", cliente.idTipoIdentificacion)
-                    putExtra("nombre", cliente.nombre)
-                    putExtra("direccion", cliente.direccion)
-                    putExtra("correo", cliente.correo)
-                    putExtra("id_genero", cliente.idGenero)
-                    putExtra("id_pais_nacionalidad", cliente.idPaisNacionalidad)
-                    putExtra("codigo_postal", cliente.codigoPostal)
                 }
                 startActivity(intent)
             },

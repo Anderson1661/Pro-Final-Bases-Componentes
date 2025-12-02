@@ -66,7 +66,6 @@ class Administrar_respuestas_seguridad : AppCompatActivity() {
                 val intent = Intent(this, Editar_respuestas_seguridad::class.java).apply {
                     putExtra("id_pregunta", respuesta.idPregunta)
                     putExtra("id_usuario", respuesta.idUsuario)
-                    putExtra("respuesta_pregunta", respuesta.respuestaPregunta)
                 }
                 startActivity(intent)
             },

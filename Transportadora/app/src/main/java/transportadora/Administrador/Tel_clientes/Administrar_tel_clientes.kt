@@ -65,7 +65,7 @@ class Administrar_tel_clientes : AppCompatActivity() {
             onEditarClick = { telefono ->
                 val intent = Intent(this, Editar_tel_clientes::class.java).apply {
                     putExtra("id_cliente", telefono.idCliente)
-                    putExtra("telefono", telefono.telefono)
+                    putExtra("telefono", telefono.telefono.toString())
                 }
                 startActivity(intent)
             },

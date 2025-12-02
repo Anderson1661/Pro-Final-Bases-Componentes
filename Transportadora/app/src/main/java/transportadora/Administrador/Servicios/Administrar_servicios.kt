@@ -65,22 +65,6 @@ class Administrar_servicios : AppCompatActivity() {
             onEditarClick = { ruta ->
                 val intent = Intent(this, Editar_servicios::class.java).apply {
                     putExtra("id_ruta", ruta.idRuta)
-                    putExtra("direccion_origen", ruta.direccionOrigen)
-                    putExtra("direccion_destino", ruta.direccionDestino)
-                    putExtra("id_codigo_postal_origen", ruta.idCodigoPostalOrigen)
-                    putExtra("id_codigo_postal_destino", ruta.idCodigoPostalDestino)
-                    putExtra("distancia_km", ruta.distanciaKm)
-                    putExtra("fecha_hora_reserva", ruta.fechaHoraReserva)
-                    putExtra("fecha_hora_origen", ruta.fechaHoraOrigen ?: "")
-                    putExtra("fecha_hora_destino", ruta.fechaHoraDestino ?: "")
-                    putExtra("id_conductor", ruta.idConductor ?: 0)
-                    putExtra("id_tipo_servicio", ruta.idTipoServicio)
-                    putExtra("id_cliente", ruta.idCliente)
-                    putExtra("id_estado_servicio", ruta.idEstadoServicio)
-                    putExtra("id_categoria_servicio", ruta.idCategoriaServicio)
-                    putExtra("id_metodo_pago", ruta.idMetodoPago)
-                    putExtra("total", ruta.total ?: 0.0)
-                    putExtra("pago_conductor", ruta.pagoConductor ?: 0.0)
                 }
                 startActivity(intent)
             },
