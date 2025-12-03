@@ -341,15 +341,17 @@ class Act_perfil_conductor : AppCompatActivity() {
                             if (cambioCorreo) {
                                 Toast.makeText(this@Act_perfil_conductor, "¡Correo actualizado! Por favor, vuelve a iniciar sesión.", Toast.LENGTH_LONG).show()
 
+                                // Limpiar SharedPreferences
                                 val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
                                 prefs.edit().clear().apply()
 
+                                // Redirigir al Main y limpiar stack de actividades
                                 val intent = Intent(this@Act_perfil_conductor, transportadora.Compartido.Main::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 startActivity(intent)
-                                finish()
-
-                            } else {
+                                finish() // Cerrar la actividad actual
+                            }
+                            else {
                                 Toast.makeText(this@Act_perfil_conductor, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(this@Act_perfil_conductor, Perfil_conductor::class.java)
                                 startActivity(intent)
