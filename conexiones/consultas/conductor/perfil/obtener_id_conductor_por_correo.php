@@ -1,50 +1,34 @@
 <?php
 /**
- * Script para obtener el ID de conductor dado su correo.
- * 
- * Recibe el correo electrónico y devuelve el ID del conductor.
- * Se utiliza para vincular operaciones al conductor correcto.
+ * Script para obtener el ID de un conductor por su correo.
  */
 
-try {
-    include('../../../config/conexion.php');
-    $link = Conectar();
-} catch (Exception $e) {
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode(["success" => "0", "mensaje" => "Error de conexión a la base de datos."]);
-    exit;
-}
+include('../../../config/conexion.php');
+$link = Conectar();
 
 header('Content-Type: application/json; charset=utf-8');
+$res = array("success" => "0", "mensaje" => "Parámetros incompletos");
 
-$correo = $_POST['correo'] ?? '';
+if (isset($_POST['correo'])) {
+    $correo = trim($_POST['correo']);
 
-if (empty($correo)) {
-    echo json_encode(["success" => "0", "mensaje" => "Falta el parámetro 'correo'."]);
-    exit;
-}
-
-$sql = "SELECT id_conductor FROM conductor WHERE correo = ?";
-$stmt = mysqli_prepare($link, $sql);
-if ($stmt === false) {
-    echo json_encode(["success" => "0", "mensaje" => "Error al preparar la consulta SQL."]);
-    exit;
-}
-
-mysqli_stmt_bind_param($stmt, "s", $correo);
-
-if (mysqli_stmt_execute($stmt)) {
+    $sql = "SELECT id_conductor FROM conductor WHERE correo = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $correo);
+    mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
-    if ($row = mysqli_fetch_assoc($result)) {
-        echo json_encode(["success" => "1", "id_conductor" => $row['id_conductor']]);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $res["success"] = "1";
+        $res["id_conductor"] = $row['id_conductor'];
+        $res["mensaje"] = "ID encontrado";
     } else {
-        echo json_encode(["success" => "0", "mensaje" => "Conductor no encontrado."]);
+        $res["mensaje"] = "No se encontró el conductor con ese correo.";
     }
-} else {
-    echo json_encode(["success" => "0", "mensaje" => "Error al ejecutar la consulta: " . mysqli_stmt_error($stmt)]);
+    mysqli_stmt_close($stmt);
 }
 
-mysqli_stmt_close($stmt);
+echo json_encode($res, JSON_UNESCAPED_UNICODE);
 mysqli_close($link);
-
 ?>

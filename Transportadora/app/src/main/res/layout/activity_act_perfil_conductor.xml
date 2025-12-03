@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="transportadora.Conductor.Act_preguntas_conductor">
+    tools:context="transportadora.Conductor.Act_perfil_conductor">
 
     <ImageView
         android:id="@+id/imageViewFond8IUo"
@@ -58,16 +58,6 @@
                 android:textColor="@color/naranja"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- Foto de Perfil -->
-            <ImageView
-                android:id="@+id/img_foto_perfil"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@android:drawable/ic_menu_camera"
-                android:contentDescription="Foto de perfil"
-                android:layout_marginBottom="24dp"/>
-
             <!-- Nombre -->
             <TextView
                 android:layout_width="wrap_content"
@@ -118,6 +108,21 @@
                 android:textColor="@color/grisoscuro" />
 
             <!-- Placa del vehículo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Placa del vehículo"
+                android:textStyle="bold"
+                android:textColor="@color/negro" />
+            <EditText
+                android:id="@+id/txt_placa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="text"
+                android:textColor="@color/grisoscuro" />
 
             <!-- Correo electrónico -->
             <TextView
@@ -136,6 +141,79 @@
                 android:inputType="textEmailAddress"
                 android:textColor="@color/grisoscuro" />
 
+            <!-- Cantidad de Teléfonos -->
+            <TextView
+                android:id="@+id/textViewCantidadTel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Cantidad de Teléfonos"
+                android:textStyle="bold"
+                android:textColor="@color/negro"
+                app:layout_constraintTop_toBottomOf="@+id/txt_tipo_id_reg1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Spinner
+                android:id="@+id/spinner_cantidad_tel"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:entries="@array/cantidad_telefonos"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCantidadTel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Primer número de teléfono -->
+            <TextView
+                android:id="@+id/textViewNum1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Número de Teléfono 1"
+                android:textStyle="bold"
+                android:textColor="@color/negro"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_cantidad_tel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <EditText
+                android:id="@+id/txt_tel1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:inputType="number"
+                android:textColor="@color/grisoscuro"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNum1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Segundo número de teléfono -->
+            <TextView
+                android:id="@+id/textViewNum2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Número de Teléfono 2"
+                android:textStyle="bold"
+                android:textColor="@color/negro"
+                app:layout_constraintTop_toBottomOf="@+id/txt_tel1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <EditText
+                android:id="@+id/txt_tel2"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:inputType="number"
+                android:textColor="@color/grisoscuro"
+                app:layout_constraintTop_toBottomOf="@+id/textViewNum2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
             <!-- Dirección de residencia -->
             <TextView
                 android:layout_width="wrap_content"
@@ -151,23 +229,6 @@
                 android:layout_marginBottom="16dp"
                 android:ems="10"
                 android:inputType="textPostalAddress"
-                android:textColor="@color/grisoscuro" />
-            
-            <!-- Código Postal -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Código Postal"
-                android:textStyle="bold"
-                android:textColor="@color/negro" />
-            <EditText
-                android:id="@+id/txt_codigo_postal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="16dp"
-                android:ems="10"
-                android:inputType="number"
                 android:textColor="@color/grisoscuro" />
 
             <!-- País de residencia -->
@@ -249,62 +310,17 @@
                 android:layout_marginBottom="32dp"
                 android:entries="@array/genero" />
 
-            <!-- Preguntas de seguridad (3 preguntas + respuestas) -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Preguntas de seguridad"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/negro" />
-
-            <Spinner
-                android:id="@+id/spinner_pregunta1"
+            <!-- Botones -->
+            <Button
+                android:id="@+id/buttonDescartar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp" />
-
-            <EditText
-                android:id="@+id/txt_respuesta1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Respuesta 1"
-                android:layout_marginBottom="12dp"
-                android:inputType="text" />
-
-            <Spinner
-                android:id="@+id/spinner_pregunta2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp" />
-
-            <EditText
-                android:id="@+id/txt_respuesta2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Respuesta 2"
-                android:layout_marginBottom="12dp"
-                android:inputType="text" />
-
-            <Spinner
-                android:id="@+id/spinner_pregunta3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp" />
-
-            <EditText
-                android:id="@+id/txt_respuesta3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Respuesta 3"
-                android:layout_marginBottom="24dp"
-                android:inputType="text" />
+                android:text="Descartar cambios"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/grisoscuro"/>
 
             <Button
-                android:id="@+id/btn_actualizar"
+                android:id="@+id/buttonGuardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Actualizar Datos"
