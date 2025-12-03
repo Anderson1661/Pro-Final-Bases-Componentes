@@ -11,9 +11,8 @@ $res = array("success" => "0", "mensaje" => "Parámetros incompletos o incorrect
 
 $required_params = [
     'correo', 'id_tipo_identificacion', 'identificacion', 'nombre', 
-    'direccion', 'codigo_postal', 'placa', 'id_nacionalidad',
-    'id_genero', 'id_pais', 'id_departamento', 'id_ciudad',
-    'tel1', 'tel2'
+    'direccion', 'codigo_postal', 'placa', 'id_pais_nacionalidad',
+    'id_genero', 'tel1', 'tel2'
 ];
 
 $all_set = true;
@@ -46,11 +45,8 @@ if ($all_set) {
         $direccion = trim($_POST['direccion']);
         $codigo_postal = trim($_POST['codigo_postal']);
         $placa = trim($_POST['placa']);
-        $id_nacionalidad = (int)$_POST['id_nacionalidad'];
+        $id_pais_nacionalidad = (int)$_POST['id_pais_nacionalidad'];
         $id_genero = (int)$_POST['id_genero'];
-        $id_pais = (int)$_POST['id_pais'];
-        $id_departamento = (int)$_POST['id_departamento'];
-        $id_ciudad = (int)$_POST['id_ciudad'];
         $tel1 = trim($_POST['tel1']);
         $tel2 = trim($_POST['tel2']);
 
@@ -67,30 +63,25 @@ if ($all_set) {
                     nombre = ?,
                     direccion = ?,
                     codigo_postal = ?,
-                    placa = ?,
-                    id_nacionalidad = ?,
+                    placa_vehiculo = ?,
+                    id_pais_nacionalidad = ?,
                     id_genero = ?,
-                    id_pais = ?,
-                    id_departamento = ?,
-                    id_ciudad = ?
+                    id_estado_conductor = 2  -- Siempre queda en 2
                 WHERE id_conductor = ?
             ";
             
             $stmt_conductor = mysqli_prepare($link, $sql_conductor);
             mysqli_stmt_bind_param(
                 $stmt_conductor, 
-                "isssssiiiiii", 
+                "isssssiii", 
                 $id_tipo_identificacion, 
                 $identificacion, 
                 $nombre, 
                 $direccion, 
                 $codigo_postal, 
                 $placa, 
-                $id_nacionalidad, 
+                $id_pais_nacionalidad, 
                 $id_genero, 
-                $id_pais, 
-                $id_departamento, 
-                $id_ciudad, 
                 $id_conductor
             );
             
@@ -100,7 +91,7 @@ if ($all_set) {
             }
             mysqli_stmt_close($stmt_conductor);
 
-            // Actualizar la tabla TELEFONO_CONDUCTOR (similar a telefono_administrador)
+            // Actualizar la tabla TELEFONO_CONDUCTOR
             if ($success_transaction) {
                 // Eliminar todos los teléfonos existentes del conductor
                 $sql_del_tel = "DELETE FROM telefono_conductor WHERE id_conductor = ?";

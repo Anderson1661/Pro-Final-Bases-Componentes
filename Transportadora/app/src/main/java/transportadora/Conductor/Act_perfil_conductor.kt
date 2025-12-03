@@ -36,7 +36,6 @@ class Act_perfil_conductor : AppCompatActivity() {
     private lateinit var spinner_ciudades: Spinner
     private lateinit var spinner_nacionalidad: Spinner
     private lateinit var spinner_genero: Spinner
-    private lateinit var spinner_cantidad_tel: Spinner
 
     // EditText/TextView
     private lateinit var txtIdentificacion: EditText
@@ -45,6 +44,7 @@ class Act_perfil_conductor : AppCompatActivity() {
     private lateinit var txtTel2: EditText
     private lateinit var txtCorreo: TextView
     private lateinit var txtDireccion: EditText
+    private lateinit var txtPlaca: EditText
 
     private var id_conductor_actual: Int = -1
     private var userEmail: String? = null
@@ -67,15 +67,6 @@ class Act_perfil_conductor : AppCompatActivity() {
             return
         }
 
-        // Obtener ID del conductor
-        CoroutineScope(Dispatchers.Main).launch {
-            id_conductor_actual = obtenerIdConductorPorCorreo(userEmail!!)
-            if (id_conductor_actual == -1) {
-                Toast.makeText(this@Act_perfil_conductor, "Error: No se pudo obtener el ID del conductor. Verifica tu sesión.", Toast.LENGTH_LONG).show()
-                finish()
-            }
-        }
-
         // Initialize views
         spinner_tipos_id = findViewById(R.id.txt_tipo_id)
         spinner_paises = findViewById(R.id.txt_pais)
@@ -84,20 +75,6 @@ class Act_perfil_conductor : AppCompatActivity() {
         spinner_nacionalidad = findViewById(R.id.txt_nacionalidad)
         spinner_genero = findViewById(R.id.spinner_genero)
 
-        // Si existe el spinner de cantidad de teléfonos
-        spinner_cantidad_tel = try {
-            findViewById(R.id.spinner_cantidad_tel)
-        } catch (e: Exception) {
-            // Si no existe, crear uno virtual
-            Spinner(this).apply {
-                // Por defecto mostrar 2 teléfonos
-                adapter = ArrayAdapter(this@Act_perfil_conductor, android.R.layout.simple_spinner_item, listOf("1", "2")).apply {
-                    setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                }
-                setSelection(1) // Seleccionar "2"
-            }
-        }
-
         // Initialize EditText/TextView
         txtIdentificacion = findViewById(R.id.txt_id)
         txtNombre = findViewById(R.id.txt_nombre)
@@ -105,31 +82,15 @@ class Act_perfil_conductor : AppCompatActivity() {
         txtTel2 = findViewById(R.id.txt_tel2)
         txtCorreo = findViewById(R.id.txt_email)
         txtDireccion = findViewById(R.id.txt_dir)
+        txtPlaca = findViewById(R.id.txt_placa)
 
-        // Configurar spinner de cantidad de teléfonos si existe en el layout
-        try {
-            val opcionesCantidadTel = arrayOf("1", "2")
-            val adapterCantidadTel = ArrayAdapter(this, android.R.layout.simple_spinner_item, opcionesCantidadTel)
-            adapterCantidadTel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner_cantidad_tel.adapter = adapterCantidadTel
-
-            // ESTABLECER VALOR POR DEFECTO A "2" (mostrar ambos teléfonos)
-            spinner_cantidad_tel.setSelection(1)
-
-            spinner_cantidad_tel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    val cantidadSeleccionada = parent.getItemAtPosition(position).toString().toIntOrNull() ?: 2
-                    manejarCamposTelefono(cantidadSeleccionada)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Por defecto, manejar como 2 teléfonos
-                    manejarCamposTelefono(2)
-                }
+        // Obtener ID del conductor
+        CoroutineScope(Dispatchers.Main).launch {
+            id_conductor_actual = obtenerIdConductorPorCorreo(userEmail!!)
+            if (id_conductor_actual == -1) {
+                Toast.makeText(this@Act_perfil_conductor, "Error: No se pudo obtener el ID del conductor. Verifica tu sesión.", Toast.LENGTH_LONG).show()
+                finish()
             }
-        } catch (e: Exception) {
-            // El spinner no existe en el layout, manejamos 2 teléfonos por defecto
-            manejarCamposTelefono(2)
         }
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -178,6 +139,9 @@ class Act_perfil_conductor : AppCompatActivity() {
                     }
 
                     if (perfil != null) {
+                        Log.d("Act_perfil_conductor", "Cargando perfil del conductor: ${perfil.nombre}")
+                        Log.d("Act_perfil_conductor", "Placa del vehículo: ${perfil.placa}")
+
                         // Tipo de identificación
                         val tipoIdSeleccionado = perfil.tipo_identificacion
                         val listaDescripcionesId = listatiposid.map { it.descripcion }
@@ -190,6 +154,7 @@ class Act_perfil_conductor : AppCompatActivity() {
                         txtNombre.setText(perfil.nombre)
                         txtCorreo.text = perfil.correo
                         txtDireccion.setText(perfil.direccion)
+                        txtPlaca.setText(perfil.placa)
 
                         // Género
                         val generoSeleccionado = perfil.genero
@@ -239,26 +204,10 @@ class Act_perfil_conductor : AppCompatActivity() {
                             }
                         }
 
-                        // Teléfonos - determinar cantidad basada en teléfonos existentes
+                        // Teléfonos
                         val telefonosExistentes = perfil.telefonos.filter { it.isNotBlank() }
                         txtTel1.setText(telefonosExistentes.getOrNull(0) ?: "")
                         txtTel2.setText(telefonosExistentes.getOrNull(1) ?: "")
-
-                        // Establecer la selección del spinner basado en teléfonos existentes
-                        val cantidadTel = when {
-                            telefonosExistentes.size >= 2 -> 1 // Índice 1 = "2"
-                            telefonosExistentes.size == 1 -> 0 // Índice 0 = "1"
-                            else -> 1 // Por defecto "2"
-                        }
-
-                        try {
-                            spinner_cantidad_tel.setSelection(cantidadTel)
-                            // Aplicar el estado inicial de los campos
-                            manejarCamposTelefono(cantidadTel + 1) // +1 porque los índices son 0="1", 1="2"
-                        } catch (e: Exception) {
-                            // Si no hay spinner, manejamos ambos teléfonos
-                            manejarCamposTelefono(2)
-                        }
 
                     } else {
                         Toast.makeText(this@Act_perfil_conductor, "No se pudo cargar el perfil.", Toast.LENGTH_LONG).show()
@@ -335,6 +284,7 @@ class Act_perfil_conductor : AppCompatActivity() {
             val nombrecompleto: String = txtNombre.text.toString().trim()
             val nuevoCorreo: String = txtCorreo.text.toString().trim()
             val direccion: String = txtDireccion.text.toString().trim()
+            val placa: String = txtPlaca.text.toString().trim()
             val tel1: String = txtTel1.text.toString().trim()
             val tel2: String = txtTel2.text.toString().trim()
 
@@ -351,21 +301,38 @@ class Act_perfil_conductor : AppCompatActivity() {
             val correoOriginal = userEmail
             val cambioCorreo: Boolean = nuevoCorreo != correoOriginal
 
+            // Validaciones básicas
+            if (numero_identificacion.isEmpty()) {
+                Toast.makeText(this, "El número de identificación es obligatorio", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if (nombrecompleto.isEmpty()) {
+                Toast.makeText(this, "El nombre completo es obligatorio", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            if (placa.isEmpty()) {
+                Toast.makeText(this, "La placa del vehículo es obligatoria", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
             CoroutineScope(Dispatchers.Main).launch {
                 try {
+                    // Obtener código postal desde el PHP
                     val codigoPostal = obtenerCodigoPostal(pais, departamento, ciudad)
 
                     if (codigoPostal != null) {
                         val actualizacionExitosa = actualizarPerfilConductor(
-                            id_conductor_actual,
+                            nuevoCorreo,
                             id_tipo_identificacion,
                             numero_identificacion,
                             nombrecompleto,
                             direccion,
-                            nuevoCorreo,
-                            id_genero,
                             codigoPostal,
+                            placa,
                             id_pais_nacionalidad,
+                            id_genero,
                             tel1,
                             tel2
                         )
@@ -400,35 +367,6 @@ class Act_perfil_conductor : AppCompatActivity() {
                 } catch (e: Exception) {
                     Toast.makeText(this@Act_perfil_conductor, "Error de red al obtener Código Postal: ${e.message}", Toast.LENGTH_LONG).show()
                 }
-            }
-        }
-    }
-
-    // FUNCIÓN PARA MANEJAR LOS CAMPOS DE TELÉFONO SEGÚN LA CANTIDAD SELECCIONADA
-    private fun manejarCamposTelefono(cantidad: Int) {
-        when (cantidad) {
-            1 -> {
-                // Habilitar solo teléfono 1
-                txtTel1.isEnabled = true
-                txtTel1.hint = "Ingrese su teléfono"
-
-                // Deshabilitar y limpiar teléfono 2
-                txtTel2.isEnabled = false
-                txtTel2.hint = "No disponible"
-                txtTel2.text?.clear()
-            }
-            2 -> {
-                // Habilitar ambos teléfonos
-                txtTel1.isEnabled = true
-                txtTel1.hint = "Teléfono principal"
-
-                txtTel2.isEnabled = true
-                txtTel2.hint = "Teléfono secundario (opcional)"
-            }
-            else -> {
-                // Por defecto, manejar como 2 teléfonos
-                txtTel1.isEnabled = true
-                txtTel2.isEnabled = true
             }
         }
     }
@@ -540,42 +478,32 @@ class Act_perfil_conductor : AppCompatActivity() {
     }
 
     private suspend fun actualizarPerfilConductor(
-        idConductor: Int,
+        correo: String,
         idTipoIdentificacion: Int,
         identificacion: String,
         nombre: String,
         direccion: String,
-        correo: String,
-        idGenero: Int,
         codigoPostal: String,
+        placa: String,
         idPaisNacionalidad: Int,
+        idGenero: Int,
         tel1: String,
         tel2: String
     ): Boolean = withContext(Dispatchers.IO) {
         try {
             val url = java.net.URL(transportadora.Configuracion.ApiConfig.BASE_URL + "consultas/conductor/perfil/actualizar_perfil.php")
 
-            // Determinar qué teléfonos enviar basado en la selección del spinner
-            val cantidadSeleccionada = try {
-                spinner_cantidad_tel.selectedItem.toString().toIntOrNull() ?: 2
-            } catch (e: Exception) {
-                2 // Por defecto 2 teléfonos
-            }
-
-            val tel1Final = if (cantidadSeleccionada >= 1) tel1 else ""
-            val tel2Final = if (cantidadSeleccionada >= 2) tel2 else ""
-
-            val params = "id_conductor=$idConductor" +
+            val params = "correo=${java.net.URLEncoder.encode(correo, "UTF-8")}" +
                     "&id_tipo_identificacion=$idTipoIdentificacion" +
                     "&identificacion=${java.net.URLEncoder.encode(identificacion, "UTF-8")}" +
                     "&nombre=${java.net.URLEncoder.encode(nombre, "UTF-8")}" +
                     "&direccion=${java.net.URLEncoder.encode(direccion, "UTF-8")}" +
-                    "&correo=${java.net.URLEncoder.encode(correo, "UTF-8")}" +
-                    "&id_genero=$idGenero" +
                     "&codigo_postal=${java.net.URLEncoder.encode(codigoPostal, "UTF-8")}" +
+                    "&placa=${java.net.URLEncoder.encode(placa, "UTF-8")}" +
                     "&id_pais_nacionalidad=$idPaisNacionalidad" +
-                    "&tel1=${java.net.URLEncoder.encode(tel1Final, "UTF-8")}" +
-                    "&tel2=${java.net.URLEncoder.encode(tel2Final, "UTF-8")}"
+                    "&id_genero=$idGenero" +
+                    "&tel1=${java.net.URLEncoder.encode(tel1, "UTF-8")}" +
+                    "&tel2=${java.net.URLEncoder.encode(tel2, "UTF-8")}"
 
             Log.d("Act_perfil_conductor", "Sending params: $params")
 
