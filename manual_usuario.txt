@@ -1,0 +1,194 @@
+# Manual de Usuario de la Aplicación de Transporte (Versión Detallada)
+
+## 1. Funciones Comunes para Todos los Usuarios
+
+### 1.1. Registro de Nuevo Usuario
+
+#### 1.1.1. Registro como Cliente
+Este es el registro estándar para usuarios que solicitarán servicios.
+1.  En la pantalla de inicio, pulse sobre el texto **"¿Aún no tienes una cuenta? Registrar una nueva ahora"**.
+2.  Será dirigido a la pantalla de "Registro (Paso 1 de 2)".
+3.  **Complete sus datos personales**:
+    -   **Tipo de Identificación**: Seleccione Cédula, Pasaporte, etc.
+    -   **Número de Identificación**: Ingrese su número de documento. **Importante**: Esta será su contraseña inicial.
+    -   **Nombre Completo**.
+    -   **Correo Electrónico**: Asegúrese de que sea un correo válido y único.
+    -   **Dirección de Residencia**.
+    -   **Nacionalidad**: Seleccione su país de nacionalidad.
+    -   **Género**: Seleccione su género.
+    -   **Ubicación de Residencia**: Seleccione el País, Departamento y Ciudad donde vive.
+    -   **Teléfonos**: Puede registrar hasta dos números de teléfono. El primero es obligatorio.
+4.  Pulse **"Continuar"**.
+5.  Será dirigido a la pantalla de "Registro (Paso 2 de 2)" para configurar sus **preguntas de seguridad**.
+6.  **Seleccione 3 preguntas diferentes** y escriba una respuesta para cada una. Estas respuestas son cruciales para recuperar su contraseña si la olvida.
+7.  Pulse **"Registrar"**. Si todo es correcto, su cuenta será creada.
+8.  Será redirigido a la pantalla de inicio de sesión. Ya puede ingresar con su correo y su número de identificación como contraseña.
+
+#### 1.1.2. Registro como Conductor
+Este registro es más extenso ya que incluye información del vehículo.
+1.  En la pantalla de inicio de sesión, pulse sobre el texto **"¿Eres conductor? Regístrate aquí"**.
+2.  Se abrirá un formulario largo que debe completar en su totalidad:
+    -   **Datos Personales**: Similar al registro de cliente (nombre, identificación, correo, etc.).
+    -   **Datos del Vehículo**: Placa, Marca, Línea, Modelo (año), Color y el Tipo de Servicio que prestará (Pasajeros, Alimentos, etc.).
+    -   **Preguntas de Seguridad**: Al igual que el cliente, debe configurar 3 preguntas y respuestas.
+3.  Pulse **"Registrar"**. El sistema creará su cuenta de conductor, su cuenta de usuario y registrará su vehículo. Su contraseña inicial también será su número de identificación.
+
+### 1.2. Inicio de Sesión (Login)
+1.  Abra la aplicación y vaya a la pantalla de Login.
+2.  Ingrese su **correo electrónico** y **contraseña**.
+3.  Pulse **"Ingresar"**.
+4.  Será dirigido a la pantalla principal correspondiente a su rol (Cliente, Conductor o Administrador).
+
+### 1.3. Recuperación de Contraseña
+1.  En la pantalla de Login, pulse **"¿Olvidaste tu contraseña?"**.
+2.  Ingrese el correo electrónico asociado a su cuenta y pulse **"Habilitar Respuestas"**.
+3.  El sistema le mostrará las 3 preguntas de seguridad que configuró. Escriba las respuestas exactas.
+4.  Pulse **"Verificar"**.
+5.  Si las respuestas son correctas, será llevado a una nueva pantalla donde podrá establecer y confirmar su nueva contraseña.
+
+---
+
+## 2. Rol: Cliente
+
+### 2.1. Pantalla Principal: Solicitar un Servicio
+Esta es su pantalla de inicio. Desde aquí puede crear una nueva solicitud de servicio.
+
+**Flujo de solicitud:**
+1.  **Origen**:
+    -   **Mi dirección**: Por defecto, la aplicación usará la dirección de su perfil.
+    -   **Otra dirección**: Puede seleccionar esta opción para ingresar manualmente una dirección de origen diferente, así como su país, departamento y ciudad.
+2.  **Destino**:
+    -   **Dirección de Entrega**: Escriba la dirección completa de destino.
+    -   **Ubicación**: Seleccione el País, Departamento y Ciudad de destino.
+3.  **Detalles del Servicio**:
+    -   **Tipo de Servicio**: Elija si es un servicio para "Pasajeros" o "Alimentos".
+    -   **Si es Pasajeros**: Se habilitará un campo para seleccionar la cantidad de pasajeros (de 1 a 4). Deberá ingresar el nombre de cada pasajero en los campos que aparecerán.
+4.  **Configuración de Pago**:
+    -   **Categoría de Servicio**: Seleccione entre "Económico", "Estándar" o "Premium". Esto afecta directamente el costo del viaje.
+    -   **Método de Pago**: Elija cómo pagará (Efectivo, Tarjeta, etc.).
+5.  **Cálculo de Tarifa**:
+    -   La aplicación calculará una **distancia estimada** en kilómetros y, basado en la categoría seleccionada, mostrará un **Total a Pagar** aproximado.
+6.  **Fecha y Hora**:
+    -   Seleccione la fecha y hora en que desea que se realice el servicio.
+7.  **Confirmar**: Pulse el botón **"Continuar"**.
+    -   Si elige **Efectivo**, el servicio se creará y se le indicará que debe pagar al conductor.
+    -   Si elige un método digital (Tarjeta, Transferencia), será llevado a una pantalla de pago simulada. Tras la "confirmación", el servicio se creará.
+
+### 2.2. Pantalla de Seguimiento de Servicio
+-   Puede acceder a esta pantalla desde el menú inferior.
+-   Ingrese el **ID del servicio** que recibió al crearlo y pulse **"Buscar"**.
+-   Se mostrará un panel con **toda la información detallada** de su servicio: estado actual (Pendiente, En Proceso, Finalizado), datos de origen y destino, información del conductor asignado (nombre y placa), y detalles de los pasajeros y costos.
+-   **Importante**: Solo puede ver los detalles de los servicios que pertenecen a su cuenta.
+
+### 2.3. Pantalla de Historial de Servicios
+-   Acceda desde el menú inferior.
+-   Verá una lista de todos los servicios que ha solicitado, con su estado.
+-   **Cancelar un servicio**: Si un servicio está en estado "Pendiente", verá un botón **"Cancelar"**. Al pulsarlo, el estado del servicio cambiará a "Cancelado". Si pagó por un método digital, se le informará que el reembolso está en proceso.
+-   **Ver Detalles**: Puede pulsar el botón "Detalle" en cualquier servicio para ir a la pantalla de "Seguimiento de Servicio" y ver toda su información.
+
+### 2.4. Gestión de Perfil
+-   Acceda desde el menú lateral a **"Editar Perfil"**.
+-   **Actualizar Datos**: Le permite cambiar su información personal (nombre, dirección, teléfonos, etc.). Si cambia su correo electrónico, su sesión se cerrará y deberá volver a iniciar sesión con el nuevo correo.
+-   **Cambiar Contraseña**: Le llevará al flujo de recuperación de contraseña para establecer una nueva.
+-   **Preguntas de Seguridad**: Le permite ver y actualizar sus preguntas y respuestas de seguridad.
+
+---
+
+## 3. Rol: Conductor
+
+### 3.1. Pantalla Principal: Centro de Operaciones
+Esta es su pantalla principal para gestionar su trabajo.
+
+-   **Estado de Disponibilidad**: En la parte superior, encontrará un interruptor para cambiar su estado:
+    -   **Conectado**: Está disponible para recibir y aceptar nuevas solicitudes de servicio que coincidan con su ubicación y el tipo de servicio de su vehículo.
+    -   **Desconectado**: No recibirá nuevas ofertas de servicio.
+-   **Lista de Servicios**:
+    -   **Servicios Disponibles**: Si está conectado, aquí aparecerán las rutas en estado "Pendiente" que se encuentren en su misma ciudad y sean de un tipo compatible con su vehículo.
+    -   **Mis Servicios en Proceso**: Aquí aparecerán los servicios que usted ya ha aceptado y están en curso.
+
+### 3.2. Interacción con un Servicio
+-   **Aceptar un Servicio**: En un servicio "Pendiente", pulse el botón **"Aceptar"**.
+    -   El estado del servicio cambiará a "En Proceso".
+    -   El servicio ahora le pertenece y se moverá a su lista de servicios en proceso.
+    -   **Importante**: Al aceptar, se revelará la información de contacto del cliente (nombre y teléfonos) y la lista de pasajeros (si aplica), para que pueda coordinar la recogida.
+-   **Finalizar un Servicio**: En un servicio "En Proceso", pulse el botón **"Finalizar"**.
+    -   El estado del servicio cambiará a "Finalizado".
+    -   El servicio desaparecerá de su pantalla principal y pasará a su historial de pagos.
+
+### 3.3. Historial de Pagos
+-   Acceda desde el menú lateral a **"Historial de Pagos"**.
+-   Verá una lista detallada de todos los servicios que ha **finalizado**.
+-   Para cada servicio, se muestra el total cobrado al cliente y su ganancia correspondiente (calculada como un porcentaje del total).
+-   En la parte superior, se muestra la suma total de todas sus ganancias.
+
+### 3.4. Gestión de Perfil
+-   Acceda desde el menú lateral a **"Editar Perfil"**.
+-   **Actualizar Datos Personales**: Similar al cliente, puede editar su nombre, dirección, teléfonos, etc.
+-   **Actualizar Foto de Perfil**: Le llevará a una pantalla dedicada donde puede seleccionar una nueva foto de la galería de su dispositivo. La foto se subirá y se actualizará en su perfil.
+-   **Cambiar Contraseña y Preguntas**: Funciona igual que para el rol de cliente.
+
+---
+
+## 4. Rol: Administrador
+
+El rol de administrador tiene acceso total para supervisar y gestionar toda la plataforma.
+
+### 4.1. Panel Principal
+Es un gran menú que da acceso a las dos funciones principales: **Gestión de Tablas (CRUD)** y **Reportería**.
+
+-   **Botones de Actualización de Reportes**:
+    -   **Actualizar Resumen Mensual**: Al pulsarlo, ejecuta un proceso en el servidor que recalcula la tabla de ingresos mensuales (`mv_resumen_mensual_ingresos`). Úselo para tener los datos del Reporte 6 actualizados.
+    -   **Actualizar Estadísticas Conductores**: Ejecuta el proceso que recalcula las estadísticas de conductores por ciudad (`mv_estadisticas_conductores_ciudad`). Úselo para tener los datos del Reporte 7 actualizados.
+
+### 4.2. Gestión de Tablas (CRUD)
+El administrador puede gestionar **22 tablas** del sistema. El flujo para cada una es similar:
+
+1.  **Pantalla `Administrar_*`**: Al pulsar un botón como "Administrar Clientes", se abre una pantalla que muestra una lista de todos los registros existentes.
+2.  **Crear**: En esta pantalla, un botón **"Crear"** le lleva a un nuevo formulario (`Crear_*.kt`) para añadir un nuevo registro.
+3.  **Editar**: Cada item de la lista tiene un botón **"Editar"**. Al pulsarlo, se abre un formulario (`Editar_*.kt`) con los datos de ese registro, permitiéndole modificarlos.
+4.  **Eliminar**: Cada item tiene un botón **"Eliminar"**.
+    -   **Verificación de Dependencias**: Antes de borrar, el sistema comprueba si ese registro está siendo usado en otra parte (ej. si un `país` está asignado a un `cliente`).
+    -   Si hay dependencias, se muestra una alerta indicando que no se puede borrar y dónde está siendo usado.
+    -   Si no hay dependencias, se muestra un diálogo de confirmación. Si acepta, el registro se elimina.
+
+**Lista de Módulos de Gestión Disponibles:**
+-   Administradores
+-   Categorías de Servicio
+-   Clientes
+-   Códigos Postales
+-   Colores de Vehículo
+-   Conductores
+-   Estados de Conductor
+-   Estados de Servicio
+-   Estados de Vehículo
+-   Géneros
+-   Líneas de Vehículo
+-   Marcas de Vehículo
+-   Métodos de Pago
+-   Países
+-   Pasajeros por Ruta
+-   Preguntas de Seguridad
+-   Respuestas de Seguridad
+-   Rutas (Servicios)
+-   Teléfonos de Administrador
+-   Teléfonos de Cliente
+-   Teléfonos de Conductor
+-   Tipos de Identificación
+-   Tipos de Servicio
+-   Tipos de Usuario
+-   Usuarios (Acceso al sistema)
+-   Vehículos
+
+### 4.3. Visualización de Reportes
+El administrador tiene acceso a 7 reportes de negocio.
+
+-   **Reporte 1 - Total por Tipo y Categoría**: Muestra un resumen de cuántos servicios se han hecho y cuánto dinero se ha generado, agrupado por cada combinación de tipo de servicio (Pasajeros/Alimentos) y categoría (Económico/Premium).
+-   **Reporte 2 - Servicios por Mes y Tipo**: Muestra una línea de tiempo de cuántos servicios de cada tipo se realizaron mes a mes.
+-   **Reporte 3 - Ranking de Clientes**: Lista los clientes ordenados por quién ha solicitado más servicios o ha gastado más dinero. Permite filtrar por un rango de fechas.
+-   **Reporte 4 - Total por Método de Pago**: Muestra qué métodos de pago son los más utilizados y cuánto dinero se ha movido a través de cada uno.
+-   **Reporte 5 - Análisis Cruzado**: Un reporte avanzado que cruza categorías de servicio con métodos de pago, mostrando totales, promedios, ganancia neta de la empresa y pago a conductores.
+-   **Reporte 6 - Resumen Mensual de Ingresos**: Muestra los datos pre-calculados de la vista materializada `mv_resumen_mensual_ingresos`. Es una vista rápida del rendimiento financiero mes a mes.
+-   **Reporte 7 - Estadísticas de Conductores por Ciudad**: Muestra los datos de `mv_estadisticas_conductores_ciudad`, permitiendo ver cuántos conductores hay por ciudad, cuántos están activos, etc.
+
+### 4.4. Gestión de Perfil de Administrador
+Funciona de manera idéntica al perfil del cliente, permitiendo actualizar datos personales, cambiar contraseña y gestionar preguntas de seguridad.

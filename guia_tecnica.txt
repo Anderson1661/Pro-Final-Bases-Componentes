@@ -1,0 +1,150 @@
+# Guía Técnica del Sistema de Transporte (Versión Detallada)
+
+## 1. Visión General de la Arquitectura
+
+El sistema sigue una arquitectura de tres capas:
+
+1.  **Frontend (Cliente)**: Una aplicación nativa de Android desarrollada en Kotlin. Es la interfaz con la que interactúan todos los usuarios.
+2.  **Backend (API)**: Un servidor de aplicaciones escrito en PHP que expone una serie de endpoints RESTful. Sirve como intermediario entre la aplicación Android y la base de datos.
+3.  **Base de Datos**: Un motor de base de datos MySQL que no solo almacena la información, sino que también contiene lógica de negocio crítica a través de triggers, vistas y procedimientos almacenados.
+
+---
+
+## 2. Capa de Base de Datos (MySQL)
+
+La base de datos es el núcleo del sistema. Su diseño incluye catálogos, tablas transaccionales, y lógica de negocio para automatización y reportería.
+
+### 2.1. Descripción Detallada del Esquema
+
+A continuación se detallan las tablas más importantes:
+
+-   **`tipo_usuario`**: Catálogo de roles (1: Administrador, 2: Conductor, 3: Cliente).
+-   **`usuario`**: Tabla central de autenticación. Almacena `id_usuario`, `id_tipo_usuario`, `correo` y `contrasenia`.
+-   **`pais`**: Catálogo de países (`id_pais`, `nombre`).
+-   **`codigo_postal`**: Catálogo geográfico (`id_codigo_postal`, `id_pais`, `departamento`, `ciudad`).
+-   **`tipo_identificacion`**: Catálogo de tipos de documento (`id_tipo_identificacion`, `descripcion`).
+-   **`genero`**: Catálogo de géneros (`id_genero`, `descripcion`).
+-   **`cliente`**: Perfil del cliente. Contiene datos personales y claves foráneas a `tipo_identificacion`, `genero`, `pais` (nacionalidad) y `codigo_postal`.
+-   **`conductor`**: Perfil del conductor. Similar al cliente, pero incluye `id_estado_conductor`, `placa_vehiculo` y `url_foto`.
+-   **`administrador`**: Perfil del administrador. Similar al cliente.
+-   **`telefono_cliente`, `telefono_conductor`, `telefono_administrador`**: Tablas para almacenar múltiples números de teléfono por usuario.
+-   **`vehiculo`**: Inventario de vehículos. Clave primaria: `placa`. Contiene claves foráneas a `color_vehiculo`, `linea_vehiculo`, `tipo_servicio`, `estado_vehiculo`.
+-   **`marca_vehiculo`**: Catálogo de marcas (ej. Chevrolet).
+-   **`linea_vehiculo`**: Catálogo de modelos por marca (ej. Aveo para Chevrolet). Clave primaria compuesta (`id_linea`, `id_marca`).
+-   **`color_vehiculo`, `estado_vehiculo`, `estado_conductor`**: Catálogos para estados y colores.
+-   **`ruta`**: Tabla transaccional principal. Registra cada servicio con origen, destino, distancias, fechas, IDs de cliente/conductor, costos y estado.
+-   **`pasajero_ruta`**: Almacena pasajeros adicionales para un servicio de `ruta`.
+-   **`preguntas_seguridad` y `respuestas_seguridad`**: Gestionan la recuperación de contraseñas.
+
+### 2.2. Lógica de Negocio en la Base de Datos
+
+-   **Triggers**:
+    -   `trg_insert_usuario_*`: Al insertar en `cliente`, `conductor` o `administrador`, se crea un registro en `usuario` con el mismo correo y la `identificacion` como contraseña por defecto.
+    -   `trg_calcular_total_ruta`: Antes de insertar en `ruta`, calcula el `total` multiplicando `distancia_km` por el `valor_km` de la `categoria_servicio`.
+    -   `trg_calcular_pago_conductor`: Antes de insertar en `ruta`, calcula el `pago_conductor` como un 30% del `total`.
+    -   `trg_update_correo_*`: Si se actualiza el `correo` en `cliente`, `conductor` o `admin`, el cambio se propaga a la tabla `usuario`.
+    -   `update_placa_conductor`: Si se actualiza la `placa` en `vehiculo`, se actualiza la `placa_vehiculo` en la tabla `conductor`.
+
+-   **Vistas para Reportería**:
+    -   `vw_total_por_tipo_y_categoria`: Agrupa ingresos por tipo y categoría.
+    -   `vw_cantidad_servicios_por_mes_y_tipo`: Cuenta servicios por mes y tipo.
+    -   `vw_clientes_con_servicios`: Ranking de clientes por número de servicios y gasto.
+    -   `vw_total_por_metodo_pago`: Agrupa ingresos por método de pago.
+    -   `vw_analisis_categoria_metodo_pago`: Cruce detallado de categorías y métodos de pago.
+
+-   **Vistas Materializadas (Tablas) y Procedimientos**:
+    -   `mv_resumen_mensual_ingresos`: Tabla que almacena un resumen pre-calculado de ingresos mensuales. Es actualizada por el procedimiento `ActualizarResumenMensual()`.
+    -   `mv_estadisticas_conductores_ciudad`: Tabla que almacena estadísticas de conductores por ciudad. Es actualizada por `ActualizarEstadisticasConductores()`.
+    -   **Eventos**: `event_actualizar_resumen_mensual` y `event_actualizar_estadisticas_conductores` son eventos programados en MySQL que ejecutan los procedimientos de actualización automáticamente.
+
+### 2.3. ¡ADVERTENCIA DE SEGURIDAD CRÍTICA!
+
+El script `conexiones/consultas/login.php` compara la contraseña en **texto plano**. Esto es una vulnerabilidad grave. Las contraseñas deben ser "hasheadas" con `password_hash()` en PHP al registrar/actualizar y verificadas con `password_verify()` durante el login.
+
+---
+
+## 3. Capa de Backend (API en PHP)
+
+El backend es una API RESTful simple donde cada archivo `.php` actúa como un endpoint.
+
+### 3.1. Estructura y Endpoints Principales
+
+La API se organiza en la carpeta `conexiones/consultas/`.
+
+#### 3.1.1. Endpoints Comunes
+-   `login.php`: Autentica al usuario.
+-   `cambiar_contrasenia.php`: Actualiza la contraseña de un usuario.
+-   `consultar_preguntas_seguridad.php`: Obtiene las preguntas de un usuario por su correo.
+-   `verificar_respuestas_seguridad.php`: Valida las respuestas para la recuperación de cuenta.
+
+#### 3.1.2. Endpoints de Cliente (`/cliente`)
+-   `/ruta/crear_ruta.php`: Crea un nuevo servicio/ruta.
+-   `/ruta/cancelar_ruta.php`: Cambia el estado de una ruta a "Cancelado".
+-   `/ruta/consultar_ruta.php`: Obtiene los detalles completos de una ruta.
+-   `/ruta/crear_pasajero_ruta.php`: Añade un pasajero a una ruta existente.
+-   `/perfil/*`: Endpoints para consultar y actualizar el perfil del cliente y sus preguntas/respuestas de seguridad.
+-   `/principal/*`: Endpoints para poblar los spinners de la pantalla principal (países, ciudades, etc.).
+-   `/historial/consultar_historial.php`: Obtiene el historial de servicios del cliente.
+
+#### 3.1.3. Endpoints de Conductor (`/conductor`)
+-   `/registrar_conductor.php`: Endpoint complejo y transaccional para registrar un nuevo conductor, su vehículo, teléfonos y preguntas de seguridad.
+-   `/estado_conductor/*`: Para consultar y actualizar el estado de disponibilidad del conductor.
+-   `/servicios/*`: Para consultar servicios pendientes, detalles de una ruta y cambiar su estado (aceptar/finalizar).
+-   `/perfil/*`: Endpoints para consultar y actualizar el perfil del conductor, incluyendo la URL de la foto.
+-   `/pagos/consultar_pagos.php`: Obtiene el historial de pagos del conductor.
+
+#### 3.1.4. Endpoints de Administrador (`/administrador`)
+-   `/datos/*`: Endpoints para obtener listas de datos para los spinners de los formularios de administración (ej. `consultar_paises.php`, `consultar_clientes_simple.php`).
+-   `/reportes/consultar_reporte[1-7].php`: Siete endpoints, cada uno consultando una de las vistas de reportería.
+-   `/actualizar/*`: Endpoints para ejecutar manualmente los procedimientos que actualizan las vistas materializadas.
+-   `/tablas/{nombre_tabla}/*`: Para cada tabla de la base de datos, existen los siguientes endpoints:
+    -   `create.php`: Crea un nuevo registro.
+    -   `read.php`: Lee todos los registros.
+    -   `update.php`: Actualiza un registro existente.
+    -   `delete.php`: Elimina un registro.
+    -   `consultar_{tabla}.php`: Consulta un registro por su clave primaria.
+    -   `verificar_dependencias.php`: Verifica si un registro puede ser eliminado sin causar errores de integridad referencial.
+
+---
+
+## 4. Capa de Frontend (Aplicación Android en Kotlin)
+
+### 4.1. Arquitectura y Estructura de Paquetes
+
+-   **`transportadora.Compartido`**: Contiene pantallas comunes como `Login.kt`, `Main.kt`, `Preg_seguridad.kt` (recuperación de contraseña) y `Registrar1.kt`/`Registrar2.kt` (registro de cliente).
+-   **`transportadora.Cliente`, `transportadora.Conductor`, `transportadora.Administrador`**: Paquetes que contienen las Activities y la lógica específica para cada rol.
+-   **`transportadora.Modelos`**: Contiene las `data class` que representan las entidades del sistema (ej. `Usuario`, `Ruta`, `Vehiculo`). Se usan para parsear las respuestas JSON de la API.
+-   **`transportadora.Almacenados`**: Actúa como la capa de Repositorio/Datos. Cada clase aquí (ej. `Cliente_simple_almacenados.kt`) es responsable de realizar una llamada a un endpoint específico de la API y devolver los datos parseados en su `data class` correspondiente.
+-   **`transportadora.Network`**: Contiene la configuración de red.
+-   **`transportadora.Configuracion`**: Contiene `ApiConfig.kt`, donde se define la URL base de la API y la API Key para el servicio de subida de imágenes.
+
+### 4.2. Flujo de Datos y Comunicación con la API
+
+1.  **Llamada de Red**: Una Activity (ej. `Principal_cliente.kt`) necesita datos.
+2.  **Repositorio**: La Activity llama a una función en una clase de `Almacenados` (ej. `Pais_almacenados.obtenerPaises()`).
+3.  **Ejecución en Hilo Secundario**: La función del `Almacenado` se ejecuta en un hilo de fondo usando `withContext(Dispatchers.IO)`.
+4.  **Método de Red**: Dentro del `Almacenado`, se utiliza una de las siguientes técnicas para la llamada de red:
+    -   **`ApiHelper`**: Un wrapper manual que usa `HttpURLConnection` para peticiones GET y POST. Es el método más común en los `Almacenados`.
+    -   **`Volley`**: Usado en las Activities de `Administrar_*` para las operaciones CRUD (Create, Read, Update, Delete).
+    -   **`HttpURLConnection` directa**: Usada en `Login.kt`.
+    -   **`Retrofit`**: Definido en `Network/RetrofitClient.kt`, pero su uso práctico en el código analizado es limitado o nulo, sugiriendo que podría ser un remanente o una implementación futura.
+5.  **Procesamiento de Respuesta**: La respuesta JSON del servidor es parseada (generalmente usando `org.json.JSONObject`) y convertida en una lista de `data class`.
+6.  **Actualización de UI**: La lista de objetos es devuelta a la Activity, que la usa para actualizar la interfaz de usuario (ej. poblar un `RecyclerView` o un `Spinner`).
+
+### 4.3. Referencia de Pantallas (Activities) y su Lógica
+
+-   **`Login.kt`**: Realiza la autenticación. Guarda el `user_email` y `user_id` en `SharedPreferences` al tener éxito y redirige a la `Principal_*` correspondiente según el `id_tipo_usuario`.
+-   **`Registrar_conductor.kt`**: Un formulario masivo que recopila todos los datos del conductor y su vehículo. Al pulsar "Registrar", empaqueta toda la información en un único y complejo objeto JSON y lo envía al endpoint `conductor/registrar_conductor.php`.
+-   **`Principal_cliente.kt`**: Pantalla principal del cliente. Carga dinámicamente países, departamentos y ciudades en spinners dependientes. Calcula una distancia y costo estimado. Al solicitar un servicio, llama a `cliente/ruta/crear_ruta.php` y luego, si es de pasajeros, a `cliente/ruta/crear_pasajero_ruta.php` por cada pasajero.
+-   **`Principal_conductor.kt`**: Pantalla principal del conductor.
+    -   Usa un `Switch` para cambiar su estado entre "Conectado" (ID 1) y "Desconectado" (ID 2), llamando a `conductor/estado_conductor/actualizar_estado_conductor.php`.
+    -   Si está conectado, llama a `conductor/servicios/consultar_servicios_pendientes.php` para obtener una lista de servicios disponibles en su zona y de su tipo.
+    -   Al "Aceptar" un servicio, llama a `conductor/servicios/cambiar_estado_ruta.php` con el nuevo estado y su `id_conductor`.
+    -   Al "Finalizar", llama al mismo endpoint con el estado correspondiente.
+-   **`Principal_administrador.kt`**: Es un gran menú con más de 30 botones.
+    -   **Botones de Administración**: Cada botón (ej. "Administrar Clientes") lanza la Activity `Administrar_clientes.kt`.
+    -   **`Administrar_*.kt`**: Estas pantallas típicamente contienen un `RecyclerView`. Cargan la lista de registros llamando al endpoint `read.php` de la tabla correspondiente. Cada item tiene botones de "Editar" y "Eliminar".
+        -   **Editar**: Lanza la `Editar_*.kt`, pasando la clave primaria del registro.
+        -   **Eliminar**: Primero llama a `verificar_dependencias.php`. Si no hay dependencias, muestra un diálogo de confirmación y, si se acepta, llama a `delete.php`.
+    -   **Botones de Reportes**: Cada botón lanza una `Reporte[1-7]_admin.kt`, que a su vez llama al endpoint `consultar_reporte[1-7].php` y muestra los datos en un `RecyclerView`.
+-   **`Act_foto_conductor.kt`**: Permite al conductor seleccionar una imagen de la galería. La imagen se sube al servicio **ImgBB** (usando una API Key definida en `ApiConfig.kt`), y la URL devuelta se guarda en la base de datos llamando a `conductor/perfil/actualizar_imagen.php`.
